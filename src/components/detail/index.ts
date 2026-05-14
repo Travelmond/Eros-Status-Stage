@@ -18,3 +18,9 @@ export type { CharacterVoiceFieldProps, MultipleVoiceFieldProps } from './Charac
 
 export { HistoryField, CompactHistoryField } from './HistoryField';
 export type { HistoryFieldProps, CompactHistoryFieldProps } from './HistoryField';
+
+export { NTRDisplay } from './NTRDisplay';
+export type { NTRDisplayProps } from './NTRDisplay';
+
+export { ImportantMomentsTimeline } from './ImportantMomentsTimeline';
+export type { ImportantMomentsTimelineProps } from './ImportantMomentsTimeline';

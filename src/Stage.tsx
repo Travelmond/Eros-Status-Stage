@@ -218,6 +218,7 @@ export class Stage extends StageBase<InitStateType, ChatStateType, ErosStatusSta
                 pace: 'none',
                 arousal: 0,
                 orgasmCount: 0,
+                cumLocation: '',
             },
             ntrModule: {
                 enabled: false,

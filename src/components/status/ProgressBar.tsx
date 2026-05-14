@@ -30,7 +30,7 @@ export interface ProgressBarProps {
     /** Progress bar style variant (legacy enum or new string types) */
     style?: ProgressBarStyle | EmojiProgressStyle;
     /** Status type for color theming (affection, arousal, etc.) */
-    status?: 'affection' | 'obedience' | 'libido' | 'arousal' | 'location' | 'time' | 'trust' | 'corruption' | 'submission';
+    status?: 'affection' | 'obedience' | 'libido' | 'arousal' | 'location' | 'time' | 'trust' | 'corruption' | 'submission' | 'jealousy' | 'embarrassment' | 'fatigue' | 'happiness';
     /** Size variant */
     size?: 'sm' | 'md' | 'lg' | 'xl';
     /** Show percentage text */

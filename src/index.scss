@@ -9,11 +9,16 @@
 @import 'styles/components/progress-bar.css';
 @import 'styles/components/terminal.css';
 @import 'styles/components/floating-window.css';
+@import 'styles/components/terminal-live.css';
 @import 'styles/layout/panel.css';
 @import 'styles/components/app.css';
 @import 'styles/components/detail.css';
+@import 'styles/components/genitalia-display.css';
 @import 'styles/components/character.css';
 @import 'styles/components/lock.css';
+@import 'styles/components/expression.css';
+@import 'styles/components/ntr-display.css';
+@import 'styles/components/moments-display.css';
 
 :root {
   font-synthesis: none;
@@ -22,14 +27,10 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-// Ensure that everything is transparent,
-// so that the chat page can be seen through the stage
-* {
+// Only make the root stage container transparent,
+// not all child elements (which was hiding button labels)
+#root, html, body {
   background-color: transparent !important;
-  overflow: hidden !important;
-}
-
-html, body, #root {
   margin: 0;
   padding: 0;
 }

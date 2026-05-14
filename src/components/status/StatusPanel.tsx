@@ -132,12 +132,14 @@ export function StatusPanel({
         key: keyof ProgressionValues;
         label: string;
         icon: string;
-        status: 'arousal' | 'corruption' | 'submission' | 'location';
+        status: 'arousal' | 'corruption' | 'submission' | 'jealousy' | 'embarrassment' | 'location';
         style: EmojiProgressStyle;
     }> = [
         { key: 'arousal', label: 'Arousal', icon: '💋', status: 'arousal', style: 'emoji-fire' },
         { key: 'submission', label: 'Submission', icon: '🔒', status: 'submission', style: 'emoji-check' },
         { key: 'corruption', label: 'Corruption', icon: '💜', status: 'corruption', style: 'emoji-check' },
+        { key: 'jealousy', label: 'Jealousy', icon: '💚', status: 'jealousy', style: 'emoji-check' },
+        { key: 'embarrassment', label: 'Embarrassment', icon: '😳', status: 'embarrassment', style: 'emoji-check' },
     ];
 
     return (

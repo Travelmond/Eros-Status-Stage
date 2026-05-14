@@ -1,0 +1,673 @@
+/**
+ * Eros Status Stage - NTR Display CSS
+ * Netorare module display styling
+ * Phase 3.3 - NTR & Advanced Relationship Module
+ */
+
+/* ============================================================================
+   NTR DISPLAY - Main Container
+   ============================================================================ */
+
+.eros-ntr-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+  padding: var(--eros-space-6);
+  background: var(--eros-bg-primary);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-lg);
+  transition: border-color var(--eros-transition-normal),
+              box-shadow var(--eros-transition-normal);
+}
+
+/* Active state border glow */
+.eros-ntr-active {
+  border-color: var(--eros-highlight);
+  box-shadow: 0 0 12px rgba(139, 92, 246, 0.15);
+}
+
+.eros-ntr-display-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  padding-bottom: var(--eros-space-4);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-ntr-display-icon {
+  font-size: var(--eros-font-size-xl);
+  line-height: 1;
+}
+
+.eros-ntr-display-title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--eros-font-size-lg);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================================
+   TOGGLE SWITCH
+   ============================================================================ */
+
+.eros-ntr-toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--eros-space-2);
+  border-radius: var(--eros-radius-md);
+  transition: background-color var(--eros-transition-fast);
+  font-family: var(--eros-font-primary);
+}
+
+.eros-ntr-toggle:hover {
+  background: var(--eros-bg-tertiary);
+}
+
+.eros-ntr-toggle:focus-visible {
+  outline: 2px solid var(--eros-border-focus);
+  outline-offset: 2px;
+}
+
+.eros-ntr-toggle-track {
+  position: relative;
+  width: 2.25rem;
+  height: 1.25rem;
+  border-radius: var(--eros-radius-full);
+  transition: background-color var(--eros-transition-normal);
+  flex-shrink: 0;
+}
+
+.eros-ntr-toggle-active .eros-ntr-toggle-track {
+  background-color: var(--eros-success);
+}
+
+.eros-ntr-toggle-inactive .eros-ntr-toggle-track {
+  background-color: var(--eros-border);
+}
+
+.eros-ntr-toggle-thumb {
+  position: absolute;
+  top: 0.125rem;
+  left: 0.125rem;
+  width: 1rem;
+  height: 1rem;
+  background: var(--eros-text-inverse);
+  border-radius: var(--eros-radius-full);
+  transition: transform var(--eros-transition-normal);
+  box-shadow: var(--eros-shadow-sm);
+}
+
+.eros-ntr-toggle-active .eros-ntr-toggle-thumb {
+  transform: translateX(1rem);
+}
+
+.eros-ntr-toggle-inactive .eros-ntr-toggle-thumb {
+  transform: translateX(0);
+}
+
+.eros-ntr-toggle-label {
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-semibold);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color var(--eros-transition-fast);
+}
+
+.eros-ntr-toggle-active .eros-ntr-toggle-label {
+  color: var(--eros-success);
+}
+
+.eros-ntr-toggle-inactive .eros-ntr-toggle-label {
+  color: var(--eros-text-muted);
+}
+
+/* ============================================================================
+   BODY CONTAINER
+   ============================================================================ */
+
+.eros-ntr-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-5);
+}
+
+/* ============================================================================
+   NTR TYPE BADGE & ROW
+   ============================================================================ */
+
+.eros-ntr-type-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-3);
+  padding: var(--eros-space-4);
+  background: var(--eros-bg-secondary);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+}
+
+.eros-ntr-type-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  padding: var(--eros-space-3) var(--eros-space-5);
+  background: var(--eros-bg-tertiary);
+  border: 1px solid;
+  border-radius: var(--eros-radius-full);
+  align-self: flex-start;
+}
+
+.eros-ntr-type-icon {
+  font-size: var(--eros-font-size-lg);
+  line-height: 1;
+}
+
+.eros-ntr-type-label {
+  font-family: var(--eros-font-display);
+  font-size: var(--eros-font-size-base);
+  font-weight: var(--eros-font-weight-bold);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.eros-ntr-type-desc {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-secondary);
+  line-height: var(--eros-line-height-relaxed);
+}
+
+/* ============================================================================
+   FIELDS
+   ============================================================================ */
+
+.eros-ntr-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-3);
+  padding: var(--eros-space-4);
+  background: var(--eros-bg-secondary);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  transition: border-color var(--eros-transition-normal);
+}
+
+.eros-ntr-field:hover {
+  border-color: var(--eros-border-light);
+}
+
+.eros-ntr-field-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+}
+
+.eros-ntr-field-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--eros-space-10);
+  height: var(--eros-space-10);
+  font-size: var(--eros-font-size-base);
+  background: var(--eros-bg-primary);
+  border-radius: var(--eros-radius-sm);
+  flex-shrink: 0;
+}
+
+.eros-ntr-field-label {
+  flex: 1;
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.eros-ntr-field-value-row {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  padding-left: calc(var(--eros-space-10) + var(--eros-space-3));
+}
+
+/* ============================================================================
+   ROLE BADGE
+   ============================================================================ */
+
+.eros-ntr-role-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--eros-space-2) var(--eros-space-4);
+  background: linear-gradient(135deg, var(--eros-bg-tertiary), var(--eros-surface));
+  border: 1px solid var(--eros-highlight);
+  border-radius: var(--eros-radius-sm);
+  font-family: var(--eros-font-display);
+  font-size: var(--eros-font-size-base);
+  font-weight: var(--eros-font-weight-bold);
+  color: var(--eros-highlight);
+  letter-spacing: 0.03em;
+}
+
+.eros-ntr-role-desc {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  line-height: var(--eros-line-height-normal);
+}
+
+/* ============================================================================
+   PARTNER NAME
+   ============================================================================ */
+
+.eros-ntr-partner-name {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-base);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  padding: var(--eros-space-2) var(--eros-space-4);
+  background: var(--eros-bg-primary);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-sm);
+}
+
+/* ============================================================================
+   HUMILIATION LEVEL
+   ============================================================================ */
+
+.eros-ntr-humiliation-value {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-bold);
+  flex-shrink: 0;
+}
+
+.eros-ntr-field-bar {
+  padding-left: calc(var(--eros-space-10) + var(--eros-space-3));
+}
+
+.eros-ntr-bar-row {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+}
+
+.eros-ntr-stage-label {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-semibold);
+  white-space: nowrap;
+  flex-shrink: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+/* Progress Bar Styles */
+.eros-ntr-bar {
+  position: relative;
+  width: 100%;
+  background: var(--eros-bg-primary);
+  border-radius: var(--eros-radius-full);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px var(--eros-shadow);
+}
+
+.eros-ntr-bar-sm {
+  height: 0.375rem;
+}
+
+.eros-ntr-bar-md {
+  height: 0.5rem;
+}
+
+.eros-ntr-bar-lg {
+  height: 0.75rem;
+}
+
+.eros-ntr-bar-fill {
+  height: 100%;
+  border-radius: var(--eros-radius-full);
+  transition: width var(--eros-progress-transition);
+  position: relative;
+}
+
+/* Glow effect for high humiliation */
+.eros-ntr-bar-fill[style*="width: 8"],
+.eros-ntr-bar-fill[style*="width: 9"],
+.eros-ntr-bar-fill[style*="width: 100"] {
+  box-shadow: 0 0 8px currentColor, 0 0 16px currentColor;
+}
+
+/* Pulse animation for extreme levels */
+@keyframes eros-ntr-humiliation-pulse {
+  0%, 100% {
+    box-shadow: 0 0 8px currentColor;
+  }
+  50% {
+    box-shadow: 0 0 16px currentColor, 0 0 24px currentColor;
+  }
+}
+
+.eros-ntr-bar-fill[style*="width: 9"],
+.eros-ntr-bar-fill[style*="width: 100"] {
+  animation: eros-ntr-humiliation-pulse 2s ease-in-out infinite;
+}
+
+/* ============================================================================
+   GENE QUALITY
+   ============================================================================ */
+
+.eros-ntr-gene-value {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-bold);
+  flex-shrink: 0;
+}
+
+/* ============================================================================
+   DISABLED STATE
+   ============================================================================ */
+
+.eros-ntr-disabled {
+  border-color: var(--eros-border);
+  box-shadow: none;
+}
+
+.eros-ntr-disabled-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--eros-space-4);
+  padding: var(--eros-space-12) var(--eros-space-6);
+  text-align: center;
+}
+
+.eros-ntr-disabled-icon {
+  font-size: var(--eros-font-size-3xl);
+  opacity: 0.4;
+}
+
+.eros-ntr-disabled-text {
+  font-size: var(--eros-font-size-md);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-muted);
+}
+
+.eros-ntr-disabled-hint {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  opacity: 0.7;
+  max-width: 220px;
+  line-height: var(--eros-line-height-normal);
+}
+
+/* ============================================================================
+   EMPTY STATE (no data at all)
+   ============================================================================ */
+
+.eros-ntr-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--eros-space-4);
+  padding: var(--eros-space-16) var(--eros-space-6);
+  text-align: center;
+  min-height: 160px;
+  border-color: var(--eros-border);
+}
+
+.eros-ntr-empty-icon {
+  font-size: var(--eros-font-size-3xl);
+  opacity: 0.5;
+}
+
+.eros-ntr-empty-text {
+  font-size: var(--eros-font-size-md);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-muted);
+}
+
+.eros-ntr-empty-hint {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  opacity: 0.7;
+}
+
+/* ============================================================================
+   DENSITY VARIANTS
+   ============================================================================ */
+
+/* Compact density */
+.eros-status-density-compact .eros-ntr-display {
+  padding: var(--eros-space-4);
+  gap: var(--eros-space-3);
+}
+
+.eros-status-density-compact .eros-ntr-body {
+  gap: var(--eros-space-4);
+}
+
+.eros-status-density-compact .eros-ntr-field {
+  padding: var(--eros-space-3) var(--eros-space-4);
+  gap: var(--eros-space-2);
+}
+
+.eros-status-density-compact .eros-ntr-field-icon {
+  width: var(--eros-space-8);
+  height: var(--eros-space-8);
+  font-size: var(--eros-font-size-xs);
+}
+
+.eros-status-density-compact .eros-ntr-type-row {
+  padding: var(--eros-space-3);
+}
+
+.eros-status-density-compact .eros-ntr-type-badge {
+  padding: var(--eros-space-2) var(--eros-space-4);
+}
+
+.eros-status-density-compact .eros-ntr-field-value-row {
+  padding-left: calc(var(--eros-space-8) + var(--eros-space-2));
+}
+
+.eros-status-density-compact .eros-ntr-field-bar {
+  padding-left: calc(var(--eros-space-8) + var(--eros-space-2));
+}
+
+.eros-status-density-compact .eros-ntr-bar-lg {
+  height: 0.5rem;
+}
+
+.eros-status-density-compact .eros-ntr-role-badge {
+  font-size: var(--eros-font-size-sm);
+  padding: var(--eros-space-1) var(--eros-space-3);
+}
+
+.eros-status-density-compact .eros-ntr-partner-name {
+  font-size: var(--eros-font-size-sm);
+}
+
+.eros-status-density-compact .eros-ntr-type-label {
+  font-size: var(--eros-font-size-sm);
+}
+
+.eros-status-density-compact .eros-ntr-field-label {
+  font-size: var(--eros-font-size-xs);
+}
+
+.eros-status-density-compact .eros-ntr-humiliation-value,
+.eros-status-density-compact .eros-ntr-gene-value {
+  font-size: var(--eros-font-size-xs);
+}
+
+/* Expanded density */
+.eros-status-density-expanded .eros-ntr-display {
+  padding: var(--eros-space-8);
+  gap: var(--eros-space-5);
+}
+
+.eros-status-density-expanded .eros-ntr-body {
+  gap: var(--eros-space-6);
+}
+
+.eros-status-density-expanded .eros-ntr-field {
+  padding: var(--eros-space-5) var(--eros-space-6);
+}
+
+.eros-status-density-expanded .eros-ntr-role-badge {
+  font-size: var(--eros-font-size-md);
+}
+
+.eros-status-density-expanded .eros-ntr-partner-name {
+  font-size: var(--eros-font-size-md);
+}
+
+.eros-status-density-expanded .eros-ntr-type-label {
+  font-size: var(--eros-font-size-md);
+}
+
+/* ============================================================================
+   SECTION COLOR THEMES - Accent border per NTR severity
+   ============================================================================ */
+
+.eros-ntr-active {
+  border-left: 3px solid var(--eros-highlight);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+.eros-ntr-active {
+  animation: eros-ntr-fade-in var(--eros-transition-slow) ease-out both;
+}
+
+.eros-ntr-field {
+  animation: eros-ntr-slide-up var(--eros-transition-slow) ease-out both;
+}
+
+.eros-ntr-field:nth-child(1) { animation-delay: 0ms; }
+.eros-ntr-field:nth-child(2) { animation-delay: 60ms; }
+.eros-ntr-field:nth-child(3) { animation-delay: 120ms; }
+.eros-ntr-field:nth-child(4) { animation-delay: 180ms; }
+.eros-ntr-field:nth-child(5) { animation-delay: 240ms; }
+
+@keyframes eros-ntr-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes eros-ntr-slide-up {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .eros-ntr-active,
+  .eros-ntr-field {
+    animation: none;
+  }
+
+  .eros-ntr-bar-fill {
+    transition: none;
+  }
+
+  .eros-ntr-bar-fill[style*="width: 9"],
+  .eros-ntr-bar-fill[style*="width: 100"] {
+    animation: none;
+  }
+
+  .eros-ntr-toggle-thumb {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .eros-ntr-display {
+    padding: var(--eros-space-4);
+    gap: var(--eros-space-3);
+  }
+
+  .eros-ntr-body {
+    gap: var(--eros-space-4);
+  }
+
+  .eros-ntr-field {
+    padding: var(--eros-space-3) var(--eros-space-4);
+    gap: var(--eros-space-2);
+  }
+
+  .eros-ntr-field-icon {
+    width: var(--eros-space-8);
+    height: var(--eros-space-8);
+    font-size: var(--eros-font-size-xs);
+  }
+
+  .eros-ntr-field-value-row {
+    padding-left: calc(var(--eros-space-8) + var(--eros-space-2));
+  }
+
+  .eros-ntr-field-bar {
+    padding-left: calc(var(--eros-space-8) + var(--eros-space-2));
+  }
+
+  .eros-ntr-type-row {
+    padding: var(--eros-space-3);
+  }
+
+  .eros-ntr-type-badge {
+    padding: var(--eros-space-2) var(--eros-space-4);
+  }
+
+  .eros-ntr-bar-lg {
+    height: 0.5rem;
+  }
+
+  .eros-ntr-display-header {
+    flex-wrap: wrap;
+  }
+
+  .eros-ntr-disabled-body {
+    padding: var(--eros-space-8) var(--eros-space-4);
+  }
+
+  .eros-ntr-empty {
+    padding: var(--eros-space-12) var(--eros-space-4);
+    min-height: 120px;
+  }
+
+  .eros-ntr-role-badge {
+    font-size: var(--eros-font-size-sm);
+  }
+
+  .eros-ntr-type-label {
+    font-size: var(--eros-font-size-sm);
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .eros-ntr-field {
+    padding: var(--eros-space-4);
+  }
+}

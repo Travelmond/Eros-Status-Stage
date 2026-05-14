@@ -1,0 +1,425 @@
+/**
+ * Eros Status Stage - Genitalia Display CSS
+ * Intimate body state display styling
+ * Phase 3.2 - Genitalia & Intimate Details
+ */
+
+/* ============================================================================
+   GENITALIA DISPLAY - Main Container
+   ============================================================================ */
+
+.eros-genitalia-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+  padding: var(--eros-space-6);
+  background: var(--eros-bg-primary);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-lg);
+}
+
+.eros-genitalia-display-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  padding-bottom: var(--eros-space-4);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-genitalia-display-icon {
+  font-size: var(--eros-font-size-xl);
+  line-height: 1;
+}
+
+.eros-genitalia-display-title {
+  margin: 0;
+  font-size: var(--eros-font-size-lg);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  letter-spacing: 0.02em;
+}
+
+/* ============================================================================
+   SECTIONS CONTAINER
+   ============================================================================ */
+
+.eros-genitalia-sections {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+}
+
+/* ============================================================================
+   INDIVIDUAL SECTION
+   ============================================================================ */
+
+.eros-genitalia-section {
+  background: var(--eros-bg-secondary);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  overflow: hidden;
+  transition: border-color var(--eros-transition-normal);
+}
+
+.eros-genitalia-section:hover {
+  border-color: var(--eros-border-light);
+}
+
+/* Section Header */
+.eros-genitalia-section-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  padding: var(--eros-space-4) var(--eros-space-5);
+  background: var(--eros-bg-tertiary);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-genitalia-section-icon {
+  font-size: var(--eros-font-size-lg);
+  line-height: 1;
+}
+
+.eros-genitalia-section-title {
+  margin: 0;
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+/* Section Body */
+.eros-genitalia-section-body {
+  padding: var(--eros-space-4) var(--eros-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+}
+
+/* ============================================================================
+   FIELD ROW
+   ============================================================================ */
+
+.eros-genitalia-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+}
+
+.eros-genitalia-field-row {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  min-height: var(--eros-space-12);
+}
+
+.eros-genitalia-field-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--eros-space-10);
+  height: var(--eros-space-10);
+  font-size: var(--eros-font-size-base);
+  background: var(--eros-bg-primary);
+  border-radius: var(--eros-radius-sm);
+  flex-shrink: 0;
+}
+
+.eros-genitalia-field-label {
+  flex: 1;
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.eros-genitalia-field-value {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  text-align: right;
+  flex-shrink: 0;
+  max-width: 60%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================================
+   STATUS BAR (inline progress bar for levels)
+   ============================================================================ */
+
+.eros-genitalia-field-bar {
+  padding-left: calc(var(--eros-space-10) + var(--eros-space-3));
+}
+
+.eros-genitalia-bar {
+  position: relative;
+  width: 100%;
+  background: var(--eros-bg-primary);
+  border-radius: var(--eros-radius-full);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px var(--eros-shadow);
+}
+
+.eros-genitalia-bar-sm {
+  height: 0.375rem;
+}
+
+.eros-genitalia-bar-md {
+  height: 0.5rem;
+}
+
+.eros-genitalia-bar-fill {
+  height: 100%;
+  border-radius: var(--eros-radius-full);
+  transition: width var(--eros-progress-transition);
+  position: relative;
+}
+
+/* Glow effect for high values */
+.eros-genitalia-bar-fill[style*="width: 8"],
+.eros-genitalia-bar-fill[style*="width: 9"],
+.eros-genitalia-bar-fill[style*="width: 100"] {
+  box-shadow: 0 0 6px currentColor;
+}
+
+/* ============================================================================
+   ENTITY MESSAGES (womb, vagina, balls, cock)
+   ============================================================================ */
+
+.eros-genitalia-messages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-3);
+  padding-top: var(--eros-space-4);
+  margin-top: var(--eros-space-2);
+  border-top: 1px dashed var(--eros-border);
+}
+
+.eros-genitalia-message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--eros-space-3);
+  padding: var(--eros-space-3) var(--eros-space-4);
+  background: var(--eros-bg-primary);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  border-left: 3px solid var(--eros-highlight);
+}
+
+.eros-message-icon {
+  font-size: var(--eros-font-size-sm);
+  flex-shrink: 0;
+  margin-top: var(--eros-space-1);
+}
+
+.eros-message-text {
+  font-size: var(--eros-font-size-sm);
+  line-height: var(--eros-line-height-relaxed);
+  color: var(--eros-text-secondary);
+  font-style: italic;
+}
+
+/* ============================================================================
+   EMPTY STATE
+   ============================================================================ */
+
+.eros-genitalia-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--eros-space-4);
+  padding: var(--eros-space-16) var(--eros-space-6);
+  text-align: center;
+  min-height: 160px;
+}
+
+.eros-genitalia-empty-icon {
+  font-size: var(--eros-font-size-3xl);
+  opacity: 0.5;
+}
+
+.eros-genitalia-empty-text {
+  font-size: var(--eros-font-size-md);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-muted);
+}
+
+.eros-genitalia-empty-hint {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  opacity: 0.7;
+}
+
+/* ============================================================================
+   DENSITY VARIANTS
+   ============================================================================ */
+
+/* Compact density - smaller padding and font */
+.eros-status-density-compact .eros-genitalia-display {
+  padding: var(--eros-space-4);
+  gap: var(--eros-space-3);
+}
+
+.eros-status-density-compact .eros-genitalia-section-body {
+  padding: var(--eros-space-3) var(--eros-space-4);
+  gap: var(--eros-space-3);
+}
+
+.eros-status-density-compact .eros-genitalia-section-header {
+  padding: var(--eros-space-3) var(--eros-space-4);
+}
+
+.eros-status-density-compact .eros-genitalia-field-row {
+  min-height: var(--eros-space-8);
+}
+
+.eros-status-density-compact .eros-genitalia-field-icon {
+  width: var(--eros-space-8);
+  height: var(--eros-space-8);
+  font-size: var(--eros-font-size-xs);
+}
+
+.eros-status-density-compact .eros-genitalia-field-value {
+  font-size: var(--eros-font-size-xs);
+}
+
+.eros-status-density-compact .eros-genitalia-bar-sm {
+  height: 0.25rem;
+}
+
+/* Expanded density - more spacing */
+.eros-status-density-expanded .eros-genitalia-display {
+  padding: var(--eros-space-8);
+  gap: var(--eros-space-5);
+}
+
+.eros-status-density-expanded .eros-genitalia-section-body {
+  padding: var(--eros-space-5) var(--eros-space-6);
+  gap: var(--eros-space-5);
+}
+
+.eros-status-density-expanded .eros-genitalia-field-value {
+  font-size: var(--eros-font-size-md);
+}
+
+/* ============================================================================
+   SECTION COLOR THEMES - Border accents per section type
+   ============================================================================ */
+
+/* Female - Pink/magenta accent */
+.eros-genitalia-section:has(.eros-genitalia-section-icon:contains("🌸")) {
+  border-left: 2px solid var(--eros-interactive);
+}
+
+/* Male - Blue accent */
+.eros-genitalia-section:has(.eros-genitalia-section-icon:contains("🍆")) {
+  border-left: 2px solid var(--eros-info);
+}
+
+/* Anal - Purple accent */
+.eros-genitalia-section:has(.eros-genitalia-section-icon:contains("🔄")) {
+  border-left: 2px solid var(--eros-highlight);
+}
+
+/* Menstrual - Red accent */
+.eros-genitalia-section:has(.eros-genitalia-section-icon:contains("🩸")) {
+  border-left: 2px solid var(--eros-arousal);
+}
+
+/* Pregnancy - Gold accent */
+.eros-genitalia-section:has(.eros-genitalia-section-icon:contains("🤰")) {
+  border-left: 2px solid var(--eros-time);
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+.eros-genitalia-section {
+  animation: eros-genitalia-fade-in var(--eros-transition-slow) ease-out both;
+}
+
+.eros-genitalia-section:nth-child(1) { animation-delay: 0ms; }
+.eros-genitalia-section:nth-child(2) { animation-delay: 50ms; }
+.eros-genitalia-section:nth-child(3) { animation-delay: 100ms; }
+.eros-genitalia-section:nth-child(4) { animation-delay: 150ms; }
+.eros-genitalia-section:nth-child(5) { animation-delay: 200ms; }
+
+@keyframes eros-genitalia-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .eros-genitalia-section {
+    animation: none;
+  }
+
+  .eros-genitalia-bar-fill {
+    transition: none;
+  }
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .eros-genitalia-display {
+    padding: var(--eros-space-4);
+    gap: var(--eros-space-3);
+  }
+
+  .eros-genitalia-section-body {
+    padding: var(--eros-space-3) var(--eros-space-4);
+    gap: var(--eros-space-3);
+  }
+
+  .eros-genitalia-field-row {
+    gap: var(--eros-space-2);
+    min-height: var(--eros-space-8);
+  }
+
+  .eros-genitalia-field-icon {
+    width: var(--eros-space-8);
+    height: var(--eros-space-8);
+    font-size: var(--eros-font-size-xs);
+  }
+
+  .eros-genitalia-field-value {
+    font-size: var(--eros-font-size-xs);
+    max-width: 50%;
+  }
+
+  .eros-genitalia-field-bar {
+    padding-left: calc(var(--eros-space-8) + var(--eros-space-2));
+  }
+
+  .eros-genitalia-empty {
+    padding: var(--eros-space-12) var(--eros-space-4);
+    min-height: 120px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .eros-genitalia-section-body {
+    padding: var(--eros-space-4);
+  }
+}

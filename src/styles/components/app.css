@@ -593,6 +593,95 @@
 }
 
 /* ============================================================================
+   SUB-TAB NAVIGATION (Phase 3 — Full component wiring)
+   ============================================================================ */
+
+.eros-sub-tabs {
+  display: flex;
+  gap: var(--eros-space-2);
+  margin-bottom: var(--eros-space-4);
+  padding-bottom: var(--eros-space-2);
+  border-bottom: 1px solid var(--eros-border);
+  flex-wrap: wrap;
+}
+
+.eros-sub-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+  padding: var(--eros-space-1) var(--eros-space-3);
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.eros-sub-tab:hover {
+  background-color: var(--eros-surface-hover);
+  color: var(--eros-text);
+  border-color: var(--eros-border-light);
+}
+
+.eros-sub-tab.active {
+  background-color: var(--eros-highlight);
+  color: var(--eros-text-inverse);
+  border-color: var(--eros-highlight);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.3);
+}
+
+.eros-sub-tab-icon {
+  font-size: var(--eros-font-size-base);
+}
+
+.eros-sub-tab-label {
+  display: inline;
+}
+
+/* Inventory list styles */
+.eros-inventory-list {
+  list-style: none;
+  padding: 0;
+  margin: var(--eros-space-3) 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+}
+
+.eros-inventory-item {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-2) var(--eros-space-3);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  font-size: var(--eros-font-size-sm);
+}
+
+.eros-item-name {
+  color: var(--eros-text);
+  font-weight: var(--eros-font-weight-medium);
+}
+
+.eros-item-qty {
+  color: var(--eros-highlight);
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-xs);
+}
+
+.eros-item-category {
+  margin-left: auto;
+  color: var(--eros-text-muted);
+  font-size: var(--eros-font-size-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* ============================================================================
    ANIMATIONS
    ============================================================================ */
 

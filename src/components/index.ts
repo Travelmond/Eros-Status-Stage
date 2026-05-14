@@ -47,6 +47,24 @@ export type { CategoryButtonProps } from './navigation/CategoryButton';
 export type { SummaryTerminalProps } from './terminal/SummaryTerminal';
 export type { TerminalFrameProps } from './terminal/TerminalFrame';
 
+// Phase 3.2 — Character Components
+export { CharacterTab, CharacterTabEmpty } from './character/CharacterTab';
+export type { CharacterTabProps } from './character/CharacterTab';
+
+// Phase 3.3 — Expression/Pose Components
+export { ExpressionPoseSection, ExpressionPoseSectionSkeleton } from './expression/ExpressionPoseSection';
+export type { ExpressionPoseSectionProps } from './expression/ExpressionPoseSection';
+
+// Phase 3.2 — Genitalia & NTR Components
+export { GenitaliaDisplay } from './detail/GenitaliaDisplay';
+export type { GenitaliaDisplayProps } from './detail/GenitaliaDisplay';
+export { NTRDisplay } from './detail/NTRDisplay';
+export type { NTRDisplayProps } from './detail/NTRDisplay';
+
+// Phase 3.4 — Moments Timeline
+export { ImportantMomentsTimeline } from './detail/ImportantMomentsTimeline';
+export type { ImportantMomentsTimelineProps } from './detail/ImportantMomentsTimeline';
+
 // Detail Types - Phase 3.1
 export type { EnhancedCategoryDetailProps } from './detail/EnhancedCategoryDetail';
 export type { StateDisplayFieldProps } from './detail/StateDisplayField';

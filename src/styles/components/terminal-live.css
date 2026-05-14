@@ -1,0 +1,228 @@
+/* ============================================================================
+   LIVE TERMINAL - Real-time Lorebook-format terminal display
+   ============================================================================ */
+
+.live-terminal {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--eros-text, #e0e0e0);
+    width: 100%;
+}
+
+/* Header box styling */
+.live-terminal__header {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--eros-border, #4a7ba7);
+    border-radius: 4px 4px 0 0;
+    padding: 6px 10px;
+    margin-bottom: 2px;
+    border-bottom: 2px solid var(--eros-border, #4a7ba7);
+}
+
+.live-terminal__header-line {
+    font-weight: bold;
+    letter-spacing: 0.5px;
+}
+
+/* Character name */
+.live-terminal__char {
+    padding: 4px 10px;
+    border-left: 1px solid var(--eros-border, #4a7ba7);
+    border-right: 1px solid var(--eros-border, #4a7ba7);
+    background: rgba(0, 0, 0, 0.15);
+}
+
+.live-terminal__char-name {
+    font-weight: bold;
+    color: var(--eros-accent, #ff6b81);
+}
+
+/* Stats section */
+.live-terminal__body {
+    border: 1px solid var(--eros-border, #4a7ba7);
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    padding: 6px 10px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.live-terminal__stats {
+    margin-bottom: 4px;
+}
+
+.live-terminal__stat-row {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 1px 0;
+    white-space: nowrap;
+}
+
+.live-terminal__stat-icon {
+    width: 20px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.live-terminal__stat-label {
+    width: 60px;
+    flex-shrink: 0;
+    color: var(--eros-text-muted, #aaa);
+}
+
+.live-terminal__stat-bar {
+    display: none;
+}
+
+.live-terminal__stat-value {
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 11px;
+    white-space: pre;
+}
+
+/* Line items */
+.live-terminal__line {
+    padding: 1px 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Sex module section */
+.live-terminal__sex {
+    border-top: 1px solid rgba(255, 105, 180, 0.3);
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+/* NTR warning */
+.live-terminal__ntr {
+    border-top: 1px solid rgba(255, 0, 0, 0.3);
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+.live-terminal__ntr-warn {
+    color: #ff4444;
+    font-weight: bold;
+}
+
+/* Body state section */
+.live-terminal__body-state {
+    border-top: 1px solid rgba(0, 210, 211, 0.2);
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+/* Genitalia section */
+.live-terminal__genitalia {
+    border-top: 1px solid rgba(255, 105, 180, 0.2);
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+/* Mood */
+.live-terminal__mood {
+    border-top: 1px solid rgba(128, 0, 128, 0.3);
+    padding-top: 4px;
+    margin-top: 4px;
+}
+
+/* Condensed format */
+.live-terminal__condensed {
+    display: flex;
+    gap: 8px;
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--eros-border, #4a7ba7);
+    border-radius: 4px;
+    font-size: 11px;
+    white-space: nowrap;
+    overflow-x: auto;
+    flex-wrap: wrap;
+}
+
+.live-terminal__condensed-stats {
+    color: var(--eros-text, #e0e0e0);
+}
+
+.live-terminal__condensed-loc {
+    color: #00d2d3;
+}
+
+.live-terminal__condensed-time {
+    color: #feca57;
+}
+
+.live-terminal__condensed-mood {
+    color: #a55eea;
+}
+
+/* NPC blocks (Penitentiary format) */
+.live-terminal__npcs {
+    border-top: 2px solid var(--eros-border, #4a7ba7);
+    margin-top: 6px;
+    padding-top: 6px;
+}
+
+.live-terminal__npc-block {
+    background: rgba(0, 0, 0, 0.2);
+    border-left: 3px solid var(--eros-border, #4a7ba7);
+    padding: 6px 8px;
+    margin-bottom: 6px;
+    border-radius: 0 4px 4px 0;
+}
+
+.live-terminal__npc-header {
+    font-weight: bold;
+    color: var(--eros-accent, #ff6b81);
+    margin-bottom: 3px;
+}
+
+.live-terminal__npc-info {
+    font-size: 11px;
+    padding: 1px 0;
+    color: var(--eros-text-muted, #ccc);
+}
+
+/* Stats rows compact */
+.live-terminal__stat-row:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 2px;
+}
+
+/* Animations */
+@keyframes live-terminal-fade-in {
+    from { opacity: 0; transform: translateY(-4px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.live-terminal__stat-row {
+    animation: live-terminal-fade-in 0.3s ease-out;
+}
+
+/* Density variants */
+.live-terminal--condensed .live-terminal__header {
+    font-size: 11px;
+    padding: 3px 6px;
+}
+
+.live-terminal--condensed .live-terminal__body {
+    padding: 3px 6px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .live-terminal {
+        font-size: 10px;
+    }
+
+    .live-terminal__stat-label {
+        width: 50px;
+    }
+
+    .live-terminal__condensed {
+        font-size: 10px;
+    }
+}
