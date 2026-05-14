@@ -1,0 +1,143 @@
+{
+  "name": "Eros Status System 3.1",
+  "description": "Automated character status tracking for 18+ roleplaying. Auto-scans character metadata on first message, auto-evaluates structure every turn, and auto-activates modules based on context.",
+  "is_creation": false,
+  "scan_depth": 9999,
+  "token_budget": 3000,
+  "recursive_scanning": true,
+  "extensions": {
+    "chub": {
+      "id": null,
+      "full_path": "lorebooks/user/eros-status-v3",
+      "extensions": []
+    }
+  },
+  "entries": {
+    "1": {
+      "uid": 1,
+      "key": ["first", "new conversation", "initialize", "start", "beginning", "first message"],
+      "keysecondary": ["scan", "metadata", "auto", "setup"],
+      "comment": "[AUTO_SCAN] Metadata Scanner",
+      "content": "<!-- EROS STATUS SYSTEM - AUTOMATIC METADATA SCANNER -->\n\n## PURPOSE\nThis entry runs ONLY on the first message of a NEW conversation. It auto-scans character data and initializes all module variables.\n\n## AUTOMATIC SCANNING PROCESS\n\n### 1. Character Metadata Extraction\nScan {{char}} description for:\n- Gender → Set gender module\n- Age → Set age_appearance\n- Species (human, cat, dog, etc.) → Set species module\n- Body type, breast size → Set body_state\n- Hair color, eye color → Set image_attributes\n\n### 2. Relationship Context\nScan for relationship keywords:\n- \"husband\", \"wife\", \"married\", \"spouse\" → Activate relationships, set spouse name\n- \"single\", \"alone\" → Set relationship type to single\n- \"boyfriend\", \"girlfriend\" → Set to dating\n\n### 3. Location Context\nScan for location keywords:\n- \"kitchen\", \"bedroom\", \"bathroom\", \"living room\" → Set current_room\n- \"home\", \"house\" → Set building\n\n### 4. Object Context\nScan for items mentioned:\n- Add to inventory module\n\n### 5. Third-Party Stat Mapping\nIf character has existing stats (Love, Corruption, NTR):\n- Same name → Same value\n- Different name → Apply formula:\n  - Love → Affection (value * 0.6)\n  - NTR → NTR module dormant (default disabled)\n  - Corruption → Corruption (value * 1)\n\n## INITIALIZATION COMPLETE\nAfter scanning, set:\n- metadata_scanned: true\n- All progression values to defaults (affection:30, obedience:30, libido:20)\n- All modules to disabled state\n- Location to detected or default\n\nThis runs automatically - no user command needed."
+    },
+    "2": {
+      "uid": 2,
+      "key": ["every", "turn", "evaluate", "validate", "priority", "structure", "check"],
+      "keysecondary": ["correct", "conflict", "resolve", "order"],
+      "comment": "[PRIORITY] Structure Evaluation",
+      "content": "<!-- EROS STATUS SYSTEM - STRUCTURE EVALUATION (RUNS EVERY TURN) -->\n\n## PURPOSE\nThis entry runs EVERY TURN to evaluate which modules should be active, enforce priority order, detect conflicts, and self-correct.\n\n## PRIORITY ORDER (Highest to Lowest)\n1. NTR Module (if ntr_enabled:true)\n2. Sex Module (if sex_active:true)\n3. Personified Genitalia (if personified_genitalia:true)\n4. Body/Genitalia\n5. General Status (always active)\n\n## AUTO-ACTIVATION RULES\nBased on context signals:\n\n| Context Signal | Auto-Activate | Data to Track |\n|----------------|---------------|---------------|\n| Room/place keywords | location_map | current_room, building |\n| Touching, kissing, undressing | sex_module | arousal, wetness, position |\n| \"another man\", \"bull\", \"cuckold\" | ntr_module | ntr_type, participants |\n| Species keywords (cat ears, tail) | species_module | species, features |\n| Breeding, impregnation | personified_genitalia | womb_entity states |\n\n## CONFLICT DETECTION\nCheck for:\n- Relationship says single but scene shows spouse → Resolve to scene\n- Location says one room but action in another → Resolve to action\n- Arousal 0 but sex module active → Deactivate sex\n- Multiple modules active → Enforce priority\n\n## SELF-CORRECTION\nIf conflict detected:\n1. Keep the most recent context data\n2. Deactivate conflicting lower-priority module\n3. Log correction for next turn\n\n## OUTPUT GENERATION\nBased on active modules and priority, generate appropriate status display:\n- Full terminal for important scenes\n- Condensed for normal play\n- Minimal for token saving\n\nThis runs automatically - no user command needed."
+    },
+    "3": {
+      "uid": 3,
+      "key": ["status", "terminal", "display", "output", "full", "condensed", "get status"],
+      "keysecondary": ["emoji", "progress", "bar", "format", "❤️", "🔥"],
+      "comment": "[STATUS] Terminal Display",
+      "content": "<!-- EROS STATUS SYSTEM - STATUS DISPLAY -->\n\n## FULL TERMINAL FORMAT\nFor important scenes, first message, or when user requests <GET status>:\n```\n╔═══════════════════════════════════════════════════╗\n║ 📅 Day {day} | 🕐 {time} | ☀️ {weather} | 📍 {location} ║\n╠═══════════════════════════════════════════════════╣\n║ {character_name}\n║ ❤️ Affection: [{progress_bar}] {value}%  😣 Obedience: [{progress_bar}] {value}%\n║ 🥵 Libido: [{progress_bar}] {value}%  🔥 Arousal: [{progress_bar}] {value}%\n║ 😊 Mood: {mood}\n╚═══════════════════════════════════════════════════╝\n```\n\n## CONDENSED FORMAT\nFor normal play (token saving):\n```\n[❤️{affection}% 🔥{arousal}% 😫{orgasm_count}x 💦{wetness}] [📍{location}] [⏰{time}]\n```\n\n## USER COMMAND\n<GET status> - Shows full terminal\n<GET status:condensed> - Shows condensed format\n\nUse color tags for character names: <span style=\"color:red\"><b>Name:</b></span>"
+    },
+    "4": {
+      "uid": 4,
+      "key": ["affection", "obedience", "libido", "arousal", "trust", "corruption", "progression", "values", "stats"],
+      "keysecondary": ["love", "loyalty", "desire", "mood"],
+      "comment": "[PROGRESSION] Character Values",
+      "content": "<!-- EROS STATUS SYSTEM - PROGRESSION VALUES -->\n\n## AUTO-TRACKED VALUES\nAI automatically updates these based on narrative:\n\n| Value | Range | Default | Auto-Update Trigger |\n|-------|-------|---------|---------------------|\n| Affection | 0-100 | 30 | Positive interactions increase, negative decrease |\n| Obedience | 0-100 | 30 | Requests complied = increase |\n| Libido | 0-100 | 20 | Sexual context increases, abstinance decreases |\n| Arousal | 0-100 | 0 | Physical stimulation increases |\n| Trust | 0-100 | 30 | Honesty/reliability increases, lies decrease |\n| Corruption | 0-100 | 0 | Morally questionable acts increase |\n| Submission | 0-100 | 50 | Dominant actions = decrease, submissive = increase |\n| Jealousy | 0-100 | 0 | Insecurity/trusts violations increase |\n| Embarrassment | 0-100 | 50 | Embarrassing moments increase |\n\n## UPDATE FREQUENCY\nAI updates these values automatically after:\n- Significant interactions\n- Scene changes\n- Explicit user actions affecting stats\n\nNo manual commands needed - AI handles automatically."
+    },
+    "5": {
+      "uid": 5,
+      "key": ["relationship", "relationships", "spouse", "married", "husband", "wife", "dating"],
+      "keysecondary": ["love", "marriage", "affair", "romantic", "family"],
+      "comment": "[RELATIONSHIPS] Relationship Tracking",
+      "content": "<!-- EROS STATUS SYSTEM - RELATIONSHIPS ---\n\n## AUTO-DETECTION\nAI automatically detects and tracks relationships based on context:\n\n### Relationship with User\n- Stranger → Acquaintance → Friend → Close Friend → Lover → Soulmate\n- Stage 1-10 within each type\n\n### Auto-Detection Keywords\n- \"husband\", \"wife\", \"married\" → Set to Spouse\n- \"boyfriend\", \"girlfriend\" → Set to Dating\n- \"ex\" → Set to Ex\n- Context shows affection → Increase relationship stage\n\n### Family\n- \"mother\", \"father\", \"sister\", \"brother\" → Track family type\n- \"step\" prefix → Step-relationships\n\n### NPCs\n- Track other characters mentioned\n- Note relationship to {{char}}\n- Note importance level\n\n## AUTO-UPDATE\nAI updates relationships based on:\n- Key events together\n- Trust levels\n- Interactions\n\nNo manual commands needed."
+    },
+    "6": {
+      "uid": 6,
+      "key": ["location", "room", "building", "kitchen", "bedroom", "bathroom", "living room", "home", "house"],
+      "keysecondary": ["place", "area", "where", "at"],
+      "comment": "[LOCATION] Location System",
+      "content": "<!-- EROS STATUS SYSTEM - LOCATION ---\n\n## AUTO-DETECTION\nAI automatically detects and tracks location:\n\n### Current Room\nDetected from scene description:\n- Kitchen, Bedroom, Bathroom, Living Room, Office, etc.\n\n### Building/Area\nDetected from context:\n- Home, Work, School, Restaurant, Hotel, etc.\n\n### Visited Rooms\nTrack rooms character has been to\n\n### Locked Rooms\nTrack rooms that require conditions to access\n\n## AUTO-UPDATE\nLocation updates when:\n- Scene explicitly mentions room change\n- User commands <SET room:NAME>\n- Context clearly shows different location\n\nNo manual commands needed - AI auto-detects."
+    },
+    "7": {
+      "uid": 7,
+      "key": ["inventory", "items", "objects", "carrying", "holding", "possessing"],
+      "keysecondary": ["item", "prop", "weapon", "key", "phone", "bag"],
+      "comment": "[INVENTORY] Objects & Items",
+      "content": "<!-- EROS STATUS SYSTEM - INVENTORY ---\n\n## AUTO-DETECTION\nAI automatically tracks items mentioned in scene:\n\n### Carrying Items\nItems character has:\n- Phone, Wallet, Keys, Clothing, etc.\n\n### Room Objects\nObjects in current location that can be interacted with\n\n### Special Items\nStory-important items tracked separately\n\n## AUTO-UPDATE\nItems added when:\n- Explicitly mentioned in scene\n- Character picks up/gives items\n- Scene change reveals new objects\n\nNo manual commands needed."
+    },
+    "8": {
+      "uid": 8,
+      "key": ["npc", "npcs", "character", "person", "someone", "other"],
+      "keysecondary": ["friend", "enemy", "family", "stranger", "supporting"],
+      "comment": "[NPCS] NPC Management",
+      "content": "<!-- EROS STATUS SYSTEM - NPC MANAGEMENT ---\n\n## AUTO-DETECTION\nAI automatically tracks NPCs mentioned:\n\n### Auto-Track\n- Name mentioned → Add to active NPCs\n- Role implied → Set importance (main/supporting/minor)\n- Relationship shown → Track relationship type\n\n### NPC Data\nFor each NPC track:\n- Name\n- Role in story\n- Relationship to character\n- Affection level\n\n## AUTO-UPDATE\nNPCs updated when:\n- New character enters scene\n- Relationship changes\n- Key events with NPC occur\n\nNo manual commands needed."
+    },
+    "9": {
+      "uid": 9,
+      "key": ["body", "clothing", "naked", "nude", "exposed", "breasts", "skin", "wearing", "dressed"],
+      "keysecondary": ["clothes", "shirt", "pants", "jeans", "underwear"],
+      "comment": "[BODY] Body State",
+      "content": "<!-- EROS STATUS SYSTEM - BODY STATE ---\n\n## AUTO-DETECTION\nAI automatically tracks body state:\n\n### Clothing\n- Upper (shirt, blouse, etc.)\n- Lower (pants, skirt, etc.)\n- Underwear state\n- Exposed areas\n\n### Body Status\n- Breasts (Normal/Swollen/Hard)\n- Skin (Normal/Sweaty/Flush)\n- Expression\n\n### Health\n- HP, Energy levels\n- Intoxication (if applicable)\n\n## AUTO-UPDATE\nBody state updates when:\n- Character undresses/dresses\n- Physical activity changes state\n- Scene requires body description\n\nNo manual commands needed."
+    },
+    "10": {
+      "uid": 10,
+      "key": ["genitalia", "vagina", "wetness", "aroused", "orgasm", "penis", "erection", "reproductive", "pregnant", "fertility"],
+      "keysecondary": ["cum", "sperm", "menstrual", "period", "cycle"],
+      "comment": "[GENITALIA] Genitalia & Reproduction",
+      "content": "<!-- EROS STATUS SYSTEM - GENITALIA & REPRODUCTION ---\n\n## AUTO-DETECTION\nAI automatically tracks genital state in sexual contexts:\n\n### Female\n- Wetness (Dry → Soaking)\n- Looseness\n- Sensitivity\n- Menstrual cycle day\n- Fertility phase\n- Pregnancy status\n- Sperm present (days, source)\n\n### Male\n- Erection level\n- Sensitivity\n- Balls fullness\n- Cum ready state\n\n### Anal\n- Wetness, looseness\n- Sensitivity\n\n## ACTIVATION\nGenitalia tracking activates when:\n- Sex module is active\n- Sexual content in scene\n- Explicit physical descriptions\n\nNo manual commands needed - auto-activates in context."
+    },
+    "11": {
+      "uid": 11,
+      "key": ["sex", "sexual", "fucking", "sucking", "licking", "intimate", "touching", "kissing"],
+      "keysecondary": ["position", "pace", "orgasm", "cum", "foreplay"],
+      "comment": "[SEX] Sex Module",
+      "content": "<!-- EROS STATUS SYSTEM - SEX MODULE ---\n\n## AUTO-ACTIVATION\nSex module activates when scene contains:\n- Physical intimacy (kissing, touching, etc.)\n- Undressing\n- Sexual activity descriptions\n- Arousal buildup\n\n## AUTO-TRACK\nWhen active, track:\n- Position (missionary, doggy, cowgirl, etc.)\n- Pace (slow, medium, fast, rough)\n- Actions (thrusting, oral, etc.)\n- Arousal level\n- Orgasm state (building/peaking/cumming/spent)\n- Cum details (inside, swallowed, where)\n\n## DEACTIVATION\nSex module deactivates when:\n- Scene returns to non-sexual\n- Aftercare complete\n- Explicit scene end\n\nNo manual commands needed - AI auto-activates/deactivates based on context."
+    },
+    "12": {
+      "uid": 12,
+      "key": ["ntr", "cuckold", "bull", "hotwife", "cheating", "affair", "adultery", "another man"],
+      "keysecondary": ["cuckolded", "wife", "husband", "betrayal"],
+      "comment": "[NTR] NTR Module",
+      "content": "<!-- EROS STATUS SYSTEM - NTR MODULE ---\n\n## DEFAULT STATE\nNTR module is DISABLED by default (dormant).\n\n## AUTO-ACTIVATION\nNTR module activates when scene contains:\n- \"another man\", \"bull\"\n- \"cuckold\", \"cuckolded\"\n- \"hotwife\", \"shared\"\n- Cheating/affair context\n- Reference to other sexual partners\n\n## AUTO-TRACK (When Active)\n- NTR type (cuckold/bull/hotwife)\n- Participants (husband, bull names)\n- Character emotions (guilt, pleasure, shame, excitement)\n- Humiliation level\n- Gene quality comparison\n\n## IMPORTANT\nNTR stays disabled unless context clearly indicates NTR content.\nAI should NOT assume NTR - only activate when explicit.\n\nNo manual commands needed - auto-activates in context."
+    },
+    "13": {
+      "uid": 13,
+      "key": ["personified", "womb", "balls", "breeding", "impregnate", "pregnant", "seed", "egg"],
+      "keysecondary": ["breeder", "fertile", "ovulation"],
+      "comment": "[PERSONIFIED] Personified Genitalia",
+      "content": "<!-- EROS STATUS SYSTEM - PERSONIFIED GENITALIA ---\n\n## DEFAULT STATE\nPersonified genitalia is DISABLED by default.\n\n## AUTO-ACTIVATION\nActivates when scene contains:\n- Breeding/impregnation focus\n- Ovulation context\n- Internal organ perspectives (womb thoughts, etc.)\n- Explicit breeding dialogue\n\n## AUTO-TRACK (When Active)\n### Womb Entity\n- Mood (neutral/satisfied/desperate)\n- Desire level\n- Satisfaction %\n- Egg ready state\n- Impregnated state\n\n### Balls Entity\n- Fullness level\n- Desire to release\n- Production level\n\n## DEACTIVATION\nDeactivates when:\n- Breeding scene ends\n- Scene returns to non-breeding sex\n- User disables\n\nNo manual commands needed - auto-activates in breeding contexts."
+    },
+    "14": {
+      "uid": 14,
+      "key": ["species", "kemonomimi", "cat", "dog", "rabbit", "fox", "wolf", "furry", "animal ears", "tail"],
+      "keysecondary": ["nya", "wan", "purr", "heat", "rut", "ears", "tail"],
+      "comment": "[SPECIES] Species & Kemonomimi",
+      "content": "<!-- EROS STATUS SYSTEM - SPECIES MODULE ---\n\n## DEFAULT STATE\nSpecies defaults to Human.\n\n## AUTO-ACTIVATION\nSpecies module activates when character description or scene contains:\n- \"cat\", \"dog\", \"rabbit\", \"fox\", \"wolf\", \"kemonomimi\"\n- \"animal ears\", \"pointed ears\"\n- \"tail\" (non-human)\n- Species-specific behaviors\n\n## AUTO-TRACK\nWhen active, track:\n- Species type\n- Ear type\n- Tail type\n- Features (whiskers, paw pads, etc.)\n- Heat cycle (if applicable)\n- Species-specific sounds in dialogue\n\n## DIALOGUE ADAPTATION\nSpecies characters should use appropriate speech patterns:\n- Cat: ends with ~nya, ~meow\n- Dog: eager, enthusiastic\n- Rabbit: nervous, stuttering\n- Fox: cunning, playful\n- Wolf: protective, intense\n\nNo manual commands needed - auto-activates when species detected."
+    },
+    "15": {
+      "uid": 15,
+      "key": ["img", "image", "generate", "prompt", "civitai", "stable diffusion"],
+      "keysecondary": ["picture", "art", "create", "draw"],
+      "comment": "[COMMANDS] User Commands",
+      "content": "<!-- EROS STATUS SYSTEM - USER COMMANDS ---\n\n## ONLY 4 USER COMMANDS\n\n### 1. <IMG>\nGenerate image prompt for external AI art tools.\nOutput format:\n```\nscore_9, score_8_up, BREAK\nrating_explicit, nsfw, source_aname, BREAK\n\n[character description]\n[clothing state]\n[action/pose]\n[location]\n[framing/style]\n[explicit content]\n\n---\nNEGATIVE: [bad tags]\n\nTECHNICAL: Width:1024 Height:1024 Steps:25 CFG:7\n```\n\n### 2. <GET status>\nShow full terminal status display.\n\n### 3. <GET status:condensed>\nShow condensed status (token saving).\n\n### 4. <RESET>\nReset ALL values including:\n- All progression values to defaults\n- All modules to disabled\n- Location to Home\n- Auto-scanned metadata cleared\n- Memories cleared\n\n## NO OTHER COMMANDS\nAll other commands (setting values, activating modules, etc.) are handled AUTOMATICALLY by AI based on context.\n\nUser only uses these 4 commands. AI handles the rest."
+    },
+    "16": {
+      "uid": 16,
+      "key": ["memory", "memories", "milestone", "first time", "trauma", "history", "past", "remember"],
+      "keysecondary": ["event", "experience", "key moment"],
+      "comment": "[MEMORY] Memory & History",
+      "content": "<!-- EROS STATUS SYSTEM - MEMORY LOG ---\n\n## AUTO-TRACKING\nAI automatically records significant events:\n\n### Memories\n- Key emotional moments\n- Important conversations\n- Character-defining events\n\n### Milestones\n- Relationship advancements\n- Sexual firsts\n- Story turning points\n\n### First Times\n- First kiss\n- First sexual encounter\n- First NTR experience (if applicable)\n- First pregnancy\n\n### Traumas\n- Negative events affecting character\n- Betrayals\n- Losses\n\n### Discovered Preferences\n- Turn-ons discovered during play\n- Turn-offs discovered during play\n- Kinks revealed\n\n## AUTO-UPDATE\nMemories update when:\n- Scene contains significant events\n- First-time events occur\n- Key milestones reached\n\nNo manual commands needed."
+    },
+    "17": {
+      "uid": 17,
+      "key": ["default", "defaults", "initial", "starting", "values", "reset"],
+      "keysecondary": ["baseline", "original", "begin"],
+      "comment": "[DEFAULT] Default Values",
+      "content": "<!-- EROS STATUS SYSTEM - DEFAULT VALUES ---\n\n## DEFAULT PROGRESSION VALUES\n| Value | Default |\n|-------|----------|\n| Affection | 30 |\n| Obedience | 30 |\n| Libido | 20 |\n| Arousal | 0 |\n| Trust | 30 |\n| Corruption | 0 |\n| Submission | 50 |\n| Jealousy | 0 |\n| Embarrassment | 50 |\n| Pleasure Addiction | 0 |\n\n## DEFAULT MODULE STATES\n| Module | Default |\n|--------|----------|\n| NTR Enabled | false (disabled) |\n| Sex Active | false |\n| Personified Genitalia | false |\n| Species | Human |\n\n## DEFAULT LOCATION\n- Current Room: Living Room\n- Building: Home\n\n## RESET COMMAND\n<RESET> sets ALL values to these defaults including clearing auto-scanned metadata.\n\n## FIRST SCAN\nIf metadata not yet scanned (first conversation), run metadata scanner entry first."
+    },
+    "18": {
+      "uid": 18,
+      "key": ["validator", "token", "optimization", "display rules", "conditional", "scan depth", "budget"],
+      "keysecondary": ["lorebook", "matching", "trigger"],
+      "comment": "[SYSTEM] Validator & Settings",
+      "content": "<!-- EROS STATUS SYSTEM - SYSTEM SETTINGS ---\n\n## LOREBOOK SETTINGS\n- Scan Depth: 9999 (maximum)\n- Token Budget: 3000\n- Recursive Scanning: Enabled\n\n## CONDITIONAL DISPLAY\n| Module | Condition |\n|--------|------------|\n| Sex Details | Show only when sex module active |\n| NTR Details | Show only when NTR enabled |\n| Personified | Show only when enabled |\n| Genitalia | Show basic, explicit only when active |\n\n## TOKEN OPTIMIZATION\n- Full view: ~400-600 tokens\n- Condensed view: ~100 tokens\n- Minimal view: ~50 tokens\n\n## PRIORITY FOR CONTENT\nWhen multiple modules active:\n1. NTR content (if enabled)\n2. Sex content (if active)\n3. Personified content (if enabled)\n4. Body/Physical\n5. General status\n\n## MAPPING THIRD-PARTY STATS\nIf character has existing stats (like \"Love: 50%\"):\n- Same name → Same value (Love → Affection = 50)\n- Different name → Apply formula:\n  - Love → Affection = value * 0.6\n  - NTR → NTR module dormant (disabled)\n\n\nThis entry provides system-level configuration."
+    }
+  }
+}

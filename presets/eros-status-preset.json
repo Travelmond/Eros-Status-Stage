@@ -1,0 +1,189 @@
+{
+  "name": "Eros Status Preset (Flexible)",
+  "version": "2.1",
+  "description": "Optional preset for Eros Status System 3.0 - flexible for native and third-party characters. Use only if character supports the system.",
+
+  "model_parameters": {
+    "temperature": 0.85,
+    "frequency_penalty": 0.3,
+    "presence_penalty": 0.8,
+    "top_p": 1,
+    "top_k": 50,
+    "repetition_penalty": 1.1,
+    "names_in_completion": true,
+    "description": "Optimized for creative adult roleplay with diverse character types"
+  },
+
+  "pre_history": {
+    "description": "OPTIONAL - Use only if character supports Eros Status system. If character has their own system, use theirs instead.",
+
+    "system_directive_optional": {
+      "content_rating": "NC-21 / ADULT",
+      "scope": "Any adult theme permitted when it serves story. Optional - respect character's own guidelines.",
+      "note": "Don't force over character's existing system_prompt"
+    },
+
+    "writing_style_optional": {
+      "overview": "Optional guidelines - use only if applicable to character",
+
+      "dialogue_format": {
+        "structure": "Use *actions* for movements, ~thoughts~ for feelings",
+        "example": "If using HTML: <span style=\"color:red\"><b>Name:</b></span> \"Dialogue\""
+      },
+
+      "optional_rules": {
+        "actions": "Use *asterisks* for physical movements",
+        "thoughts": "Use ~italics~ for internal thoughts",
+        "intensity": "UPPERCASE with !! for intense moments",
+        "pauses": "... (short), …… (medium), ……… (long)"
+      },
+
+      "intensity_stages": [
+        "1. Quiet/Flirting - Soft dialogue, shy reactions",
+        "2. Teasing - Innuendos, light touching",
+        "3. Aroused - Heavy breathing, obvious arousal",
+        "4. Passionate - Active participation, initiating",
+        "5. Climax - Broken dialogue, intense reactions",
+        "6. Aftercare - Tender words, emotional connection"
+      ]
+    },
+
+    "character_types_optional": {
+      "description": "Only use if character is non-human/kemonomimi",
+      "examples": {
+        "cat": "Ends dialogue with ~nya, ~meow",
+        "dog": "Eager, enthusiastic phrasing",
+        "rabbit": "Nervous, stuttering",
+        "fox": "Cunning, playful",
+        "wolf": "Protective, intense"
+      }
+    },
+
+    "important_note": "If character has their own established personality and writing style, use theirs instead of forcing these rules."
+  },
+
+  "post_history": {
+    "description": "OPTIONAL - Quick reference. Don't override character's existing post_history_instructions.",
+
+    "status_display_optional": {
+      "condensed": "Use only when requested: [❤️affection% 🔥arousal% 😫orgasm_countx 💦wetness] [📍location]",
+      "full": "Use only for important scenes: Terminal with box characters",
+      "note": "If character has native status format (like [Love - 50%]), use that instead"
+    },
+
+    "module_toggles_optional": {
+      "description": "Only use when scene requires",
+      "commands": [
+        "<SET sex_active:true|false> - During sexual scenes",
+        "<SET ntr_enabled:true|false> - For NTR storylines",
+        "<SET personified_genitalia:true|false> - For breeding scenes",
+        "<SET room:NAME> - When location changes"
+      ]
+    },
+
+    "stat_mapping": {
+      "description": "For third-party characters with different stat names",
+      "mappings": [
+        "Love → Affection",
+        "NTR / NTR Desire → NTR module",
+        "Corruption → Corruption (same)"
+      ],
+      "note": "Map silently or use character's native format when available"
+    },
+
+    "commands_optional": {
+      "status": "<GET status> or <GET status:condensed>",
+      "update": "<UPDATE affection:75>",
+      "location": "<SET room:bedroom>",
+      "image": "<IMG> for prompt generation",
+      "reset": "<RESET> to reset defaults"
+    },
+
+    "important_note": "Don't show this reference in normal roleplay - only when user explicitly requests commands. Never force status display if character has their own system."
+  },
+
+  "lorebook_settings": {
+    "scan_depth": 9999,
+    "token_budget": 3000,
+    "position": "top",
+    "recursive_scanning": true,
+    "match_whole_words": true
+  },
+
+  "default_modules": {
+    "description": "These are optional toggles - only enable when scene requires",
+    "general_status": true,
+    "progression": true,
+    "relationships": true,
+    "location_map": true,
+    "objects_inventory": true,
+    "npcs": true,
+    "body_state": false,
+    "genitalia": false,
+    "sex_module": false,
+    "ntr_module": false,
+    "personified_genitalia": false,
+    "species_module": false
+  },
+
+  "display_settings": {
+    "default_view": "condensed",
+    "use_colors": true,
+    "use_unicode_boxes": true,
+    "auto_condense": true,
+    "note": "Use condensed view by default to save tokens"
+  },
+
+  "initial_values": {
+    "affection": 30,
+    "obedience": 30,
+    "libido": 20,
+    "trust": 30,
+    "corruption": 0,
+    "arousal": 0,
+    "mood": "Neutral",
+    "day": 1,
+    "time": "Morning"
+  },
+
+  "module_commands": {
+    "enable_sex": { "command": "<SET sex_active:true>", "description": "Enable during sexual activity" },
+    "disable_sex": { "command": "<SET sex_active:false>", "description": "Disable after scene ends" },
+    "enable_ntr": { "command": "<SET ntr_enabled:true>", "description": "Enable for NTR storylines" },
+    "disable_ntr": { "command": "<SET ntr_enabled:false>", "description": "Disable for non-NTR content" },
+    "enable_personified": { "command": "<SET personified_genitalia:true>", "description": "Enable for breeding scenes" },
+    "disable_personified": { "command": "<SET personified_genitalia:false>", "description": "Disable otherwise" },
+    "set_ntr_type": { "command": "<SET ntr_type:cuckold|bull|hotwife>", "description": "Set NTR scenario type" },
+    "set_room": { "command": "<SET room:NAME>", "description": "Change location" },
+    "generate_image": { "command": "<IMG>", "description": "Generate image prompt" },
+    "generate_image_full": { "command": "<IMG:full>", "description": "Generate with max NSFW" },
+    "generate_image_custom": { "command": "<IMG:framing:TYPE>", "description": "Custom override" }
+  },
+
+  "quick_commands": {
+    "get_status": "<GET status>",
+    "get_condensed": "<GET status:condensed>",
+    "get_genitalia": "<GET genitalia>",
+    "get_sex": "<GET sex_status>",
+    "get_ntr": "<GET ntr>",
+    "generate_image": "<IMG>",
+    "generate_image_full": "<IMG:full>",
+    "reset": "<RESET>",
+    "export": "<EXPORT state>",
+    "import": "<IMPORT state:filename>"
+  },
+
+  "third_party_compatibility": {
+    "description": "This system now works with third-party characters",
+
+    "detection": "Check if character uses native Eros Stats (Affection/Obedience/Libido) or their own (Love/NTR/Corruption)",
+
+    "handling": {
+      "native": "Use Eros Status format normally",
+      "third_party": "Map stats OR use character's native format",
+      "never_override": "NEVER force our format over character's established system"
+    },
+
+    "example": "If character shows [Love - 50%] in their first message, don't replace with [❤️50%] - either map silently or keep both"
+  }
+}

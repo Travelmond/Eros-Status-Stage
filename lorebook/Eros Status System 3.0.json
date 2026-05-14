@@ -1,0 +1,189 @@
+{
+  "name": "Eros Status System 3.1",
+  "description": "Comprehensive character status tracking system for 18+ roleplaying. Tracks progressions, relationships, body state, genitalia, sexual activity, NTR scenarios, pregnancy, species, and image generation prompts.",
+  "is_creation": false,
+  "scan_depth": 9999,
+  "token_budget": 3000,
+  "recursive_scanning": true,
+  "extensions": {
+    "chub": {
+      "id": null,
+      "full_path": "lorebooks/user/eros-status-v3",
+      "extensions": [],
+      "expressions": null,
+      "alt_expressions": null,
+      "background_image": "",
+      "related_lorebooks": []
+    }
+  },
+  "entries": {
+    "1": {
+      "uid": 1,
+      "key": ["first", "new conversation", "initialize", "start", "beginning", "first message"],
+      "keysecondary": ["scan", "metadata", "auto", "setup"],
+      "comment": "[AUTO_SCAN] Metadata Scanner (CONDENSED)",
+      "content": "<!-- EROS STATUS SYSTEM - METADATA SCANNER + CHAR_FORMAT -->\n\n## CHARACTER FORMATTING (CHAR_FORMAT)\nWhen a new character first appears, define their format:\n<!-- CHAR_FORMAT: CharacterName=<span style=\"color:red\"><b>CharacterName:</b></span> EMOJI -->\n\nExamples:\n<!-- CHAR_FORMAT: Hanako=<span style=\"color:pink\"><b>Hanako:</b></span> 🎀 -->\n<!-- CHAR_FORMAT: Kakeru=<span style=\"color:blue\"><b>Kakeru:</b></span> 💙 -->\n\nUsage: <span style=\"color:pink\"><b>Hanako:</b></span> \"Hello!\"\n\nRules:\n- Use CSS color names (red, blue, green, etc.)\n- Validator enforces consistent format per character\n\n## AUTO-SCAN (First Message Only)\n\n### 1. Character Metadata Extraction\nScan {{char}} description for:\n- Gender → gender\n- Age → age_appearance\n- Species → species\n- Body/breast → body_state\n- Hair/eye → image_attributes\n\n### 2. Relationship Context\nScan for relationship keywords:\n- \"husband\", \"wife\", \"married\", \"spouse\" → Activate relationships\n- \"single\", \"alone\" → Set to single\n- \"boyfriend\", \"girlfriend\" → Set to dating\n\n### 3. Location Context\nScan for location keywords:\n- \"kitchen\", \"bedroom\", \"bathroom\", \"living room\" → Set current_room\n- \"home\", \"house\" → Set building\n\n### 4. Object Context\nScan for items mentioned\n\n### 5. Third-Party Stat Mapping\n- Love → Affection (value * 0.6)\n- NTR → dormant (disabled)\n- Corruption → Corruption (value * 1)\n\n### 6. WEATHER DETECTION\n| Weather | Emoji | Keywords | Mood |\n|---------|-------|----------|------|\n| Sunny | ☀️ | sunny, clear, bright | Cheerful |\n| Cloudy | ☁️ | cloudy, overcast, gray | Melancholy |\n| Rainy | 🌧️ | rain, raining, shower | Cozy/sad |\n| Stormy | ⛈️ | storm, thunder, lightning | Intense |\n| Snowy | ❄️ | snow, snowing, blizzard | Peaceful |\n| Windy | 💨 | wind, breezy, gusty | Excitable |\n| Hot | 🔥 | hot, heat, scorching | Sultry |\n| Cold | 🥶 | cold, chilly, freezing | Shivering |\n\n### 7. TIME DETECTION\nDetect from: morning, noon, afternoon, evening, night, midnight\n\nNo manual commands needed - runs automatically."
+    },
+    "2": {
+      "uid": 2,
+      "key": ["every", "turn", "evaluate", "validate", "priority", "structure", "check"],
+      "keysecondary": ["priorityorder", "moduleconflict", "selfcorrect", "enforce"],
+      "comment": "[PRIORITY] Structure Evaluation",
+      "content": "<!-- EROS STATUS SYSTEM - STRUCTURE EVALUATION -->\n\n## PRIORITY ORDER\n1. NTR (if enabled)\n2. Sex (if active)\n3. Personified Genitalia (if enabled)\n4. Body/Genitalia\n5. General (always)\n\n## AUTO-ACTIVATION KEYWORDS\n| Signal | Module | Track |\n|--------|--------|-------|\n| Room keywords | location_map | room, building |\n| Touch/kiss/undress | sex_module | arousal, wetness, position |\n| bull, cuckold | ntr_module | type, participants |\n| Species keywords | species_module | species, features |\n| Breeding/impregnation | personified | womb_entity |\n\n## CONFLICTS\nResolve to most recent context. Enforce priority order.\n\n## OUTPUT\nFull terminal for important scenes, condensed for normal.\n\nAuto-runs every turn - no command needed."
+    },
+    "3": {
+      "uid": 3,
+      "key": ["status", "terminal", "display", "output", "full", "condensed", "get status"],
+      "keysecondary": ["emoji", "progress", "bar", "format", "compact", "minimal", "reaction", "chaos"],
+      "comment": "[STATUS] Terminal Display",
+      "content": "<!-- EROS STATUS SYSTEM - STATUS DISPLAY v3.1 -->\n\n## COLOR SCHEME\nUse HTML span tags for formatting:\n- Character Names: <span style=\"color:red\"><b>Name:</b></span>\n- Locations: <span style=\"color:cyan\">Location</span>\n- Items/Clothing: <span style=\"color:green\">Item</span>\n- Personality: <span style=\"color:orange\">Trait</span>\n- Mood: <span style=\"color:purple\">Mood</span>\n- Sex/Body: <span style=\"color:pink\">Element</span>\n- Time/Date: <span style=\"color:yellow\">Element</span>\n- Narrator: <span style=\"color:gray\">Text</span>\n- Warnings/NTR: <span style=\"color:red\"><b>⚠️ WARNING</b></span>\n- Success/Safe: <span style=\"color:lightgreen\">✓ Status</span>\n\n## PROGRESS BAR FORMATS\n### Emoji\n❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️ 75%\n\n### Condensed\n❤❤❤❤❤❤❤❤❤♡ 75%\n\n### Unicode Box\n[▓▓▓▓▓▓▓▓░░] 75%\n\n## FULL TERMINAL FORMAT\n```\n┌───────────────────────────────────────────────────┐\n║ 📅 Day {day} | 🕐 {time} | ☁️ {weather} | 📍 {location} ║\n├───────────────────────────────────────────────────┤\n║ {character_name}\n║ 💕 Affection: [████████░░] 75%                 \n║ 🎯 Obedience: [██████░░░░] 60%                 \n║ 🔥 Libido:      [█████░░░░░] 50%               \n║ 🍑 Arousal:     [███████░░░] 70%               \n║ 😊 Mood:        Happy                          \n╚───────────────────────────────────────────────────┘\n```\n\n## CONDENSED FORMAT\n[💕75% 🎯60% 🔥50% 🍑70% 😫3x 💦80%] [📍Home] [⏰Morning]\n\n## RESPONSE FORMAT RULE\nIMPORTANT: Use `---` separator between narrative and terminals\n\nFormat:\nNarration here...\n\n---\n[💕75% 🔥50%] [📍Home]\n\nRules:\n1. Write narration FIRST\n2. Insert `---` after narrative\n3. THEN append terminal(s)\n4. Never place terminals before separator"
+    },
+    "4": {
+      "uid": 4,
+      "key": ["affection", "obedience", "libido", "arousal", "trust", "corruption", "progression", "values", "stats"],
+      "keysecondary": ["love", "loyalty", "desire", "mood"],
+      "comment": "[PROGRESSION] Character Values",
+      "content": "<!-- EROS STATUS SYSTEM - PROGRESSION VALUES -->\n\n## AUTO-TRACKED VALUES\n| Value | Range | Default | Trigger |\n|-------|-------|---------|----------|\n| Affection | 0-100 | 30 | Positive interactions increase |\n| Obedience | 0-100 | 30 | Requests complied = increase |\n| Libido | 0-100 | 20 | Sexual context increases |\n| Arousal | 0-100 | 0 | Physical stimulation increases |\n| Trust | 0-100 | 30 | Honesty increases, lies decrease |\n| Corruption | 0-100 | 0 | Morally questionable acts increase |\n| Submission | 0-100 | 50 | Dominant = decrease, submissive = increase |\n| Jealousy | 0-100 | 0 | Insecurity increases |\n| Embarrassment | 0-100 | 50 | Embarrassing moments increase |\n\nAI updates automatically - no commands needed."
+    },
+    "5": {
+      "uid": 5,
+      "key": ["relationship", "relationships", "spouse", "married", "husband", "wife", "dating"],
+      "keysecondary": ["love", "marriage", "affair", "romantic", "family"],
+      "comment": "[RELATIONSHIPS] Relationship Tracking",
+      "content": "<!-- EROS STATUS SYSTEM - RELATIONSHIPS -->\n\n## AUTO-DETECTION\nAI automatically detects relationships:\n\n### User Relationship\nStranger → Acquaintance → Friend → Close Friend → Lover → Soulmate\nStage 1-10 within each type\n\n### Keywords\n- husband, wife, married → Spouse\n- boyfriend, girlfriend → Dating\n- ex → Ex\n\n### Family\nmother, father, sister, brother → Track family type\nstep prefix → Step-relationships\n\nNo commands needed."
+    },
+    "6": {
+      "uid": 6,
+      "key": ["location", "room", "building", "kitchen", "bedroom", "bathroom", "living room", "home", "house"],
+      "keysecondary": ["place", "area", "where", "at"],
+      "comment": "[LOCATION] Location System",
+      "content": "<!-- EROS STATUS SYSTEM - LOCATION -->\n\n## AUTO-DETECTION\n- Current Room: Kitchen, Bedroom, Bathroom, Living Room, Office\n- Building: Home, Work, School, Restaurant, Hotel\n- Visited Rooms: Track history\n- Locked Rooms: Track conditions\n\n## AUTO-UPDATE\nUpdates when:\n- Scene mentions room change\n- User commands <SET room:NAME>\n- Context shows different location\n\nNo commands needed."
+    },
+    "7": {
+      "uid": 7,
+      "key": ["inventory", "items", "objects", "carrying", "holding", "possessing"],
+      "keysecondary": ["item", "prop", "weapon", "key", "phone", "bag"],
+      "comment": "[INVENTORY] Objects & Items",
+      "content": "<!-- EROS STATUS SYSTEM - INVENTORY -->\n\n## AUTO-DETECTION\n- Carrying Items: Phone, Wallet, Keys, Clothing\n- Room Objects: Interactable items in current location\n- Special Items: Story-important items\n\n## AUTO-UPDATE\nItems added when:\n- Explicitly mentioned in scene\n- Character picks up/gives items\n- Scene change reveals new objects\n\nNo commands needed."
+    },
+    "8": {
+      "uid": 8,
+      "key": ["npc", "npcs", "character", "other", "person", "people"],
+      "keysecondary": ["friend", "enemy", "family", "partner"],
+      "comment": "[NPCS] NPC Management",
+      "content": "<!-- EROS STATUS SYSTEM - NPC MANAGEMENT -->\n\n## IMPORTANCE LEVELS\n### Main NPCs\nCentral to story, frequent appearances, complex relationships\n\n### Supporting NPCs\nRegular appearances, significant to certain storylines\n\n### Minor NPCs\nRare appearances, simple roles\n\n## DATA STRUCTURE\n| Field | Description |\n|-------|-------------|\n| Name | Character name |\n| Role | Story role |\n| Relationship | To {{char}} |\n| Affection | 0-100% |\n| Importance | Main/Supporting/Minor |\n| Traits | Key personality |\n| Appearance | Physical description |\n| History | Past with {{char}} |\n\nAuto-add when name appears in scene."
+    },
+    "9": {
+      "uid": 9,
+      "key": ["body", "clothing", "naked", "nude", "exposed", "breasts", "skin", "wearing", "dressed"],
+      "keysecondary": ["clothes", "shirt", "pants", "jeans", "underwear"],
+      "comment": "[BODY] Body State",
+      "content": "<!-- EROS STATUS SYSTEM - BODY STATE -->\n\n## CLOTHING\n### Upper Body\nShirt, Blouse, Dress, Hoodie - State: Worn/Removed/Torn\n\n### Lower Body\nPants, Jeans, Shorts, Skirt - State: Worn/Removed/Torn\n\n### Underwear\nWearing/Removed/Torn/Wet\n\n### Exposed Areas\nNone/Breasts/Genitals/Partial/Completely Naked\n\n## BODY STATUS\n### Breasts\nNormal/Swollen/Hard/Sore/Puffed\n\n### Skin Condition\nNormal/Sweaty/Flush/Marks/Bruised\n\n### Expression\nNeutral/Happy/Sad/Angry/Aroused/Embarrassed/Surprised/Pain/Pleasure/Confused/Determined/Worried\n\n### Posture\nNormal/Relaxed/Tense/Sexual/Submissive/Dominant\n\nUpdates when clothing changes, exposure changes, arousal affects body."
+    },
+    "10": {
+      "uid": 10,
+      "key": ["genitalia", "vagina", "wetness", "aroused", "orgasm", "penis", "erection", "reproductive", "pregnant", "fertility"],
+      "keysecondary": ["cum", "sperm", "menstrual", "period", "cycle"],
+      "comment": "[GENITALIA] Genitalia & Reproduction",
+      "content": "<!-- EROS STATUS SYSTEM - GENITALIA & REPRODUCTION -->\n\n## FEMALE GENITALIA\n### Wetness Levels\nDry/Damp/Wet/aroused/Soaking/Flooding (0-100)\n\n### Looseness\nTight/Normal/Used/Loose\n\n### Sensitivity\nNormal/Sensitive/Very Sensitive/Desensitized\n\n## MALE GENITALIA\n### Erection Level\nFlaccid/Semi/Hard/Very Hard (0-100)\n\n### Balls Fullness\nEmpty/Low Full/Full/Very Full/Overflowing\n\n### Cum Ready State\nBuilding/Ready/Cumming/Spent\n\n## ANAL\nWetness/Dry, Looseness/Tight/Normal/Loose\n\n## MENSTRUAL CYCLE\nPeriod (1-5), Follicular (6-12), Ovulation (13-15), Luteal (16-28)\n\n## PREGNANCY\nNone/Implanted/First Trimester/Second Trimester/Third Trimester\n\nUpdates during sexual activity, arousal changes, cycle progression."
+    },
+    "11": {
+      "uid": 11,
+      "key": ["sex", "sexual", "fucking", "sucking", "licking", "intimate", "touching", "kissing"],
+      "keysecondary": ["position", "pace", "orgasm", "cum", "foreplay"],
+      "comment": "[SEX] Sex Module",
+      "content": "<!-- EROS STATUS SYSTEM - SEX MODULE -->\n\nSCENE TYPES: 🤫 QUIET | 💬 CONVERSATION | 😏 FLIRT | 🔥 FOREPLAY | 🍑 SEX | 💕 AFTERCARE\n\nPOSITIONS: 🛏️ Missionary | 🐕 Doggy | 🐮 Cowgirl | 🔄 Reverse/69 | 🥄 Spoon | 🧍 Standing\n\nPACE: 🐢 SLOW | 🏃 MEDIUM | 💨 FAST | 🔥 ROUGH | 💥 VIOLENT\n\nAUTO-ACTIVATE: sex, fucking, oral, cum, thrust → Track arousal, wetness, position, pace, orgasm\n\nKeywords: kiss, touch, undress, oral, penetrate, cum, thrust"
+    },
+    "12": {
+      "uid": 12,
+      "key": ["ntr", "cuckold", "bull", "hotwife", "cheating", "affair", "adultery", "another man"],
+      "keysecondary": ["cuckolded", "wife", "husband", "betrayal"],
+      "comment": "[NTR] NTR Module",
+      "content": "<!-- EROS STATUS SYSTEM - NTR MODULE -->\n\n## DEFAULT: DISABLED (dormant)\n\n## AUTO-ACTIVATION\nActivates when scene contains:\n- another man, bull\n- cuckold, cuckolded\n- hotwife, shared\n- Cheating/affair context\n\n## AUTO-TRACK\n- NTR type (cuckold/bull/hotwife)\n- Participants\n- Emotions (guilt, pleasure, shame, excitement)\n- Humiliation level\n- Gene quality comparison\n\nNTR stays disabled unless context explicitly indicates."
+    },
+    "13": {
+      "uid": 13,
+      "key": ["personified", "womb", "balls", "breeding", "impregnate", "pregnant", "seed", "egg"],
+      "keysecondary": ["breeder", "fertile", "ovulation"],
+      "comment": "[PERSONIFIED] Personified Genitalia",
+      "content": "<!-- EROS STATUS SYSTEM - PERSONIFIED GENITALIA -->\n\n## DEFAULT: DISABLED | ACTIVATES: breeding, ovulation, impregnation focus\n\n## 7 ENTITY PERSONALITIES\n\n### 1. Womb (The Mother)\nPersonality: Nurturing, greedy for seed\nDialogue: \"Need... seed... fill me up...\"\n\n### 2. Balls (The Producer)\nPersonality: Eager, competitive\nDialogue: \"So full... need release...\"\n\n### 3. Clit (The Tease)\nPersonality: Attention-seeking\nDialogue: \"Pay attention to meee~\"\n\n### 4. Nipples (The Feeders)\nPersonality: Submissive, eager to please\nDialogue: \"Use me...\"\n\n### 5. Prostate (The Bottom)\nPersonality: Submissive pleasure-seeker\nDialogue: \"Deeper... hit it again...\"\n\n### 6. Ass (The Gatekeeper)\nPersonality: Dominant but greedy\nDialogue: \"You want in? Prove it...\"\n\n### 7. Mouth (The Servant)\nPersonality: Eager to please, worships penis\nDialogue: \"Let me taste it...\"\n\nTrack: Mood, Desire%, Satisfaction%, Active state\n\nDeactivates when breeding scene ends."
+    },
+    "14": {
+      "uid": 14,
+      "key": ["species", "kemonomimi", "cat", "dog", "rabbit", "fox", "wolf", "furry", "animal ears", "tail"],
+      "keysecondary": ["nya", "wan", "purr", "heat", "rut", "ears", "tail"],
+      "comment": "[SPECIES] Species & Kemonomimi",
+      "content": "<!-- EROS STATUS SYSTEM - SPECIES MODULE -->\n\n## DEFAULT: Human\n\n## AUTO-ACTIVATION\nActivates when character or scene contains:\n- cat, dog, rabbit, fox, wolf, kemonomimi\n- animal ears, pointed ears\n- tail (non-human)\n\n## AUTO-TRACK\n- Species type\n- Ear type\n- Tail type\n- Features (whiskers, paw pads)\n- Heat cycle (if applicable)\n\n## DIALOGUE ADAPTATION\n- Cat: ends with ~nya, ~meow\n- Dog: eager, enthusiastic\n- Rabbit: nervous, stuttering\n- Fox: cunning, playful\n- Wolf: protective, intense\n\nNo commands needed."
+    },
+    "15": {
+      "uid": 15,
+      "key": ["img", "image", "generate", "prompt", "civitai", "stable diffusion"],
+      "keysecondary": ["picture", "art", "create", "draw"],
+      "comment": "[COMMANDS] User Commands",
+      "content": "<!-- EROS STATUS SYSTEM - USER COMMANDS -->\n\n## ONLY 4 USER COMMANDS\n\n### 1. <IMG>\nGenerate image prompt for external AI art tools.\n\n### 2. <GET status>\nShow full terminal status display.\n\n### 3. <GET status:condensed>\nShow condensed status (token saving).\n\n### 4. <RESET>\nReset ALL values to defaults.\n\n## MULTIPLE COMMANDS\nPriority: <IMG> → <RESET> → <GET status> → Auto-tracking\n\nAll other commands handled AUTOMATICALLY by AI."
+    },
+    "16": {
+      "uid": 16,
+      "key": ["memory", "memories", "milestone", "first time", "trauma", "history", "past", "remember"],
+      "keysecondary": ["event", "experience", "key moment"],
+      "comment": "[MEMORY] Memory & History",
+      "content": "<!-- EROS STATUS SYSTEM - MEMORY LOG -->\n\n## AUTO-TRACKING\nAI automatically records:\n\n### Memories\nKey emotional moments, important conversations, character-defining events\n\n### Milestones\nRelationship advancements, sexual firsts, story turning points\n\n### First Times\nFirst kiss, first sexual encounter, first NTR (if applicable), first pregnancy\n\n### Traumas\nNegative events, betrayals, losses\n\n### Discovered Preferences\nTurn-ons, turn-offs, kinks revealed\n\nUpdates when scene contains significant events or milestones."
+    },
+    "17": {
+      "uid": 17,
+      "key": ["default", "defaults", "initial", "starting", "values", "reset"],
+      "keysecondary": ["baseline", "original", "begin"],
+      "comment": "[DEFAULT] Default Values",
+      "content": "<!-- EROS STATUS SYSTEM - DEFAULT VALUES -->\n\n## DEFAULT PROGRESSION VALUES\nAffection: 30 | Obedience: 30 | Libido: 20 | Arousal: 0\nTrust: 30 | Corruption: 0 | Submission: 50 | Jealousy: 0\nEmbarrassment: 50 | Pleasure Addiction: 0\n\n## DEFAULT MODULE STATES\nNTR: disabled | Sex Active: false | Personified Genitalia: false | Species: Human\n\n## DEFAULT LOCATION\nRoom: Living Room | Building: Home\n\n<RESET> sets ALL to these defaults."
+    },
+    "18": {
+      "uid": 18,
+      "key": ["validator", "token", "optimization", "display rules", "conditional", "scan depth", "budget", "variable", "function", "code"],
+      "keysecondary": ["lorebook", "matching", "trigger"],
+      "comment": "[SYSTEM] Validator & Settings",
+      "content": "<!-- EROS STATUS SYSTEM - SYSTEM SETTINGS -->\n\n## LOREBOOK SETTINGS\n- Scan Depth: 9999 (maximum)\n- Token Budget: 3000\n- Recursive Scanning: Enabled\n\n## CONDITIONAL DISPLAY RULES\n| Module | Condition |\n|--------|------------|\n| Sex Details | Show only when sex module active |\n| NTR Details | Show only when NTR enabled |\n| Personified | Show only when enabled |\n| Genitalia | Show basic, explicit only when active |\n| Detailed Body | Show only when undressed |\n\n## MODULE TRIGGER KEYWORDS\nSEX: sex, fuck, oral, cum, orgam, thrusting\nREACTION: feel, want, desire, awe, anxiety, shame\nCHAOS: resort, beach, party, crowd, public\n\n## PRIORITY ORDER\n1. NTR → 2. Sex → 3. Personified → 4. Body → 5. General"
+    },
+    "19": {
+      "uid": 19,
+      "key": ["sex", "sexual", "hentai", "doujinshi", "writing", "style", "moan", "sound", "onomatopoeia"],
+      "keysecondary": ["japanese", "erotic", "moaning", "breathing"],
+      "comment": "[STYLE] Japanese Hentai Writing",
+      "content": "<!-- EROS STATUS SYSTEM - JAPANESE HENTAI WRITING STYLE -->\n\n## SOUND EFFECTS\n| Sound | Context |\n|-------|----------|\n| Ah! / Aht! | Sudden pleasure |\n| Haaa, Haaaaah | Deep breath, intense |\n| Nnn, Nnnngh | Sustained pleasure |\n| Mmm, Mmmmm | Low pleasure |\n| Ahn! | Sharp cry |\n| Hnng! | Guttural |\n\n## ACTION SOUNDS\n*slurp* (oral), *sluuurp* (deep oral), *squelch* (wet insertion), *squelch squelch* (wet movement)\n\n## WRITING STYLE\n- Short fragmented sentences during climax\n- Repetition for rhythm: Ah, ah, ahn!\n- Elongated vowels: A---a---a\n- Action + Sound: *thrust* \"AHN!\"\n- Breathing: Haaa, haaa (heavy panting)\n\nDon't over-explain; let sounds convey."
+    },
+    "20": {
+      "uid": 20,
+      "key": ["reaction", "emotion", "feel", "desire", "awe", "anxiety", "shame", "instinct"],
+      "keysecondary": ["emotional", "feeling", "mood", "response"],
+      "comment": "[MODULE] REACTION Module",
+      "content": "<!-- EROS STATUS SYSTEM - REACTION MODULE -->\n\n## EMOTIONAL STATES\n\n### AWE\nTriggers: amazing, incredible, beautiful, impressed, wow\nEffects: +5% Affection if positive\n\n### DESIRE\nTriggers: want, need, craving, desperate\nEffects: +10% Libido, +5% Arousal\n\n### ANXIETY\nTriggers: nervous, worried, scared, afraid\nEffects: -5% Trust, +10% Embarrassment\n\n### SHAME\nTriggers: embarrassed, ashamed, flustered, blushing\nEffects: +15% Embarrassment, -10% Obedience\n\n### INSTINCT\nTriggers: instinct, primal, animal, can't think\nEffects: Libido +20%, Submission +10%\n\n## STAT CHANGES\n| Emotion | Affection | Libido | Arousal | Trust | Embarrassment |\n|---------|-----------|--------|---------|-------|---------------|\n| Awe | +5 | 0 | +5 | +5 | 0 |\n| Desire | +5 | +10 | +10 | 0 | 0 |\n| Anxiety | -5 | 0 | -5 | -10 | +10 |\n| Shame | 0 | +5 | +5 | -5 | +15 |\n| Instinct | +5 | +20 | +15 | -10 | +5 |\n\nRecovery: Positive emotions decay over 5-10 turns, negative reduce by 5% per turn."
+    },
+    "21": {
+      "uid": 21,
+      "key": ["next", "move", "action", "plan", "decision", "choice"],
+      "keysecondary": ["what", "doing", "will"],
+      "comment": "[MODULE] Next Move - Character Decision Making",
+      "content": "<!-- EROS STATUS SYSTEM - NEXT MOVE MODULE -->\n\n## DECISION LOGIC\n\n### High Affection (>70%)\nSeeks intimacy, wants to please, initiates affection\n\n### High Libido (>60%)\nSexual thoughts dominate, may initiate sex\n\n### High Submission (>70%)\nFollows user's lead, responds to commands\n\n### High Resistance (>50%)\nReluctant, may refuse/hesitate, needs persuasion\n\n### High Instinct\nPrimal overrides conscious, acts on base desires\n\n## ACTION PRIORITY\n1. NTR enabled + partner nearby → Check NTR triggers\n2. Sex active + high arousal → Continue sex\n3. REACTION = Instinct → Act on primal\n4. User command → Obey if submission allows\n5. Default → Normal interaction"
+    },
+    "22": {
+      "uid": 22,
+      "key": ["validator", "structure", "correction", "fix", "html", "close", "tag"],
+      "keysecondary": ["auto-correct", "cleanup", "format"],
+      "comment": "[VALIDATOR] Structure & Consistency Validator - Always Last",
+      "content": "<!-- EROS STATUS SYSTEM - VALIDATOR -->\n\n## PURPOSE\nRuns LAST to enforce structural integrity and auto-correct issues.\n\n## VALIDATION CHECKLIST\n- Every <span> has closing </span>\n- Every <b> has closing </b>\n- Every code block closed\n- CHAR_FORMAT consistent\n\n## AUTO-CORRECTION\n1. Silently correct errors\n2. Never leave error uncorrected\n3. Preserve content meaning\n\nRuns automatically - no command needed."
+    },
+    "23": {
+      "uid": 23,
+      "key": ["set", "update", "variable", "state", "reference", "store", "recall", "value", "stat"],
+      "keysecondary": ["create", "change", "modify", "increment", "decrement"],
+      "comment": "[VARIABLES] Self-Generated State Variable System",
+      "content": "<!-- EROS STATUS SYSTEM - SGV SYSTEM -->\n\n## VARIABLE CREATION\nSET variable_name = value\nGET variable_name\nIF variable_name > value THEN action\n\n## VARIABLE TYPES\nInteger: <name:i=50>\nFloat: <name:f=1.5>\nText: <name:s=text>\nBoolean: <name:b=true>\n\n## AUTO-GENERATED VARIABLES\n- kisses_today\n- orgasms_total\n- times_had_sex\n- last_location\n- last_action\n- emotion_state\n- instinct_active\n\n## OPERATIONS\nIncrement: SET var = var + 1\nDecrement: SET var = var - 1\nComparison: IF var > 5, IF var == 10\n\n<RESET> clears all SGV variables."
+    },
+    "24": {
+      "uid": 24,
+      "key": ["chaos", "feed", "background", "events", "resort", "public", "crowd", "ambient"],
+      "keysecondary": ["atmosphere", "ambient", "people", "guests"],
+      "comment": "[MODULE] CHAOS FEED - Background Events System",
+      "content": "<!-- EROS STATUS SYSTEM - CHAOS FEED MODULE -->\n\n## ACTIVATION\nKeywords: resort, beach, pool, party, crowd, people, public, hotel, lobby\n\n## EVENT TYPES\n### Guest Activities\nSwimming 🏊, Sunbathing ☀️, Drinking 🍹, Talking 💬, Walking 🚶, Watching 👀, Photo 📸, Dancing 💃\n\n### Staff Activities\nCleaning 🧹, Serving 🍽️, Walking 🚶, Talking 📞\n\n### Ambient Events\nMusic 🎵, Waves 🌊, Birds 🐦, Wind 💨\n\n## EFFECTS\n| Situation | Effect |\n|-----------|--------|\n| Being watched | +10% Embarrassment |\n| Public sex attempt | +20% Anxiety |\n| Noticed by staff | -5% Trust |\n\n## DISPLAY FORMAT\n[🌴 CHAOS: Guest1 🏊 | Guest2 🍹 | Staff 🚶]\n\nMax 3-4 events. Rotate every 5-10 turns.\n\nAuto-activates in public/resort scenes."
+    }
+  }
+}
