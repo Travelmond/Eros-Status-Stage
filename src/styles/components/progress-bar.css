@@ -1,0 +1,408 @@
+/**
+ * Eros Status Stage - Progress Bar Components
+ * Right-to-left fill pattern with gradient backgrounds
+ * Phase 2.1 - Progress bar styling
+ */
+
+/* ============================================================================
+   BASE PROGRESS BAR
+   ============================================================================ */
+
+.eros-progress {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 100%;
+  height: 1.5rem;
+  background-color: var(--eros-bg-secondary);
+  border-radius: var(--eros-radius-md);
+  overflow: hidden;
+  box-shadow: inset 0 2px 4px var(--eros-shadow);
+}
+
+.eros-progress-bar {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  border-radius: var(--eros-radius-md);
+  transition: width var(--eros-progress-transition);
+  position: relative;
+}
+
+/* Right-to-left fill pattern */
+.eros-progress-fill {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  transition: width var(--eros-progress-transition);
+  border-radius: 0 var(--eros-radius-md) var(--eros-radius-md) 0;
+}
+
+/* ============================================================================
+   GRADIENT VARIANTS
+   ============================================================================ */
+
+/* Low (red) → Mid (orange) → High (green) gradient */
+.eros-progress-gradient .eros-progress-fill {
+  background: linear-gradient(
+    90deg,
+    var(--eros-progress-low),
+    var(--eros-progress-mid),
+    var(--eros-progress-high)
+  );
+  background-size: 200% 100%;
+}
+
+/* Solid colors based on value range */
+.eros-progress-low .eros-progress-fill {
+  background-color: var(--eros-progress-low);
+}
+
+.eros-progress-mid .eros-progress-fill {
+  background-color: var(--eros-progress-mid);
+}
+
+.eros-progress-high .eros-progress-fill {
+  background-color: var(--eros-progress-high);
+}
+
+/* Status-specific solid colors */
+.eros-progress-affection .eros-progress-fill {
+  background-color: var(--eros-affection);
+}
+
+.eros-progress-obedience .eros-progress-fill {
+  background-color: var(--eros-obedience);
+}
+
+.eros-progress-libido .eros-progress-fill {
+  background-color: var(--eros-libido);
+}
+
+.eros-progress-arousal .eros-progress-fill {
+  background-color: var(--eros-arousal);
+}
+
+.eros-progress-location .eros-progress-fill {
+  background-color: var(--eros-location);
+}
+
+.eros-progress-time .eros-progress-fill {
+  background-color: var(--eros-time);
+}
+
+/* ============================================================================
+   UNICODE BLOCK STYLE (█░)
+   ============================================================================ */
+
+.eros-progress-unicode {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+.eros-progress-unicode .eros-progress-fill {
+  color: var(--eros-text-inverse);
+  background: transparent;
+}
+
+.eros-progress-unicode .eros-progress-empty {
+  color: var(--eros-text-muted);
+  opacity: 0.4;
+}
+
+/* Unicode block characters */
+.eros-progress-unicode .fill-char {
+  display: inline-block;
+}
+
+/* Block elements mapping */
+.eros-progress-unicode[data-value="0"] .fill-char::before { content: "░"; }
+.eros-progress-unicode[data-value="10"] .fill-char::before { content: "▓"; }
+.eros-progress-unicode[data-value="20"] .fill-char::before { content: "▓"; }
+.eros-progress-unicode[data-value="30"] .fill-char::before { content: "▓"; }
+.eros-progress-unicode[data-value="40"] .fill-char::before { content: "█"; }
+.eros-progress-unicode[data-value="50"] .fill-char::before { content: "█"; }
+.eros-progress-unicode[data-value="60"] .fill-char::before { content: "█"; }
+.eros-progress-unicode[data-value="70"] .fill-char::before { content: "█"; }
+.eros-progress-unicode[data-value="80"] .fill-char::before { content: "█"; }
+.eros-progress-unicode[data-value="90"] .fill-char::before { content: "█"; }
+.eros-progress-unicode[data-value="100"] .fill-char::before { content: "█"; }
+
+/* ============================================================================
+   EMOJI STYLE (❤️)
+   ============================================================================ */
+
+.eros-progress-emoji {
+  font-size: var(--eros-font-size-base);
+  line-height: 1.2;
+}
+
+.eros-progress-emoji .eros-progress-fill {
+  background: transparent;
+}
+
+.eros-progress-emoji .fill-emoji {
+  display: inline-block;
+}
+
+/* Emoji fill characters */
+.eros-progress-emoji.status-affection .fill-emoji::before { content: "❤️"; }
+.eros-progress-emoji.status-obedience .fill-emoji::before { content: "💚"; }
+.eros-progress-emoji.status-libido .fill-emoji::before { content: "🔥"; }
+.eros-progress-emoji.status-arousal .fill-emoji::before { content: "💋"; }
+.eros-progress-emoji.status-location .fill-emoji::before { content: "📍"; }
+.eros-progress-emoji.status-time .fill-emoji::before { content: "⏱️"; }
+
+/* Empty state emoji */
+.eros-progress-emoji .empty-emoji::before {
+  content: "🖤";
+  opacity: 0.3;
+}
+
+/* Custom emoji sets */
+.eros-progress-emoji.emoji-hearts .fill-emoji::before { content: "❤️"; }
+.eros-progress-emoji.emoji-hearts .empty-emoji::before { content: "🤍"; }
+
+.eros-progress-emoji.emoji-flames .fill-emoji::before { content: "🔥"; }
+.eros-progress-emoji.emoji-flames .empty-emoji::before { content: "🖤"; }
+
+.eros-progress-emoji.emoji-stars .fill-emoji::before { content: "⭐"; }
+.eros-progress-emoji.emoji-stars .empty-emoji::before { content: "☆"; }
+
+/* ============================================================================
+   SIZES
+   ============================================================================ */
+
+/* Small */
+.eros-progress-sm {
+  height: 0.75rem;
+  font-size: var(--eros-font-size-xs);
+}
+
+.eros-progress-sm .eros-progress-emoji {
+  font-size: var(--eros-font-size-xs);
+}
+
+/* Medium (default) */
+.eros-progress-md {
+  height: 1.25rem;
+  font-size: var(--eros-font-size-sm);
+}
+
+/* Large */
+.eros-progress-lg {
+  height: 1.75rem;
+  font-size: var(--eros-font-size-base);
+}
+
+.eros-progress-lg .eros-progress-emoji {
+  font-size: var(--eros-font-size-lg);
+}
+
+/* Extra Large */
+.eros-progress-xl {
+  height: 2.25rem;
+  font-size: var(--eros-font-size-md);
+}
+
+.eros-progress-xl .eros-progress-emoji {
+  font-size: var(--eros-font-size-xl);
+}
+
+/* ============================================================================
+   STATES
+   ============================================================================ */
+
+/* Loading/Animating state */
+.eros-progress-animated .eros-progress-fill {
+  background-position: 100% 0;
+  animation: eros-progress-shimmer 2s infinite linear;
+}
+
+@keyframes eros-progress-shimmer {
+  0% { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* Disabled state */
+.eros-progress-disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.eros-progress-disabled .eros-progress-fill {
+  background-color: var(--eros-text-muted);
+}
+
+/* Critical low value */
+.eros-progress-critical .eros-progress-fill {
+  background-color: var(--eros-progress-low);
+  animation: eros-progress-pulse 1s ease-in-out infinite;
+}
+
+@keyframes eros-progress-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Full/Complete state */
+.eros-progress-full .eros-progress-fill {
+  box-shadow: 0 0 10px var(--eros-progress-high);
+}
+
+/* ============================================================================
+   LABELS
+   ============================================================================ */
+
+.eros-progress-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--eros-space-2);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+}
+
+.eros-progress-label-start {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+}
+
+.eros-progress-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1rem;
+  height: 1rem;
+}
+
+.eros-progress-label-end {
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text);
+}
+
+/* Percentage label */
+.eros-progress-percent {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  margin-left: var(--eros-space-1);
+}
+
+/* ============================================================================
+   HORIZONTAL STAT DISPLAY
+   ============================================================================ */
+
+.eros-stat-row {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  padding: var(--eros-space-2) 0;
+}
+
+.eros-stat-icon {
+  width: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--eros-font-size-lg);
+}
+
+.eros-stat-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.eros-stat-label {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--eros-space-1);
+}
+
+.eros-stat-value {
+  display: flex;
+  align-items: baseline;
+  gap: var(--eros-space-2);
+}
+
+.eros-stat-number {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+}
+
+.eros-stat-unit {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+/* ============================================================================
+   COMPACT STAT DISPLAY
+   ============================================================================ */
+
+.eros-stats-compact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-1);
+}
+
+.eros-stats-compact .eros-stat-row {
+  padding: var(--eros-space-1) 0;
+}
+
+.eros-stats-compact .eros-stat-label {
+  display: none;
+}
+
+.eros-stats-compact .eros-stat-icon {
+  width: 1.5rem;
+  font-size: var(--eros-font-size-sm);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .eros-progress {
+    height: 1.25rem;
+  }
+
+  .eros-progress-lg {
+    height: 1.5rem;
+  }
+
+  .eros-progress-xl {
+    height: 2rem;
+  }
+
+  .eros-stat-row {
+    gap: var(--eros-space-2);
+  }
+
+  .eros-stat-icon {
+    width: 1.5rem;
+    font-size: var(--eros-font-size-base);
+  }
+}
+
+/* ============================================================================
+   RTL SUPPORT (Right-to-Left)
+   ============================================================================ */
+
+[dir="rtl"] .eros-progress-fill {
+  border-radius: var(--eros-radius-md) 0 0 var(--eros-radius-md);
+  justify-content: flex-start;
+}
+
+[dir="rtl"] .eros-progress-unicode {
+  direction: rtl;
+}

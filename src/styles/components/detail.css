@@ -1,0 +1,742 @@
+/**
+ * Eros Status Stage - Detail Components CSS
+ * 4-field category detail view styling
+ * Phase 3.1 - Enhanced Category Detail Views
+ */
+
+/* ============================================================================
+   ENHANCED CATEGORY DETAIL - Main Container
+   ============================================================================ */
+
+.eros-enhanced-category-detail {
+  background: var(--eros-bg-primary);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-lg);
+  overflow: hidden;
+}
+
+.eros-category-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  padding: var(--eros-space-4);
+  background: var(--eros-bg-secondary);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-category-icon {
+  font-size: var(--eros-font-size-xl);
+}
+
+.eros-category-title {
+  flex: 1;
+  margin: 0;
+  font-size: var(--eros-font-size-lg);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+}
+
+.eros-category-value {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-md);
+  font-weight: var(--eros-font-weight-bold);
+  color: var(--eros-accent);
+}
+
+.eros-category-fields {
+  padding: var(--eros-space-2);
+}
+
+/* ============================================================================
+   FIELD CONTAINERS
+   ============================================================================ */
+
+.eros-field-container {
+  margin-bottom: var(--eros-space-2);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  overflow: hidden;
+}
+
+.eros-field-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  width: 100%;
+  padding: var(--eros-space-3);
+  background: var(--eros-bg-secondary);
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text);
+  transition: background-color var(--eros-transition-fast);
+}
+
+.eros-field-header:hover {
+  background: var(--eros-bg-tertiary);
+}
+
+.eros-field-header .field-icon {
+  font-size: var(--eros-font-size-base);
+}
+
+.eros-field-header .field-title {
+  flex: 1;
+  font-weight: var(--eros-font-weight-medium);
+}
+
+.eros-field-header .field-toggle {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  transition: transform var(--eros-transition-fast);
+}
+
+.eros-field-header .field-toggle.expanded {
+  transform: rotate(180deg);
+}
+
+.eros-field-content {
+  padding: var(--eros-space-3);
+  background: var(--eros-bg-primary);
+}
+
+.eros-field-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--eros-space-4);
+  color: var(--eros-text-muted);
+}
+
+.eros-field-empty .empty-icon {
+  font-size: var(--eros-font-size-xl);
+  margin-bottom: var(--eros-space-2);
+}
+
+.eros-field-empty .empty-text {
+  font-size: var(--eros-font-size-sm);
+}
+
+/* ============================================================================
+   STATE DISPLAY FIELD (Field 1)
+   ============================================================================ */
+
+.eros-state-display-field {
+  padding: var(--eros-space-3);
+}
+
+.eros-state-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  margin-bottom: var(--eros-space-3);
+}
+
+.eros-state-icon {
+  font-size: var(--eros-font-size-lg);
+}
+
+.eros-state-label {
+  flex: 1;
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eros-state-stage {
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-semibold);
+  padding: var(--eros-space-1) var(--eros-space-2);
+  border-radius: var(--eros-radius-sm);
+}
+
+.eros-state-content {
+  margin-bottom: var(--eros-space-3);
+}
+
+.eros-state-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--eros-space-2);
+  margin-bottom: var(--eros-space-2);
+}
+
+.eros-state-value {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-2xl);
+  font-weight: var(--eros-font-weight-bold);
+}
+
+.eros-state-percentage {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-md);
+  color: var(--eros-text-muted);
+}
+
+.eros-state-footer {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+}
+
+.eros-state-trend {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+}
+
+.eros-trend-symbol {
+  font-size: var(--eros-font-size-lg);
+}
+
+.eros-trend-label {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+.eros-state-change {
+  display: flex;
+  align-items: center;
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+}
+
+.eros-state-change.positive {
+  color: var(--eros-success);
+}
+
+.eros-state-change.negative {
+  color: var(--eros-danger);
+}
+
+.eros-state-stage-badge {
+  margin-left: auto;
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+  padding: var(--eros-space-1) var(--eros-space-2);
+  border-radius: var(--eros-radius-sm);
+}
+
+/* ============================================================================
+   EXPLANATION FIELD (Field 2)
+   ============================================================================ */
+
+.eros-explanation-field {
+  padding: var(--eros-space-3);
+}
+
+.eros-explanation-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  margin-bottom: var(--eros-space-3);
+}
+
+.eros-explanation-icon {
+  font-size: var(--eros-font-size-lg);
+}
+
+.eros-explanation-title {
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eros-explanation-content {
+  margin-bottom: var(--eros-space-3);
+}
+
+.eros-explanation-text {
+  font-size: var(--eros-font-size-sm);
+  line-height: var(--eros-line-height-relaxed);
+  color: var(--eros-text);
+}
+
+.eros-explanation-details {
+  margin: 0;
+}
+
+.eros-explanation-summary {
+  font-size: var(--eros-font-size-sm);
+  line-height: var(--eros-line-height-relaxed);
+  color: var(--eros-text);
+  cursor: pointer;
+}
+
+.eros-explanation-expand-hint {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  margin-left: var(--eros-space-2);
+}
+
+.eros-explanation-full-text {
+  margin-top: var(--eros-space-3);
+  font-size: var(--eros-font-size-sm);
+  line-height: var(--eros-line-height-relaxed);
+  color: var(--eros-text);
+}
+
+.eros-explanation-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--eros-space-3);
+  padding-top: var(--eros-space-3);
+  border-top: 1px solid var(--eros-border);
+}
+
+.eros-explanation-source,
+.eros-explanation-confidence,
+.eros-explanation-turn {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+}
+
+.eros-explanation-metadata .metadata-icon {
+  font-size: var(--eros-font-size-sm);
+}
+
+.eros-explanation-metadata .metadata-label {
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+}
+
+.eros-explanation-metadata .metadata-value {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+.eros-explanation-events {
+  margin-top: var(--eros-space-3);
+  padding-top: var(--eros-space-3);
+  border-top: 1px solid var(--eros-border);
+}
+
+.eros-events-label {
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-muted);
+  display: block;
+  margin-bottom: var(--eros-space-2);
+}
+
+.eros-events-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.eros-event-item {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-secondary);
+  padding: var(--eros-space-1) 0;
+  padding-left: var(--eros-space-3);
+  position: relative;
+}
+
+.eros-event-item::before {
+  content: "•";
+  position: absolute;
+  left: 0;
+  color: var(--eros-accent);
+}
+
+/* ============================================================================
+   CHARACTER VOICE FIELD (Field 3)
+   ============================================================================ */
+
+.eros-voice-field,
+.eros-multiple-voice-field {
+  padding: var(--eros-space-3);
+}
+
+.eros-voice-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  margin-bottom: var(--eros-space-3);
+}
+
+.eros-voice-icon {
+  font-size: var(--eros-font-size-lg);
+}
+
+.eros-voice-title {
+  flex: 1;
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eros-voice-type-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+  padding: var(--eros-space-1) var(--eros-space-2);
+  border-radius: var(--eros-radius-sm);
+}
+
+.voice-type-icon {
+  font-size: var(--eros-font-size-xs);
+}
+
+.eros-voice-content {
+  display: flex;
+  gap: var(--eros-space-3);
+  padding: var(--eros-space-3);
+  background: var(--eros-bg-secondary);
+  border-left: 3px solid;
+  border-radius: var(--eros-radius-md);
+  margin-bottom: var(--eros-space-3);
+}
+
+.eros-voice-type-indicator {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: var(--eros-space-1);
+}
+
+.voice-quote-icon {
+  font-size: var(--eros-font-size-lg);
+}
+
+.eros-voice-text-container {
+  flex: 1;
+}
+
+.eros-voice-text {
+  margin: 0;
+  font-size: var(--eros-font-size-sm);
+  line-height: var(--eros-line-height-relaxed);
+  color: var(--eros-text);
+}
+
+.eros-voice-text.thought {
+  font-style: italic;
+}
+
+.thought-prefix,
+.thought-suffix {
+  color: var(--eros-text-muted);
+}
+
+.eros-voice-metadata {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--eros-space-3);
+}
+
+.eros-voice-speaker,
+.eros-voice-turn {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+}
+
+.eros-voice-metadata .metadata-icon {
+  font-size: var(--eros-font-size-sm);
+}
+
+.eros-voice-metadata .metadata-value {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-secondary);
+}
+
+.eros-voice-flags {
+  display: flex;
+  gap: var(--eros-space-2);
+}
+
+.eros-voice-flag {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+  font-size: var(--eros-font-size-xs);
+  padding: var(--eros-space-1) var(--eros-space-2);
+  border-radius: var(--eros-radius-sm);
+  background: var(--eros-bg-tertiary);
+  color: var(--eros-text-muted);
+}
+
+.eros-voice-flag.tracked {
+  background: rgba(59, 130, 246, 0.1);
+  color: var(--eros-info);
+}
+
+.eros-voice-flag.auto-generated {
+  background: rgba(139, 92, 246, 0.1);
+  color: var(--eros-accent);
+}
+
+.flag-icon {
+  font-size: var(--eros-font-size-xs);
+}
+
+/* Multiple voice sections */
+.eros-voice-section {
+  margin-bottom: var(--eros-space-3);
+}
+
+.eros-voice-section-label {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  margin-bottom: var(--eros-space-2);
+}
+
+.section-icon {
+  font-size: var(--eros-font-size-sm);
+}
+
+.section-label {
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eros-voice-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-4);
+  color: var(--eros-text-muted);
+}
+
+.eros-voice-empty .empty-icon {
+  font-size: var(--eros-font-size-xl);
+}
+
+.eros-voice-empty .empty-text {
+  font-size: var(--eros-font-size-sm);
+}
+
+/* ============================================================================
+   HISTORY FIELD (Field 4)
+   ============================================================================ */
+
+.eros-history-field {
+  padding: var(--eros-space-3);
+}
+
+.eros-history-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  margin-bottom: var(--eros-space-3);
+}
+
+.eros-history-icon {
+  font-size: var(--eros-font-size-lg);
+}
+
+.eros-history-title {
+  flex: 1;
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.eros-history-count {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+.eros-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.eros-history-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  gap: var(--eros-space-3);
+  align-items: center;
+  padding: var(--eros-space-3);
+  border-bottom: 1px solid var(--eros-border);
+  transition: background-color var(--eros-transition-fast);
+}
+
+.eros-history-item:last-child {
+  border-bottom: none;
+}
+
+.eros-history-item.clickable {
+  cursor: pointer;
+}
+
+.eros-history-item.clickable:hover {
+  background: var(--eros-bg-secondary);
+}
+
+.eros-history-turn {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+}
+
+.turn-icon {
+  font-size: var(--eros-font-size-sm);
+}
+
+.turn-number {
+  font-size: var(--eros-font-size-xs);
+  font-family: var(--eros-font-mono);
+  color: var(--eros-text-muted);
+}
+
+.eros-history-change {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+}
+
+.change-icon {
+  font-size: var(--eros-font-size-sm);
+}
+
+.change-amount {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+}
+
+.change-value {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+.eros-history-trigger {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+}
+
+.trigger-icon {
+  font-size: var(--eros-font-size-xs);
+}
+
+.trigger-text {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-secondary);
+}
+
+.eros-history-timestamp {
+  text-align: right;
+}
+
+.timestamp-text {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+.eros-history-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--eros-space-4);
+  color: var(--eros-text-muted);
+}
+
+.eros-history-empty .empty-icon {
+  font-size: var(--eros-font-size-xl);
+  margin-bottom: var(--eros-space-2);
+}
+
+.eros-history-empty .empty-text {
+  font-size: var(--eros-font-size-sm);
+}
+
+.eros-history-view-more {
+  margin-top: var(--eros-space-3);
+  text-align: center;
+}
+
+.view-more-button {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-accent);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--eros-space-2);
+}
+
+.view-more-button:hover {
+  text-decoration: underline;
+}
+
+/* Compact history */
+.eros-compact-history {
+  display: flex;
+  gap: var(--eros-space-2);
+}
+
+.eros-compact-history-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--eros-space-1);
+}
+
+.compact-turn {
+  font-size: var(--eros-font-size-xs);
+  font-family: var(--eros-font-mono);
+  color: var(--eros-text-muted);
+}
+
+.compact-change {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .eros-state-footer {
+    flex-wrap: wrap;
+  }
+
+  .eros-explanation-metadata {
+    flex-direction: column;
+    gap: var(--eros-space-2);
+  }
+
+  .eros-history-item {
+    grid-template-columns: 1fr;
+    gap: var(--eros-space-2);
+  }
+
+  .eros-history-timestamp {
+    text-align: left;
+  }
+
+  .eros-voice-content {
+    flex-direction: column;
+  }
+
+  .eros-voice-metadata {
+    flex-direction: column;
+    gap: var(--eros-space-2);
+  }
+}

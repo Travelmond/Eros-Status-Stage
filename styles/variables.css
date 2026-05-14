@@ -1,0 +1,237 @@
+/**
+ * Eros Status CSS Variables
+ * Theme and color definitions
+ */
+
+/* ============================================================================
+   ROOT - Default Dark Theme
+   ============================================================================ */
+
+:root {
+    /* Base Colors */
+    --eros-bg-primary: #1a1a2e;
+    --eros-bg-secondary: #16213e;
+    --eros-bg-tertiary: #0f3460;
+    --eros-bg-card: #1f2937;
+    --eros-bg-elevated: #374151;
+
+    /* Text Colors */
+    --eros-text-primary: #e5e7eb;
+    --eros-text-secondary: #9ca3af;
+    --eros-text-muted: #6b7280;
+    --eros-text-accent: #f472b6;
+
+    /* Accent Colors */
+    --eros-accent-primary: #ec4899;
+    --eros-accent-secondary: #8b5cf6;
+    --eros-accent-tertiary: #06b6d4;
+
+    /* Status Colors */
+    --eros-status-affection: #ef4444;
+    --eros-status-obedience: #22c55e;
+    --eros-status-libido: #f97316;
+    --eros-status-arousal: #ec4899;
+    --eros-status-trust: #3b82f6;
+    --eros-status-corruption: #7c3aed;
+    --eros-status-submission: #8b5cf6;
+    --eros-status-jealousy: #eab308;
+    --eros-status-embarrassment: #06b6d4;
+
+    /* Stat Stage Colors */
+    --eros-stage-cooling: #6b7280;
+    --eros-stage-neutral: #3b82f6;
+    --eros-stage-warming: #f59e0b;
+    --eros-stage-hot: #ef4444;
+    --eros-stage-blazing: #dc2626;
+
+    /* Scene Colors */
+    --eros-scene-quiet: #6b7280;
+    --eros-scene-conversation: #3b82f6;
+    --eros-scene-flirt: #f472b6;
+    --eros-scene-foreplay: #f97316;
+    --eros-scene-sex: #ef4444;
+    --eros-scene-aftercare: #8b5cf6;
+
+    /* UI Colors */
+    --eros-border-color: #374151;
+    --eros-border-light: #4b5563;
+    --eros-divider: #374151;
+    --eros-shadow: rgba(0, 0, 0, 0.3);
+    --eros-overlay: rgba(0, 0, 0, 0.5);
+
+    /* Progress Bar Colors */
+    --eros-progress-bg: #374151;
+    --eros-progress-fill: #ec4899;
+
+    /* Emoji Colors */
+    --eros-heart-full: #ef4444;
+    --eros-heart-empty: #6b7280;
+    --eros-flame-full: #f97316;
+    --eros-flame-empty: #06b6d4;
+
+    /* Typography */
+    --eros-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    --eros-font-mono: 'SF Mono', Consolas, monospace;
+
+    --eros-font-size-xs: 0.75rem;
+    --eros-font-size-sm: 0.875rem;
+    --eros-font-size-base: 1rem;
+    --eros-font-size-lg: 1.125rem;
+    --eros-font-size-xl: 1.25rem;
+    --eros-font-size-2xl: 1.5rem;
+
+    /* Spacing */
+    --eros-spacing-xs: 0.25rem;
+    --eros-spacing-sm: 0.5rem;
+    --eros-spacing-md: 1rem;
+    --eros-spacing-lg: 1.5rem;
+    --eros-spacing-xl: 2rem;
+
+    /* Border Radius */
+    --eros-radius-sm: 0.25rem;
+    --eros-radius-md: 0.5rem;
+    --eros-radius-lg: 0.75rem;
+    --eros-radius-full: 9999px;
+
+    /* Transitions */
+    --eros-transition-fast: 150ms ease;
+    --eros-transition-normal: 250ms ease;
+    --eros-transition-slow: 350ms ease;
+}
+
+/* ============================================================================
+   LIGHT THEME
+   ============================================================================ */
+
+[data-theme="light"],
+.theme-light {
+    --eros-bg-primary: #f9fafb;
+    --eros-bg-secondary: #f3f4f6;
+    --eros-bg-tertiary: #e5e7eb;
+    --eros-bg-card: #ffffff;
+    --eros-bg-elevated: #f9fafb;
+
+    --eros-text-primary: #111827;
+    --eros-text-secondary: #4b5563;
+    --eros-text-muted: #9ca3af;
+    --eros-text-accent: #db2777;
+
+    --eros-border-color: #e5e7eb;
+    --eros-border-light: #d1d5db;
+    --eros-divider: #e5e7eb;
+    --eros-shadow: rgba(0, 0, 0, 0.1);
+
+    --eros-progress-bg: #e5e7eb;
+}
+
+/* ============================================================================
+   SEPIA THEME
+   ============================================================================ */
+
+[data-theme="sepia"],
+.theme-sepia {
+    --eros-bg-primary: #f4ecd8;
+    --eros-bg-secondary: #e8dfc7;
+    --eros-bg-tertiary: #d4c4a8;
+    --eros-bg-card: #f9f3e3;
+    --eros-bg-elevated: #e8dfc7;
+
+    --eros-text-primary: #433422;
+    --eros-text-secondary: #6b5744;
+    --eros-text-muted: #8b7355;
+    --eros-text-accent: #b85c38;
+
+    --eros-border-color: #c9b896;
+    --eros-border-light: #b8a67a;
+    --eros-divider: #c9b896;
+    --eros-shadow: rgba(67, 52, 34, 0.15);
+
+    --eros-progress-bg: #d4c4a8;
+}
+
+/* ============================================================================
+   DENSITY VARIANTS
+   ============================================================================ */
+
+/* Compact Density */
+.density-compact {
+    --eros-spacing-sm: 0.25rem;
+    --eros-spacing-md: 0.5rem;
+    --eros-spacing-lg: 1rem;
+    --eros-font-size-sm: 0.75rem;
+}
+
+/* Expanded Density */
+.density-expanded {
+    --eros-spacing-sm: 0.75rem;
+    --eros-spacing-md: 1.5rem;
+    --eros-spacing-lg: 2rem;
+    --eros-font-size-base: 1.125rem;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+/* Status color utilities */
+.status-affection { color: var(--eros-status-affection); }
+.status-obedience { color: var(--eros-status-obedience); }
+.status-libido { color: var(--eros-status-libido); }
+.status-arousal { color: var(--eros-status-arousal); }
+.status-trust { color: var(--eros-status-trust); }
+.status-corruption { color: var(--eros-status-corruption); }
+.status-submission { color: var(--eros-status-submission); }
+.status-jealousy { color: var(--eros-status-jealousy); }
+.status-embarrassment { color: var(--eros-status-embarrassment); }
+
+/* Scene type utilities */
+.scene-quiet { color: var(--eros-scene-quiet); }
+.scene-conversation { color: var(--eros-scene-conversation); }
+.scene-flirt { color: var(--eros-scene-flirt); }
+.scene-foreplay { color: var(--eros-scene-foreplay); }
+.scene-sex { color: var(--eros-scene-sex); }
+.scene-aftercare { color: var(--eros-scene-aftercare); }
+
+/* Background utilities */
+.bg-primary { background-color: var(--eros-bg-primary); }
+.bg-secondary { background-color: var(--eros-bg-secondary); }
+.bg-card { background-color: var(--eros-bg-card); }
+.bg-elevated { background-color: var(--eros-bg-elevated); }
+
+/* Border utilities */
+.border-default { border-color: var(--eros-border-color); }
+.border-light { border-color: var(--eros-border-light); }
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes eros-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+@keyframes eros-fade-in {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.animate-pulse {
+    animation: eros-pulse 2s ease-in-out infinite;
+}
+
+.animate-fade-in {
+    animation: eros-fade-in 0.3s ease-out;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 640px) {
+    :root {
+        --eros-font-size-base: 0.875rem;
+        --eros-spacing-md: 0.75rem;
+        --eros-spacing-lg: 1rem;
+    }
+}

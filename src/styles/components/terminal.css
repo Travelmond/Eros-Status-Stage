@@ -1,0 +1,756 @@
+/**
+ * Eros Status Stage - Terminal Styles
+ * Box character frame, monospace typography, color coding
+ * Phase 2.1 - Terminal/console display components
+ */
+
+/* ============================================================================
+   BASE TERMINAL FRAME
+   ============================================================================ */
+
+.eros-terminal {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  line-height: var(--eros-line-height-normal);
+  color: var(--eros-terminal-text);
+  background-color: var(--eros-terminal-bg);
+  border-radius: var(--eros-radius-md);
+  padding: var(--eros-space-4);
+  overflow: hidden;
+  position: relative;
+}
+
+/* Box character frame */
+.eros-terminal-frame {
+  border: 2px solid var(--eros-terminal-border);
+  border-radius: var(--eros-radius-lg);
+  padding: var(--eros-space-4);
+  position: relative;
+}
+
+/* Corner box characters */
+.eros-terminal-frame::before {
+  content: "╔══════════════════════════════════════╗";
+  display: block;
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-terminal-border);
+  white-space: pre;
+  line-height: 1;
+  pointer-events: none;
+}
+
+.eros-terminal-frame::after {
+  content: "╚══════════════════════════════════════╝";
+  display: block;
+  position: absolute;
+  bottom: -2px;
+  left: -2px;
+  right: -2px;
+  font-family: var(--eros-font-mono);
+  font-size: var(--font-size-sm);
+  color: var(--eros-terminal-border);
+  white-space: pre;
+  line-height: 1;
+  pointer-events: none;
+}
+
+/* ============================================================================
+   TERMINAL HEADER
+   ============================================================================ */
+
+.eros-terminal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--eros-space-3);
+  margin-bottom: var(--eros-space-3);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-terminal-title {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+}
+
+.eros-terminal-icon {
+  color: var(--eros-terminal-prompt);
+}
+
+.eros-terminal-controls {
+  display: flex;
+  gap: var(--eros-space-2);
+}
+
+.eros-terminal-btn {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--eros-radius-full);
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--eros-transition-fast);
+}
+
+.eros-terminal-btn:hover {
+  opacity: 0.8;
+}
+
+.eros-terminal-btn-close {
+  background-color: var(--eros-terminal-error);
+}
+
+.eros-terminal-btn-minimize {
+  background-color: var(--eros-terminal-warning);
+}
+
+.eros-terminal-btn-maximize {
+  background-color: var(--eros-terminal-text);
+}
+
+/* ============================================================================
+   TERMINAL CONTENT
+   ============================================================================ */
+
+.eros-terminal-content {
+  padding: var(--eros-space-2) 0;
+  min-height: 100px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.eros-terminal-content::-webkit-scrollbar {
+  width: 4px;
+}
+
+.eros-terminal-content::-webkit-scrollbar-track {
+  background: var(--eros-terminal-bg);
+}
+
+.eros-terminal-content::-webkit-scrollbar-thumb {
+  background: var(--eros-terminal-border);
+  border-radius: var(--eros-radius-full);
+}
+
+/* ============================================================================
+   TERMINAL LINES
+   ============================================================================ */
+
+.eros-terminal-line {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-1) 0;
+}
+
+.eros-terminal-prompt {
+  color: var(--eros-terminal-prompt);
+  font-weight: var(--eros-font-weight-semibold);
+  flex-shrink: 0;
+}
+
+.eros-terminal-command {
+  color: var(--eros-text);
+}
+
+.eros-terminal-output {
+  color: var(--eros-text-secondary);
+}
+
+.eros-terminal-input {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  padding-top: var(--eros-space-2);
+  border-top: 1px solid var(--eros-border);
+  margin-top: var(--eros-space-2);
+}
+
+/* ============================================================================
+   COLOR CODING
+   ============================================================================ */
+
+/* Success / OK */
+.eros-terminal-success {
+  color: var(--eros-terminal-text);
+}
+
+.eros-terminal-success::before {
+  content: "[OK] ";
+  color: var(--eros-terminal-text);
+  font-weight: var(--eros-font-weight-bold);
+}
+
+/* Error / Fail */
+.eros-terminal-error {
+  color: var(--eros-terminal-error);
+}
+
+.eros-terminal-error::before {
+  content: "[ERROR] ";
+  color: var(--eros-terminal-error);
+  font-weight: var(--eros-font-weight-bold);
+}
+
+/* Warning */
+.eros-terminal-warning {
+  color: var(--eros-terminal-warning);
+}
+
+.eros-terminal-warning::before {
+  content: "[WARN] ";
+  color: var(--eros-terminal-warning);
+  font-weight: var(--eros-font-weight-bold);
+}
+
+/* Info */
+.eros-terminal-info {
+  color: var(--eros-terminal-info);
+}
+
+.eros-terminal-info::before {
+  content: "[INFO] ";
+  color: var(--eros-terminal-info);
+  font-weight: var(--eros-font-weight-bold);
+}
+
+/* Debug */
+.eros-terminal-debug {
+  color: var(--eros-text-muted);
+}
+
+.eros-terminal-debug::before {
+  content: "[DEBUG] ";
+  color: var(--eros-text-muted);
+  font-style: italic;
+}
+
+/* ============================================================================
+   STAT DISPLAY FORMAT
+   ============================================================================ */
+
+.eros-terminal-stat {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-1) 0;
+  font-size: var(--eros-font-size-sm);
+}
+
+.eros-terminal-stat-label {
+  color: var(--eros-text-secondary);
+  min-width: 100px;
+}
+
+.eros-terminal-stat-bar {
+  flex: 1;
+  display: flex;
+  gap: 1px;
+}
+
+.eros-terminal-stat-fill {
+  width: 4px;
+  height: 1em;
+  background-color: var(--eros-terminal-text);
+}
+
+.eros-terminal-stat-fill.empty {
+  background-color: var(--eros-border);
+  opacity: 0.3;
+}
+
+.eros-terminal-stat-value {
+  color: var(--eros-text);
+  font-weight: var(--eros-font-weight-medium);
+  min-width: 40px;
+  text-align: right;
+}
+
+/* Status-colored stat bars */
+.eros-terminal-stat.affection .eros-terminal-stat-fill:not(.empty) {
+  background-color: var(--eros-affection);
+}
+
+.eros-terminal-stat.obedience .eros-terminal-stat-fill:not(.empty) {
+  background-color: var(--eros-obedience);
+}
+
+.eros-terminal-stat.libido .eros-terminal-stat-fill:not(.empty) {
+  background-color: var(--eros-libido);
+}
+
+.eros-terminal-stat.arousal .eros-terminal-stat-fill:not(.empty) {
+  background-color: var(--eros-arousal);
+}
+
+.eros-terminal-stat.location .eros-terminal-stat-fill:not(.empty) {
+  background-color: var(--eros-location);
+}
+
+.eros-terminal-stat.time .eros-terminal-stat-fill:not(.empty) {
+  background-color: var(--eros-time);
+}
+
+/* ============================================================================
+   COMPACT TERMINAL
+   ============================================================================ */
+
+.eros-terminal-compact {
+  padding: var(--eros-space-2);
+  font-size: var(--eros-font-size-xs);
+}
+
+.eros-terminal-compact .eros-terminal-line {
+  padding: 2px 0;
+}
+
+.eros-terminal-compact .eros-terminal-stat {
+  font-size: var(--eros-font-size-xs);
+}
+
+/* ============================================================================
+   MINIMAL TERMINAL (Inline)
+   ============================================================================ */
+
+.eros-terminal-inline {
+  display: inline;
+  padding: 0;
+  background: transparent;
+}
+
+.eros-terminal-inline .eros-terminal-prompt::before {
+  content: "> ";
+  color: var(--eros-terminal-prompt);
+}
+
+.eros-terminal-inline .eros-terminal-output {
+  color: var(--eros-text-secondary);
+}
+
+/* ============================================================================
+   TERMINAL VARIANTS
+   ============================================================================ */
+
+/* Green on black (classic terminal) */
+.eros-terminal-classic {
+  --eros-terminal-text: #00ff00;
+  --eros-terminal-bg: #000000;
+  --eros-terminal-border: #00aa00;
+  --eros-terminal-prompt: #00ff00;
+}
+
+/* Amber on black */
+.eros-terminal-amber {
+  --eros-terminal-text: #ffb000;
+  --eros-terminal-bg: #0a0a00;
+  --eros-terminal-border: #806000;
+  --eros-terminal-prompt: #ffb000;
+}
+
+/* Pink/Cyberpunk */
+.eros-terminal-cyber {
+  --eros-terminal-text: #ff00ff;
+  --eros-terminal-bg: #0a0010;
+  --eros-terminal-border: #800080;
+  --eros-terminal-prompt: #00ffff;
+}
+
+/* Inverted (light background) */
+.eros-terminal-inverted {
+  --eros-terminal-text: #1a1a2e;
+  --eros-terminal-bg: #e0e0e8;
+  --eros-terminal-border: #a0a0b0;
+  --eros-terminal-prompt: #7c3aed;
+}
+
+/* ============================================================================
+   TERMINAL SIZES
+   ============================================================================ */
+
+.eros-terminal-sm {
+  font-size: var(--eros-font-size-xs);
+  padding: var(--eros-space-2);
+}
+
+.eros-terminal-md {
+  font-size: var(--eros-font-size-sm);
+  padding: var(--eros-space-4);
+}
+
+.eros-terminal-lg {
+  font-size: var(--eros-font-size-base);
+  padding: var(--eros-space-6);
+}
+
+.eros-terminal-xl {
+  font-size: var(--eros-font-size-lg);
+  padding: var(--eros-space-8);
+}
+
+/* ============================================================================
+   ANIMATED TERMINAL
+   ============================================================================ */
+
+.eros-terminal-typing .eros-terminal-output {
+  overflow: hidden;
+  white-space: nowrap;
+  animation: eros-terminal-typing 2s steps(40, end);
+}
+
+@keyframes eros-terminal-typing {
+  from { width: 0; }
+  to { width: 100%; }
+}
+
+/* Blinking cursor */
+.eros-terminal-cursor::after {
+  content: "█";
+  animation: eros-terminal-blink 1s step-end infinite;
+  color: var(--eros-terminal-text);
+}
+
+@keyframes eros-terminal-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+/* Scanline effect */
+.eros-terminal-scanlines {
+  position: relative;
+}
+
+.eros-terminal-scanlines::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0, 0, 0, 0.1) 2px,
+    rgba(0, 0, 0, 0.1) 4px
+  );
+  pointer-events: none;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .eros-terminal {
+    font-size: var(--eros-font-size-xs);
+    padding: var(--eros-space-2);
+  }
+
+  .eros-terminal-frame::before,
+  .eros-terminal-frame::after {
+    font-size: var(--eros-font-size-xs);
+  }
+
+  .eros-terminal-lg,
+  .eros-terminal-xl {
+    font-size: var(--eros-font-size-sm);
+    padding: var(--eros-space-4);
+  }
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+.eros-terminal-block {
+  display: block;
+  margin: var(--eros-space-2) 0;
+}
+
+.eros-terminal-divider {
+  border-top: 1px dashed var(--eros-border);
+  margin: var(--eros-space-3) 0;
+}
+
+.eros-terminal-spacer {
+  height: var(--eros-space-4);
+}
+
+.eros-terminal-indent {
+  padding-left: var(--eros-space-4);
+}
+
+.eros-terminal-highlight {
+  background-color: var(--eros-highlight);
+  color: var(--eros-text-inverse);
+  padding: 0 var(--eros-space-1);
+  border-radius: var(--eros-radius-sm);
+}
+
+/* ============================================================================
+   SUMMARY TERMINAL - Phase 2.3
+   ============================================================================ */
+
+.eros-summary-terminal {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  padding: var(--eros-space-3);
+}
+
+.eros-summary-header-info {
+  color: var(--eros-text);
+  font-size: var(--eros-font-size-sm);
+  margin-bottom: var(--eros-space-2);
+  padding-bottom: var(--eros-space-2);
+  border-bottom: 1px dashed var(--eros-border);
+}
+
+.eros-summary-location {
+  color: var(--eros-text-secondary);
+  font-size: var(--eros-font-size-sm);
+  margin-bottom: var(--eros-space-2);
+}
+
+.eros-summary-stats {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  flex-wrap: wrap;
+}
+
+.eros-summary-mood {
+  font-size: var(--eros-font-size-base);
+  margin-left: var(--eros-space-2);
+}
+
+.eros-summary-compact {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-secondary);
+}
+
+/* ============================================================================
+   COMPACT STATUS DISPLAY - Phase 2.3
+   ============================================================================ */
+
+.eros-compact-status-display {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+}
+
+.eros-compact-status-display.clickable {
+  cursor: pointer;
+  padding: var(--eros-space-1) var(--eros-space-2);
+  border-radius: var(--eros-radius-sm);
+  transition: background-color var(--eros-transition-fast);
+}
+
+.eros-compact-status-display.clickable:hover {
+  background-color: var(--eros-surface-hover);
+}
+
+.eros-compact-status-display.clickable:active {
+  background-color: var(--eros-surface-active);
+}
+
+.eros-compact-stats-bracket {
+  color: var(--eros-text-muted);
+  font-weight: var(--eros-font-weight-bold);
+}
+
+.eros-compact-stat-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px var(--eros-space-1);
+  border-radius: var(--eros-radius-sm);
+}
+
+.eros-compact-stat-item.low {
+  opacity: 0.6;
+}
+
+.eros-compact-stat-item.high {
+  font-weight: var(--eros-font-weight-semibold);
+}
+
+.eros-compact-stat-icon {
+  font-size: var(--eros-font-size-base);
+}
+
+.eros-compact-stat-value {
+  color: var(--stat-color, var(--eros-text));
+  font-size: var(--eros-font-size-xs);
+  min-width: 24px;
+}
+
+.eros-compact-status-inline {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+}
+
+/* ============================================================================
+   TERMINAL FRAME - Phase 2.3
+   ============================================================================ */
+
+.eros-terminal-frame-container {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--eros-terminal-bg);
+  border: 1px solid var(--eros-terminal-border);
+  border-radius: var(--eros-radius-md);
+  overflow: hidden;
+}
+
+.eros-terminal-border-top,
+.eros-terminal-border-bottom {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-terminal-border);
+  white-space: pre;
+  line-height: 1;
+  padding: var(--eros-space-1) var(--eros-space-2);
+  background-color: var(--eros-bg-secondary);
+  text-align: center;
+}
+
+.eros-terminal-body {
+  display: flex;
+  flex-direction: row;
+}
+
+.eros-terminal-side {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-terminal-border);
+  line-height: 1;
+  padding: var(--eros-space-1) 0;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  background-color: var(--eros-bg-secondary);
+  min-width: 1ch;
+}
+
+.eros-terminal-inner {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: var(--eros-space-2) var(--eros-space-3);
+  background-color: var(--eros-terminal-bg);
+}
+
+.eros-terminal-header-custom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: var(--eros-space-2);
+}
+
+.eros-terminal-title-area {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+}
+
+.eros-terminal-title-icon {
+  font-size: var(--eros-font-size-lg);
+}
+
+.eros-terminal-title-text {
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-terminal-text);
+}
+
+.eros-terminal-controls-custom {
+  display: flex;
+  gap: var(--eros-space-2);
+}
+
+.eros-terminal-btn-custom {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: var(--eros-radius-full);
+  border: none;
+  cursor: pointer;
+  transition: opacity var(--eros-transition-fast);
+}
+
+.eros-terminal-btn-custom:hover {
+  opacity: 0.8;
+}
+
+.eros-terminal-btn-min {
+  background-color: var(--eros-terminal-warning);
+}
+
+.eros-terminal-btn-max {
+  background-color: var(--eros-terminal-text);
+}
+
+.eros-terminal-btn-close {
+  background-color: var(--eros-terminal-error);
+}
+
+.eros-terminal-divider-custom {
+  font-family: var(--eros-font-mono);
+  color: var(--eros-terminal-border);
+  font-size: var(--eros-font-size-sm);
+  padding: var(--eros-space-1) 0;
+  text-align: center;
+  letter-spacing: 1em;
+  overflow: hidden;
+}
+
+.eros-terminal-content-custom {
+  padding: var(--eros-space-2) 0;
+  color: var(--eros-terminal-text);
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-sm);
+  line-height: var(--eros-line-height-normal);
+}
+
+.eros-terminal-footer-custom {
+  padding-top: var(--eros-space-2);
+  color: var(--eros-text-muted);
+  font-family: var(--eros-font-mono);
+  font-size: var(--eros-font-size-xs);
+  border-top: 1px dashed var(--eros-border);
+}
+
+/* Inline terminal frame */
+.eros-terminal-inline-frame {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--eros-space-1);
+  font-family: var(--eros-font-mono);
+}
+
+.eros-terminal-inline-prompt {
+  color: var(--eros-terminal-prompt);
+  font-weight: var(--eros-font-weight-bold);
+}
+
+.eros-terminal-inline-content {
+  color: var(--eros-terminal-text);
+}
+
+/* Size variants */
+.eros-terminal-frame-container.eros-terminal-sm {
+  font-size: var(--eros-font-size-xs);
+}
+
+.eros-terminal-frame-container.eros-terminal-lg {
+  font-size: var(--eros-font-size-base);
+}

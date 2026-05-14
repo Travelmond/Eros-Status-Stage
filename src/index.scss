@@ -1,3 +1,20 @@
+// ============================================================================
+// Eros Status - Main Stylesheet
+// ============================================================================
+
+// Import CSS variables first
+@import './styles/variables.css';
+
+// Import component styles - use full path from src
+@import 'styles/components/progress-bar.css';
+@import 'styles/components/terminal.css';
+@import 'styles/components/floating-window.css';
+@import 'styles/layout/panel.css';
+@import 'styles/components/app.css';
+@import 'styles/components/detail.css';
+@import 'styles/components/character.css';
+@import 'styles/components/lock.css';
+
 :root {
   font-synthesis: none;
   text-rendering: optimizeLegibility;

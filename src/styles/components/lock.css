@@ -1,0 +1,325 @@
+/**
+ * Eros Status - Lock Components CSS
+ * Styles for LockIcon and LockToggle components
+ * Phase 4.1 - Per-stat lock functionality
+ */
+
+/* ============================================================================
+   LOCK ICON
+   ============================================================================ */
+
+.lock-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--eros-transition-normal);
+}
+
+.lock-icon-xs {
+    width: 14px;
+    height: 14px;
+}
+
+.lock-icon-sm {
+    width: 16px;
+    height: 16px;
+}
+
+.lock-icon-md {
+    width: 20px;
+    height: 20px;
+}
+
+.lock-icon.locked {
+    color: var(--eros-warning);
+}
+
+.lock-icon.unlocked {
+    color: var(--eros-text-muted);
+    opacity: 0.5;
+}
+
+.lock-icon.animated {
+    transition: all var(--eros-transition-normal);
+}
+
+.lock-icon.locked.animated {
+    animation: lock-pulse 2s ease-in-out infinite;
+}
+
+.lock-icon.unlocked.animated:hover {
+    opacity: 0.8;
+}
+
+.lock-icon-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Lock pulse animation */
+@keyframes lock-pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
+
+/* ============================================================================
+   LOCK TOGGLE
+   ============================================================================ */
+
+.lock-toggle-container {
+    display: inline-flex;
+    position: relative;
+}
+
+.lock-toggle-container.left {
+    margin-right: var(--eros-space-2);
+}
+
+.lock-toggle-container.right {
+    margin-left: var(--eros-space-2);
+}
+
+.lock-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--eros-space-1);
+    padding: var(--eros-space-1) var(--eros-space-2);
+    border: 1px solid var(--eros-border);
+    border-radius: var(--eros-radius-sm);
+    background: var(--eros-surface);
+    color: var(--eros-text-muted);
+    cursor: pointer;
+    transition: all var(--eros-transition-normal);
+    outline: none;
+}
+
+.lock-toggle:focus-visible {
+    border-color: var(--eros-highlight);
+    box-shadow: 0 0 0 2px rgba(139, 92, 246, 0.3);
+}
+
+.lock-toggle-sm {
+    padding: var(--eros-space-1);
+    font-size: var(--eros-font-size-xs);
+}
+
+.lock-toggle-md {
+    padding: var(--eros-space-2) var(--eros-space-3);
+    font-size: var(--eros-font-size-sm);
+}
+
+/* Locked state */
+.lock-toggle.locked {
+    border-color: var(--eros-warning);
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--eros-warning);
+}
+
+.lock-toggle.locked:hover {
+    background: rgba(245, 158, 11, 0.25);
+}
+
+/* Unlocked state */
+.lock-toggle.unlocked {
+    border-color: var(--eros-border);
+    background: var(--eros-surface);
+    color: var(--eros-text-muted);
+}
+
+.lock-toggle.unlocked:hover {
+    border-color: var(--eros-text-muted);
+    background: var(--eros-surface-hover);
+}
+
+/* Hover state */
+.lock-toggle.hovered {
+    transform: scale(1.05);
+}
+
+/* Pressed state */
+.lock-toggle.pressed {
+    transform: scale(0.95);
+}
+
+/* Disabled state */
+.lock-toggle.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Lock glow effect for locked state */
+.lock-toggle.locked.locked-glow {
+    box-shadow: 0 0 8px var(--eros-warning), 0 0 16px rgba(245, 158, 11, 0.3);
+}
+
+/* ============================================================================
+   LOCK TOGGLE LABEL
+   ============================================================================ */
+
+.lock-toggle-label {
+    font-size: inherit;
+    font-weight: var(--eros-font-weight-medium);
+    white-space: nowrap;
+}
+
+/* ============================================================================
+   LOCK TOGGLE TOOLTIP
+   ============================================================================ */
+
+.lock-toggle-tooltip {
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: var(--eros-z-tooltip);
+    padding: var(--eros-space-2) var(--eros-space-3);
+    background: var(--eros-bg-secondary);
+    border: 1px solid var(--eros-border);
+    border-radius: var(--eros-radius-md);
+    box-shadow: var(--eros-shadow-md);
+    white-space: nowrap;
+    animation: tooltip-fade-in 0.2s ease-out;
+}
+
+.lock-toggle-tooltip::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--eros-border);
+}
+
+.tooltip-text {
+    font-size: var(--eros-font-size-xs);
+    color: var(--eros-text-secondary);
+    line-height: 1.4;
+}
+
+@keyframes tooltip-fade-in {
+    from {
+        opacity: 0;
+        transform: translateX(-50%) translateY(4px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(-50%) translateY(0);
+    }
+}
+
+/* ============================================================================
+   LOCK TOGGLE GROUP
+   ============================================================================ */
+
+.lock-toggle-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--eros-space-2);
+}
+
+/* ============================================================================
+   STAT CARD LOCK INTEGRATION
+   ============================================================================ */
+
+.rpg-stat-card {
+    position: relative;
+}
+
+.rpg-stat-card.locked {
+    opacity: 0.85;
+}
+
+.rpg-stat-card.locked::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border: 1px solid var(--eros-warning);
+    border-radius: var(--eros-radius-md);
+    pointer-events: none;
+    opacity: 0.3;
+}
+
+.rpg-stat-card.locked .rpg-stat-content {
+    opacity: 0.9;
+}
+
+/* Lock indicator in stat card */
+.rpg-stat-lock-indicator {
+    position: absolute;
+    top: var(--eros-space-2);
+    right: var(--eros-space-2);
+    z-index: var(--eros-z-base);
+}
+
+.rpg-stat-card.locked .rpg-stat-lock-indicator {
+    display: flex;
+}
+
+/* ============================================================================
+   PROGRESS BAR LOCK INTEGRATION
+   ============================================================================ */
+
+.eros-stat-row.locked-stat {
+    position: relative;
+}
+
+.eros-stat-row.locked-stat::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 10px,
+        rgba(245, 158, 11, 0.03) 10px,
+        rgba(245, 158, 11, 0.03) 20px
+    );
+    pointer-events: none;
+    border-radius: var(--eros-radius-sm);
+}
+
+/* ============================================================================
+   ACCESSIBILITY
+   ============================================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+    .lock-toggle,
+    .lock-icon,
+    .lock-toggle-tooltip {
+        animation: none;
+        transition: none;
+    }
+}
+
+/* Focus styles for accessibility */
+.lock-toggle:focus-visible {
+    outline: 2px solid var(--eros-highlight);
+    outline-offset: 2px;
+}
+
+/* Screen reader only text */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}

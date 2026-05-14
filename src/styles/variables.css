@@ -1,0 +1,349 @@
+/**
+ * Eros Status Stage - CSS Variables
+ * Base theme and color definitions for the UI system
+ * Phase 2.1 - Base styling foundation
+ */
+
+/* ============================================================================
+   ROOT CSS VARIABLES
+   ============================================================================ */
+
+:root {
+  /* ========================================
+     BASE COLORS - Panel Background & Surface
+     ======================================== */
+  --eros-bg: #1a1a2e;
+  --eros-bg-secondary: #16213e;
+  --eros-accent: #2d2d4a;
+  --eros-surface: #252545;
+  --eros-surface-hover: #353560;
+  --eros-surface-active: #404075;
+
+  /* ========================================
+     TEXT COLORS - Primary & Secondary
+     ======================================== */
+  --eros-text: #e8e8f0;
+  --eros-text-secondary: #a0a0b8;
+  --eros-text-muted: #6b6b85;
+  --eros-text-inverse: #1a1a2e;
+
+  /* ========================================
+     INTERACTIVE ELEMENTS
+     ======================================== */
+  --eros-highlight: #8b5cf6;
+  --eros-highlight-hover: #a78bfa;
+  --eros-highlight-active: #7c3aed;
+  --eros-interactive: #ec4899;
+  --eros-interactive-hover: #f472b6;
+
+  /* ========================================
+     BORDERS & SHADOWS
+     ======================================== */
+  --eros-border: #3d3d5c;
+  --eros-border-light: #4a4a6a;
+  --eros-border-focus: #8b5cf6;
+  --eros-shadow: rgba(0, 0, 0, 0.4);
+  --eros-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.2);
+  --eros-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.3);
+  --eros-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.4);
+  --eros-shadow-glow: 0 0 20px rgba(139, 92, 246, 0.3);
+
+  /* ========================================
+     STATUS COLORS - Core EROS Stats
+     ======================================== */
+
+  /* Affection - Pink/Red for love & attachment */
+  --eros-affection: #ec4899;
+  --eros-affection-light: #f9a8d4;
+  --eros-affection-dark: #be185d;
+
+  /* Obedience - Green for compliance & submission */
+  --eros-obedience: #22c55e;
+  --eros-obedience-light: #86efac;
+  --eros-obedience-dark: #15803d;
+
+  /* Libido - Orange for sexual desire */
+  --eros-libido: #f97316;
+  --eros-libido-light: #fdba74;
+  --eros-libido-dark: #c2410c;
+
+  /* Arousal - Red for sexual excitement */
+  --eros-arousal: #ef4444;
+  --eros-arousal-light: #fca5a5;
+  --eros-arousal-dark: #b91c1c;
+
+  /* Location - Cyan for position/status */
+  --eros-location: #06b6d4;
+  --eros-location-light: #67e8f9;
+  --eros-location-dark: #0e7490;
+
+  /* Time - Gold for duration/timing */
+  --eros-time: #eab308;
+  --eros-time-light: #fde047;
+  --eros-time-dark: #a16207;
+
+/* ========================================
+      PROGRESS BAR GRADIENTS
+      ======================================== */
+  --eros-progress-low: #ef4444;
+  --eros-progress-mid: #f59e0b;
+  --eros-progress-high: #22c55e;
+  --eros-progress-gradient: linear-gradient(90deg, #ef4444, #f59e0b, #22c55e);
+
+  /* ========================================
+      UTILITY COLORS
+      ======================================== */
+  --eros-success: #22c55e;
+  --eros-danger: #ef4444;
+  --eros-warning: #f59e0b;
+  --eros-info: #3b82f6;
+  --eros-bg-tertiary: #1f1f3a;
+
+  /* ========================================
+     TYPOGRAPHY
+     ======================================== */
+  --eros-font-primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --eros-font-mono: 'JetBrains Mono', 'SF Mono', 'Fira Code', Consolas, monospace;
+  --eros-font-display: 'Cinzel', Georgia, serif;
+
+  --eros-font-size-xs: 0.625rem;
+  --eros-font-size-sm: 0.75rem;
+  --eros-font-size-base: 0.875rem;
+  --eros-font-size-md: 1rem;
+  --eros-font-size-lg: 1.125rem;
+  --eros-font-size-xl: 1.25rem;
+  --eros-font-size-2xl: 1.5rem;
+  --eros-font-size-3xl: 2rem;
+
+  --eros-font-weight-normal: 400;
+  --eros-font-weight-medium: 500;
+  --eros-font-weight-semibold: 600;
+  --eros-font-weight-bold: 700;
+
+  --eros-line-height-tight: 1.25;
+  --eros-line-height-normal: 1.5;
+  --eros-line-height-relaxed: 1.75;
+
+  /* ========================================
+     SPACING SYSTEM
+     ======================================== */
+  --eros-space-1: 0.125rem;
+  --eros-space-2: 0.25rem;
+  --eros-space-3: 0.375rem;
+  --eros-space-4: 0.5rem;
+  --eros-space-5: 0.75rem;
+  --eros-space-6: 1rem;
+  --eros-space-8: 1.25rem;
+  --eros-space-10: 1.5rem;
+  --eros-space-12: 2rem;
+  --eros-space-16: 3rem;
+  --eros-space-20: 4rem;
+
+  /* ========================================
+     BORDER RADIUS
+     ======================================== */
+  --eros-radius-none: 0;
+  --eros-radius-sm: 0.25rem;
+  --eros-radius-md: 0.5rem;
+  --eros-radius-lg: 0.75rem;
+  --eros-radius-xl: 1rem;
+  --eros-radius-full: 9999px;
+
+  /* ========================================
+     TRANSITIONS & ANIMATIONS
+     ======================================== */
+  --eros-transition-fast: 100ms ease;
+  --eros-transition-normal: 200ms ease;
+  --eros-transition-slow: 300ms ease;
+  --eros-transition-smooth: 400ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Progress bar specific */
+  --eros-progress-transition: 800ms ease-out;
+
+  /* ========================================
+     Z-INDEX SCALE
+     ======================================== */
+  --eros-z-base: 1;
+  --eros-z-dropdown: 100;
+  --eros-z-sticky: 200;
+  --eros-z-modal: 300;
+  --eros-z-tooltip: 400;
+  --eros-z-toast: 500;
+
+  /* ========================================
+     PANEL DIMENSIONS
+     ======================================== */
+  --eros-panel-width: 320px;
+  --eros-panel-width-expanded: 400px;
+  --eros-panel-min-height: 200px;
+  --eros-panel-max-height: 80vh;
+  --eros-tab-height: 36px;
+  --eros-header-height: 48px;
+
+  /* ========================================
+     TERMINAL STYLES
+     ======================================== */
+  --eros-terminal-border: #4a4a6a;
+  --eros-terminal-bg: #0d0d1a;
+  --eros-terminal-text: #22c55e;
+  --eros-terminal-prompt: #8b5cf6;
+  --eros-terminal-error: #ef4444;
+  --eros-terminal-warning: #f59e0b;
+  --eros-terminal-info: #3b82f6;
+}
+
+/* ============================================================================
+   THEME VARIANTS
+   ============================================================================ */
+
+/* Light Theme */
+[data-theme="light"] {
+  --eros-bg: #f5f5f7;
+  --eros-bg-secondary: #eaeaef;
+  --eros-accent: #e0e0e8;
+  --eros-surface: #ffffff;
+  --eros-surface-hover: #f0f0f5;
+  --eros-surface-active: #e5e5ea;
+
+  --eros-text: #1d1d1f;
+  --eros-text-secondary: #6e6e73;
+  --eros-text-muted: #aeaeb2;
+  --eros-text-inverse: #ffffff;
+
+  --eros-border: #d2d2d7;
+  --eros-border-light: #e5e5ea;
+  --eros-shadow: rgba(0, 0, 0, 0.1);
+}
+
+/* Sepia Theme - Warm vintage feel */
+[data-theme="sepia"] {
+  --eros-bg: #f4ecd8;
+  --eros-bg-secondary: #e8dfc7;
+  --eros-accent: #d4c4a8;
+  --eros-surface: #f9f3e3;
+  --eros-surface-hover: #ebe3d0;
+
+  --eros-text: #433422;
+  --eros-text-secondary: #6b5744;
+  --eros-text-muted: #8b7355;
+  --eros-text-inverse: #f4ecd8;
+
+  --eros-border: #c9b896;
+  --eros-border-light: #b8a67a;
+  --eros-shadow: rgba(67, 52, 34, 0.15);
+}
+
+/* High Contrast Theme */
+[data-theme="high-contrast"] {
+  --eros-bg: #000000;
+  --eros-bg-secondary: #0a0a0a;
+  --eros-accent: #1a1a1a;
+  --eros-surface: #111111;
+
+  --eros-text: #ffffff;
+  --eros-text-secondary: #cccccc;
+  --eros-text-muted: #888888;
+
+  --eros-border: #333333;
+  --eros-border-light: #555555;
+  --eros-highlight: #ffff00;
+}
+
+/* ============================================================================
+   UTILITY CLASSES
+   ============================================================================ */
+
+/* Status Color Utilities */
+.status-affection { color: var(--eros-affection); }
+.status-obedience { color: var(--eros-obedience); }
+.status-libido { color: var(--eros-libido); }
+.status-arousal { color: var(--eros-arousal); }
+.status-location { color: var(--eros-location); }
+.status-time { color: var(--eros-time); }
+
+/* Background Utilities */
+.bg-eros { background-color: var(--eros-bg); }
+.bg-surface { background-color: var(--eros-surface); }
+.bg-accent { background-color: var(--eros-accent); }
+
+/* Border Utilities */
+.border-eros { border-color: var(--eros-border); }
+
+/* Text Utilities */
+.text-eros { color: var(--eros-text); }
+.text-muted { color: var(--eros-text-muted); }
+.text-secondary { color: var(--eros-text-secondary); }
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes eros-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes eros-fade-in {
+  from { opacity: 0; transform: translateY(-8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes eros-slide-in-right {
+  from { transform: translateX(100%); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes eros-glow {
+  0%, 100% { box-shadow: 0 0 5px var(--eros-highlight); }
+  50% { box-shadow: 0 0 20px var(--eros-highlight), 0 0 30px var(--eros-highlight); }
+}
+
+@keyframes eros-progress-fill {
+  from { width: 0; }
+}
+
+/* Animation Utility Classes */
+.animate-pulse { animation: eros-pulse 2s ease-in-out infinite; }
+.animate-fade-in { animation: eros-fade-in 0.3s ease-out; }
+.animate-glow { animation: eros-glow 2s ease-in-out infinite; }
+
+/* ============================================================================
+   RESPONSIVE BREAKPOINTS
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  :root {
+    --eros-font-size-base: 0.8125rem;
+    --eros-panel-width: 100%;
+    --eros-space-4: 0.375rem;
+    --eros-space-6: 0.75rem;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  :root {
+    --eros-panel-width: 280px;
+  }
+}
+
+@media (min-width: 1025px) {
+  :root {
+    --eros-panel-width: 320px;
+  }
+}
+
+/* Reduced Motion Preference */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --eros-transition-fast: 0ms;
+    --eros-transition-normal: 0ms;
+    --eros-transition-slow: 0ms;
+    --eros-progress-transition: 0ms;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,0 +1,917 @@
+/**
+ * Eros Status Stage - Panel Layout Styles
+ * Slide-out panel with tabs, categories, and collapsible states
+ * Phase 2.1 - Panel layout system
+ */
+
+/* ============================================================================
+   BASE PANEL CONTAINER
+   ============================================================================ */
+
+.eros-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: var(--eros-panel-width);
+  height: 100vh;
+  background-color: var(--eros-bg);
+  border-left: 1px solid var(--eros-border);
+  box-shadow: var(--eros-shadow-lg);
+  display: flex;
+  flex-direction: column;
+  z-index: var(--eros-z-modal);
+  transition: transform var(--eros-transition-smooth),
+              width var(--eros-transition-smooth);
+}
+
+/* Panel Header */
+.eros-panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--eros-header-height);
+  padding: 0 var(--eros-space-4);
+  background-color: var(--eros-surface);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-panel-title {
+  font-family: var(--eros-font-display);
+  font-size: var(--eros-font-size-lg);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0;
+}
+
+.eros-panel-subtitle {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  margin-top: var(--eros-space-1);
+}
+
+.eros-panel-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--eros-radius-md);
+  color: var(--eros-text-secondary);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.eros-panel-close:hover {
+  background-color: var(--eros-surface-hover);
+  color: var(--eros-text);
+}
+
+.eros-panel-close:focus-visible {
+  outline: 2px solid var(--eros-highlight);
+  outline-offset: 2px;
+}
+
+/* ============================================================================
+   PANEL CONTENT AREA
+   ============================================================================ */
+
+.eros-panel-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--eros-space-4);
+}
+
+.eros-panel-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.eros-panel-content::-webkit-scrollbar-track {
+  background: var(--eros-bg-secondary);
+}
+
+.eros-panel-content::-webkit-scrollbar-thumb {
+  background: var(--eros-border);
+  border-radius: var(--eros-radius-full);
+}
+
+.eros-panel-content::-webkit-scrollbar-thumb:hover {
+  background: var(--eros-border-light);
+}
+
+/* ============================================================================
+   TAB NAVIGATION
+   ============================================================================ */
+
+.eros-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+}
+
+.eros-tabs-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-1);
+}
+
+.eros-tabs-group-label {
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  padding: var(--eros-space-2) var(--eros-space-3);
+  margin-bottom: var(--eros-space-1);
+}
+
+.eros-tabs-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--eros-space-1);
+  padding: 0 var(--eros-space-3);
+}
+
+.eros-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-2) var(--eros-space-3);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.eros-tab:hover {
+  background-color: var(--eros-surface-hover);
+  color: var(--eros-text);
+  border-color: var(--eros-border-light);
+}
+
+.eros-tab:focus-visible {
+  outline: 2px solid var(--eros-highlight);
+  outline-offset: 2px;
+}
+
+.eros-tab.active {
+  background-color: var(--eros-highlight);
+  color: var(--eros-text-inverse);
+  border-color: var(--eros-highlight);
+}
+
+.eros-tab-icon {
+  font-size: var(--eros-font-size-base);
+}
+
+/* ============================================================================
+   TAB GROUPS - Progression/Body/Scene/Extras
+   ============================================================================ */
+
+/* Progression Group - Character growth stats */
+.eros-tabs-group-progression .eros-tab {
+  border-left: 3px solid var(--eros-affection);
+}
+
+.eros-tabs-group-progression .eros-tab.active {
+  background: linear-gradient(135deg, var(--eros-affection), var(--eros-arousal));
+}
+
+/* Body Group - Physical states */
+.eros-tabs-group-body .eros-tab {
+  border-left: 3px solid var(--eros-libido);
+}
+
+.eros-tabs-group-body .eros-tab.active {
+  background: linear-gradient(135deg, var(--eros-libido), var(--eros-arousal));
+}
+
+/* Scene Group - Current situation */
+.eros-tabs-group-scene .eros-tab {
+  border-left: 3px solid var(--eros-location);
+}
+
+.eros-tabs-group-scene .eros-tab.active {
+  background: linear-gradient(135deg, var(--eros-location), var(--eros-time));
+}
+
+/* Extras Group - Additional info */
+.eros-tabs-group-extras .eros-tab {
+  border-left: 3px solid var(--eros-time);
+}
+
+.eros-tabs-group-extras .eros-tab.active {
+  background: linear-gradient(135deg, var(--eros-time), var(--eros-obedience));
+}
+
+/* ============================================================================
+   SLIDE-OUT PANEL VARIANT
+   ============================================================================ */
+
+.eros-panel-slideout {
+  width: 70%;
+  max-width: 500px;
+  transform: translateX(100%);
+}
+
+.eros-panel-slideout.open {
+  transform: translateX(0);
+}
+
+/* Summary sidebar (30% width) */
+.eros-panel-summary {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 30%;
+  min-width: 200px;
+  max-width: 300px;
+  height: 100vh;
+  background-color: var(--eros-bg-secondary);
+  border-left: 1px solid var(--eros-border);
+  padding: var(--eros-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+}
+
+.eros-panel-summary-header {
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  padding-bottom: var(--eros-space-2);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-panel-summary-content {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* ============================================================================
+   COLLAPSED STATE
+   ============================================================================ */
+
+.eros-panel-collapsed {
+  width: 3rem;
+  overflow: hidden;
+}
+
+.eros-panel-collapsed .eros-panel-content,
+.eros-panel-collapsed .eros-tabs,
+.eros-panel-collapsed .eros-panel-header {
+  display: none;
+}
+
+.eros-panel-collapsed .eros-panel-header {
+  display: flex;
+  justify-content: center;
+  padding: 0;
+}
+
+.eros-panel-collapsed .eros-panel-title {
+  display: none;
+}
+
+.eros-panel-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  color: var(--eros-text-secondary);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.eros-panel-toggle:hover {
+  background: var(--eros-surface-hover);
+  color: var(--eros-text);
+}
+
+/* Collapsed indicator icon */
+.eros-panel-collapsed-indicator {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  gap: var(--eros-space-2);
+}
+
+.eros-panel-collapsed-indicator .status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: var(--eros-radius-full);
+  background: var(--eros-highlight);
+  animation: eros-pulse 2s ease-in-out infinite;
+}
+
+/* ============================================================================
+   PANEL SECTIONS
+   ============================================================================ */
+
+.eros-panel-section {
+  margin-bottom: var(--eros-space-6);
+}
+
+.eros-panel-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--eros-space-3);
+  padding-bottom: var(--eros-space-2);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-panel-section-title {
+  font-size: var(--eros-font-size-base);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+}
+
+.eros-panel-section-action {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-highlight);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.eros-panel-section-action:hover {
+  color: var(--eros-highlight-hover);
+  text-decoration: underline;
+}
+
+/* ============================================================================
+   PANEL FOOTER
+   ============================================================================ */
+
+.eros-panel-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--eros-space-3) var(--eros-space-4);
+  background-color: var(--eros-surface);
+  border-top: 1px solid var(--eros-border);
+}
+
+.eros-panel-footer-info {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+.eros-panel-footer-actions {
+  display: flex;
+  gap: var(--eros-space-2);
+}
+
+/* ============================================================================
+   RESPONSIVE STYLES
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .eros-panel {
+    width: 100%;
+    max-width: none;
+  }
+
+  .eros-panel-slideout {
+    width: 85%;
+  }
+
+  .eros-panel-summary {
+    display: none;
+  }
+
+  .eros-tabs-list {
+    padding: 0;
+  }
+
+  .eros-tab {
+    flex: 1;
+    justify-content: center;
+    min-width: calc(50% - var(--eros-space-1));
+  }
+
+  .eros-tab-icon {
+    display: none;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .eros-panel {
+    width: var(--eros-panel-width-expanded);
+  }
+
+  .eros-panel-slideout {
+    width: 60%;
+  }
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+.eros-panel-enter {
+  animation: eros-panel-slide-in 0.3s ease-out;
+}
+
+.eros-panel-exit {
+  animation: eros-panel-slide-out 0.3s ease-in;
+}
+
+@keyframes eros-panel-slide-in {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes eros-panel-slide-out {
+  from {
+    transform: translateX(0);
+    opacity: 1;
+  }
+  to {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+}
+
+/* Fade + slide combo */
+.eros-panel-enter-fade {
+  animation: eros-panel-fade-in 0.3s ease-out forwards;
+}
+
+@keyframes eros-panel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ============================================================================
+   DARK OVERLAY
+   ============================================================================ */
+
+.eros-panel-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: var(--eros-overlay);
+  z-index: calc(var(--eros-z-modal) - 1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--eros-transition-normal),
+              visibility var(--eros-transition-normal);
+}
+
+.eros-panel-overlay.visible {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* ============================================================================
+   RTL SUPPORT
+   ============================================================================ */
+
+[dir="rtl"] .eros-panel {
+  right: auto;
+  left: 0;
+  border-left: none;
+  border-right: 1px solid var(--eros-border);
+}
+
+[dir="rtl"] .eros-panel-slideout {
+  transform: translateX(-100%);
+}
+
+[dir="rtl"] .eros-panel-slideout.open {
+  transform: translateX(0);
+}
+
+[dir="rtl"] .eros-panel-summary {
+  right: auto;
+  left: 0;
+  border-left: none;
+  border-right: 1px solid var(--eros-border);
+}
+
+/* ============================================================================
+   CATEGORY TABS - Phase 2.2
+   ============================================================================ */
+
+/* Base Category Tabs Container */
+.category-tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+  width: 100%;
+}
+
+/* Category Group */
+.category-tabs__group {
+  border-radius: var(--eros-radius-md);
+  overflow: hidden;
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  transition: all var(--eros-transition-fast);
+}
+
+.category-tabs__group:hover {
+  border-color: var(--eros-border-light);
+}
+
+/* Group Header Button */
+.category-tabs__group-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-3);
+  width: 100%;
+  padding: var(--eros-space-3) var(--eros-space-4);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: all var(--eros-transition-fast);
+}
+
+.category-tabs__group-header:focus-visible {
+  outline: 2px solid var(--eros-highlight);
+  outline-offset: -2px;
+}
+
+.category-tabs__group-icon {
+  font-size: var(--eros-font-size-base);
+  flex-shrink: 0;
+}
+
+.category-tabs__group-label {
+  flex: 1;
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.category-tabs__group-arrow {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  transition: transform var(--eros-transition-fast);
+}
+
+.category-tabs__group-arrow.rotated {
+  transform: rotate(180deg);
+}
+
+/* Group Color Themes */
+.category-tabs__group--green .category-tabs__group-header {
+  border-left: 3px solid var(--eros-obedience);
+}
+
+.category-tabs__group--green.expanded {
+  background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), transparent);
+  border-color: var(--eros-obedience);
+}
+
+.category-tabs__group--blue .category-tabs__group-header {
+  border-left: 3px solid #3b82f6;
+}
+
+.category-tabs__group--blue.expanded {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1), transparent);
+  border-color: #3b82f6;
+}
+
+.category-tabs__group--red .category-tabs__group-header {
+  border-left: 3px solid var(--eros-arousal);
+}
+
+.category-tabs__group--red.expanded {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), transparent);
+  border-color: var(--eros-arousal);
+}
+
+.category-tabs__group--purple .category-tabs__group-header {
+  border-left: 3px solid var(--eros-highlight);
+}
+
+.category-tabs__group--purple.expanded {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1), transparent);
+  border-color: var(--eros-highlight);
+}
+
+/* Group Content - Categories List */
+.category-tabs__group-content {
+  overflow: hidden;
+  transition: max-height var(--eros-transition-normal), opacity var(--eros-transition-normal);
+}
+
+.category-tabs__group-content.hidden {
+  max-height: 0;
+  opacity: 0;
+}
+
+.category-tabs__group-content.visible {
+  max-height: 500px;
+  opacity: 1;
+}
+
+.category-tabs__categories {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-3) var(--eros-space-4);
+  padding-left: calc(var(--eros-space-4) + 3px);
+}
+
+/* Individual Category Button */
+.category-tabs__category {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-2) var(--eros-space-3);
+  background-color: var(--eros-bg);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-sm);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+  text-align: left;
+}
+
+.category-tabs__category:hover {
+  background-color: var(--eros-surface-hover);
+  border-color: var(--eros-border-light);
+  transform: translateY(-1px);
+  box-shadow: var(--eros-shadow-sm);
+}
+
+.category-tabs__category:focus-visible {
+  outline: 2px solid var(--eros-highlight);
+  outline-offset: 2px;
+}
+
+.category-tabs__category.active {
+  background-color: var(--eros-highlight);
+  border-color: var(--eros-highlight);
+  color: var(--eros-text-inverse);
+}
+
+.category-tabs__category-icon {
+  font-size: var(--eros-font-size-base);
+  flex-shrink: 0;
+}
+
+.category-tabs__category-label {
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.category-tabs__category.active .category-tabs__category-label {
+  color: var(--eros-text-inverse);
+}
+
+.category-tabs__category:hover .category-tabs__category-label {
+  color: var(--eros-text);
+}
+
+/* ============================================================================
+   COMPACT CATEGORY TABS
+   ============================================================================ */
+
+.category-tabs-compact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--eros-space-2);
+  width: 100%;
+}
+
+.category-tabs-compact__tab {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-2) var(--eros-space-3);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.category-tabs-compact__tab:hover {
+  background-color: var(--eros-surface-hover);
+  border-color: var(--eros-border-light);
+}
+
+.category-tabs-compact__tab:focus-visible {
+  outline: 2px solid var(--eros-highlight);
+  outline-offset: 2px;
+}
+
+.category-tabs-compact__tab.active {
+  background: linear-gradient(135deg, var(--eros-highlight), var(--eros-interactive));
+  border-color: var(--eros-highlight);
+  color: var(--eros-text-inverse);
+}
+
+.category-tabs-compact__tab-icon {
+  font-size: var(--eros-font-size-base);
+}
+
+.category-tabs-compact__tab-label {
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+  white-space: nowrap;
+}
+
+/* Compact tab color themes */
+.category-tabs-compact__tab--green.active {
+  background: linear-gradient(135deg, var(--eros-obedience), #16a34a);
+  border-color: var(--eros-obedience);
+}
+
+.category-tabs-compact__tab--blue.active {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border-color: #3b82f6;
+}
+
+.category-tabs-compact__tab--red.active {
+  background: linear-gradient(135deg, var(--eros-arousal), #dc2626);
+  border-color: var(--eros-arousal);
+}
+
+.category-tabs-compact__tab--purple.active {
+  background: linear-gradient(135deg, var(--eros-highlight), var(--eros-interactive));
+  border-color: var(--eros-highlight);
+}
+
+/* ============================================================================
+   CATEGORY BUTTON COMPONENT
+   ============================================================================ */
+
+.category-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-2) var(--eros-space-3);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+}
+
+.category-btn:hover:not(.disabled) {
+  background-color: var(--eros-surface-hover);
+  border-color: var(--eros-border-light);
+  transform: translateY(-1px);
+}
+
+.category-btn:focus-visible {
+  outline: 2px solid var(--eros-highlight);
+  outline-offset: 2px;
+}
+
+.category-btn.active {
+  background-color: var(--eros-highlight);
+  border-color: var(--eros-highlight);
+  color: var(--eros-text-inverse);
+}
+
+.category-btn.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.category-btn__icon {
+  font-size: var(--eros-font-size-base);
+}
+
+.category-btn__label {
+  font-weight: var(--eros-font-weight-medium);
+}
+
+/* Category button color themes */
+.category-btn--green {
+  border-left: 3px solid var(--eros-obedience);
+}
+
+.category-btn--green:hover:not(.disabled) {
+  box-shadow: 0 0 10px rgba(34, 197, 94, 0.3);
+}
+
+.category-btn--green.active {
+  background: linear-gradient(135deg, var(--eros-obedience), #16a34a);
+  border-color: var(--eros-obedience);
+}
+
+.category-btn--blue {
+  border-left: 3px solid #3b82f6;
+}
+
+.category-btn--blue:hover:not(.disabled) {
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+.category-btn--blue.active {
+  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  border-color: #3b82f6;
+}
+
+.category-btn--red {
+  border-left: 3px solid var(--eros-arousal);
+}
+
+.category-btn--red:hover:not(.disabled) {
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.3);
+}
+
+.category-btn--red.active {
+  background: linear-gradient(135deg, var(--eros-arousal), #dc2626);
+  border-color: var(--eros-arousal);
+}
+
+.category-btn--purple {
+  border-left: 3px solid var(--eros-highlight);
+}
+
+.category-btn--purple:hover:not(.disabled) {
+  box-shadow: 0 0 10px rgba(139, 92, 246, 0.3);
+}
+
+.category-btn--purple.active {
+  background: linear-gradient(135deg, var(--eros-highlight), var(--eros-interactive));
+  border-color: var(--eros-highlight);
+}
+
+/* Category Button Group */
+.category-btn-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--eros-space-2);
+}
+
+.category-btn-group--green .category-btn {
+  border-left-color: var(--eros-obedience);
+}
+
+.category-btn-group--blue .category-btn {
+  border-left-color: #3b82f6;
+}
+
+.category-btn-group--red .category-btn {
+  border-left-color: var(--eros-arousal);
+}
+
+.category-btn-group--purple .category-btn {
+  border-left-color: var(--eros-highlight);
+}
+
+/* ============================================================================
+   RESPONSIVE CATEGORY TABS
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .category-tabs__categories {
+    grid-template-columns: 1fr;
+  }
+
+  .category-tabs-compact {
+    flex-direction: column;
+  }
+
+  .category-tabs-compact__tab {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .category-tabs__group-label {
+    font-size: var(--eros-font-size-xs);
+  }
+}

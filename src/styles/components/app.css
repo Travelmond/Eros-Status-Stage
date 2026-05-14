@@ -1,0 +1,612 @@
+/**
+ * Eros Status Stage - Main Components CSS
+ * Import all component styles
+ * Phase 1 - Component Styles
+ */
+
+/* Import base variables (imported first) */
+@import '../variables.css';
+
+/* Import component styles */
+@import './progress-bar.css';
+@import './terminal.css';
+
+/* Import layout styles */
+@import '../layout/panel.css';
+
+/* ============================================================================
+   EROS STATUS APP STYLES
+   ============================================================================ */
+
+.eros-status-app {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+/* ============================================================================
+   SLIDE OUT CONTAINER
+   ============================================================================ */
+
+.eros-slideout-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.eros-slideout-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: calc(var(--eros-z-modal) - 1);
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity var(--eros-transition-smooth),
+              visibility var(--eros-transition-smooth);
+}
+
+.eros-slideout-container.open .eros-slideout-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.eros-slideout-summary {
+  width: 30%;
+  min-width: 200px;
+  max-width: 300px;
+  height: 100%;
+  background-color: var(--eros-bg-secondary);
+  border-right: 1px solid var(--eros-border);
+  padding: var(--eros-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+  flex-shrink: 0;
+}
+
+.eros-slideout-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 70%;
+  max-width: 500px;
+  height: 100%;
+  background-color: var(--eros-bg);
+  border-left: 1px solid var(--eros-border);
+  transform: translateX(100%);
+  transition: transform var(--eros-transition-smooth);
+  display: flex;
+  flex-direction: column;
+  z-index: var(--eros-z-modal);
+}
+
+.eros-slideout-panel.open {
+  transform: translateX(0);
+}
+
+.eros-slideout-panel.animating {
+  transition: transform var(--eros-animation-duration, 250ms) ease;
+}
+
+/* Slideout Header */
+.eros-slideout-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--eros-header-height);
+  padding: 0 var(--eros-space-4);
+  background-color: var(--eros-surface);
+  border-bottom: 1px solid var(--eros-border);
+  flex-shrink: 0;
+}
+
+.eros-slideout-title {
+  font-family: var(--eros-font-display);
+  font-size: var(--eros-font-size-lg);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0;
+}
+
+.eros-slideout-header-content {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+
+.eros-slideout-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  background: transparent;
+  border: none;
+  border-radius: var(--eros-radius-md);
+  color: var(--eros-text-secondary);
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.eros-slideout-close:hover {
+  background-color: var(--eros-surface-hover);
+  color: var(--eros-text);
+}
+
+/* Slideout Content */
+.eros-slideout-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--eros-space-4);
+}
+
+.eros-slideout-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.eros-slideout-content::-webkit-scrollbar-track {
+  background: var(--eros-bg-secondary);
+}
+
+.eros-slideout-content::-webkit-scrollbar-thumb {
+  background: var(--eros-border);
+  border-radius: var(--eros-radius-full);
+}
+
+/* Slideout Sections */
+.eros-slideout-section {
+  margin-bottom: var(--eros-space-6);
+}
+
+.eros-slideout-section-title {
+  font-size: var(--eros-font-size-base);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin-bottom: var(--eros-space-3);
+  padding-bottom: var(--eros-space-2);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-slideout-section-content {
+  color: var(--eros-text-secondary);
+}
+
+.eros-slideout-divider {
+  height: 1px;
+  background-color: var(--eros-border);
+  margin: var(--eros-space-4) 0;
+}
+
+/* ============================================================================
+   SUMMARY AREA
+   ============================================================================ */
+
+.eros-app-summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+}
+
+.eros-summary-header {
+  padding-bottom: var(--eros-space-3);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-summary-title {
+  font-size: var(--eros-font-size-base);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0 0 var(--eros-space-2) 0;
+}
+
+.eros-summary-stat {
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+}
+
+.eros-summary-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+}
+
+.eros-summary-item {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+}
+
+.eros-summary-icon {
+  font-size: var(--eros-font-size-base);
+}
+
+.eros-summary-expand {
+  margin-top: auto;
+  padding: var(--eros-space-2) var(--eros-space-4);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  color: var(--eros-text-secondary);
+  font-size: var(--eros-font-size-sm);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.eros-summary-expand:hover {
+  background-color: var(--eros-surface-hover);
+  color: var(--eros-text);
+  border-color: var(--eros-border-light);
+}
+
+.eros-summary-placeholder {
+  color: var(--eros-text-muted);
+  font-style: italic;
+}
+
+/* ============================================================================
+   CATEGORY TABS
+   ============================================================================ */
+
+.eros-app-tabs {
+  display: flex;
+  gap: var(--eros-space-2);
+  margin-bottom: var(--eros-space-4);
+  padding-bottom: var(--eros-space-3);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-app-tabs .eros-tab {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-2) var(--eros-space-3);
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.eros-app-tabs .eros-tab:hover {
+  background-color: var(--eros-surface-hover);
+  color: var(--eros-text);
+  border-color: var(--eros-border-light);
+}
+
+.eros-app-tabs .eros-tab.active {
+  background-color: var(--eros-highlight);
+  color: var(--eros-text-inverse);
+  border-color: var(--eros-highlight);
+}
+
+.eros-app-tabs .eros-tab-icon {
+  font-size: var(--eros-font-size-base);
+}
+
+.eros-app-tabs .eros-tab-label {
+  display: inline;
+}
+
+/* ============================================================================
+   APP CONTENT AREAS
+   ============================================================================ */
+
+.eros-app-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.eros-category-content {
+  margin-top: var(--eros-space-4);
+  padding-top: var(--eros-space-4);
+  border-top: 1px solid var(--eros-border);
+}
+
+.eros-category-content h4 {
+  font-size: var(--eros-font-size-base);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0 0 var(--eros-space-3) 0;
+}
+
+.eros-clothing-items,
+.eros-body-items {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+}
+
+.eros-app-footer {
+  margin-top: auto;
+  padding-top: var(--eros-space-4);
+  border-top: 1px solid var(--eros-border);
+  text-align: center;
+}
+
+.eros-turn-counter {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+/* ============================================================================
+   STATUS PANEL STYLES
+   ============================================================================ */
+
+.eros-status-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+}
+
+.eros-status-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-3);
+}
+
+.eros-section-title {
+  font-size: var(--eros-font-size-base);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0;
+  padding-bottom: var(--eros-space-2);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.eros-stats-primary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+}
+
+.eros-stat-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+}
+
+.eros-stat-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+}
+
+.eros-stat-header .eros-stat-icon {
+  font-size: var(--eros-font-size-base);
+}
+
+.eros-stat-header .eros-stat-label {
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text);
+}
+
+.eros-stat-header .eros-stat-stage {
+  margin-left: auto;
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+.eros-stats-secondary {
+  margin-top: var(--eros-space-4);
+  padding-top: var(--eros-space-4);
+  border-top: 1px solid var(--eros-border);
+}
+
+.eros-stats-subtitle {
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text-muted);
+  margin: 0 0 var(--eros-space-3) 0;
+}
+
+.eros-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: var(--eros-space-3);
+}
+
+.eros-stat-item-compact {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+}
+
+.eros-stat-icon-compact {
+  font-size: var(--eros-font-size-sm);
+  width: 1.5rem;
+  text-align: center;
+}
+
+/* Info Section (Location & Time) */
+.eros-section-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-3);
+  background-color: var(--eros-surface);
+  border-radius: var(--eros-radius-md);
+}
+
+.eros-info-item {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  font-size: var(--eros-font-size-sm);
+}
+
+.eros-info-icon {
+  font-size: var(--eros-font-size-base);
+}
+
+.eros-info-label {
+  color: var(--eros-text-muted);
+}
+
+.eros-info-value {
+  color: var(--eros-text);
+}
+
+.eros-info-weather {
+  color: var(--eros-text-secondary);
+  margin-left: var(--eros-space-2);
+}
+
+/* Scene Section */
+.eros-section-scene {
+  padding: var(--eros-space-3);
+  background-color: var(--eros-surface);
+  border-radius: var(--eros-radius-md);
+  border-left: 3px solid var(--eros-arousal);
+}
+
+.eros-scene-header {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  margin-bottom: var(--eros-space-3);
+}
+
+.eros-scene-label {
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-muted);
+}
+
+.eros-scene-type {
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-arousal);
+}
+
+.eros-scene-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+}
+
+.eros-scene-arousal {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+}
+
+.eros-scene-arousal-value {
+  font-family: var(--eros-font-mono);
+  color: var(--eros-text);
+}
+
+/* ============================================================================
+   COMPACT STATUS DISPLAY
+   ============================================================================ */
+
+.eros-compact-status {
+  display: flex;
+  gap: var(--eros-space-3);
+  align-items: center;
+}
+
+.eros-status-compact {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-2);
+}
+
+.eros-compact-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.eros-compact-name {
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+}
+
+.eros-compact-stats {
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+}
+
+/* ============================================================================
+   DENSITY VARIANTS
+   ============================================================================ */
+
+.eros-status-density-compact .eros-stat-row {
+  padding: var(--eros-space-1) 0;
+}
+
+.eros-status-density-compact .eros-progress {
+  height: 1rem;
+}
+
+.eros-status-density-expanded {
+  gap: var(--eros-space-6);
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .eros-slideout-summary {
+    display: none;
+  }
+
+  .eros-slideout-panel {
+    width: 85%;
+  }
+
+  .eros-app-tabs {
+    flex-wrap: wrap;
+  }
+
+  .eros-app-tabs .eros-tab-label {
+    display: none;
+  }
+
+  .eros-stats-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .eros-slideout-panel {
+    width: 60%;
+  }
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes eros-panel-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.eros-slideout-container.open .eros-slideout-panel {
+  animation: eros-panel-fade-in 0.3s ease-out;
+}

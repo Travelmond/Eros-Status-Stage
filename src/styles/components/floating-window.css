@@ -1,0 +1,825 @@
+/**
+ * Eros Status - Floating Window Styles
+ * Game-like floating window UI (replaces terminal frames)
+ * Phase 3 - SillyTavern-inspired RPG interface
+ */
+
+/* ============================================================================
+   FLOATING WINDOW BASE
+   ============================================================================ */
+
+.rpg-floating-window {
+    /* Positioning */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    
+    /* Sizing */
+    width: var(--rpg-window-width, auto);
+    height: var(--rpg-window-height, auto);
+    min-width: var(--rpg-min-width, 200px);
+    min-height: var(--rpg-min-height, 100px);
+    
+    /* Game-like appearance */
+    background: linear-gradient(
+        180deg,
+        var(--eros-surface) 0%,
+        var(--eros-bg-secondary) 100%
+    );
+    border: 2px solid var(--eros-border);
+    border-radius: var(--eros-radius-lg);
+    
+    /* Multi-layer shadow for depth */
+    box-shadow: 
+        0 0 0 1px rgba(0, 0, 0, 0.3),
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        0 4px 8px rgba(0, 0, 0, 0.15),
+        0 8px 16px rgba(0, 0, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    
+    /* Smooth transitions */
+    transition: 
+        transform var(--eros-transition-normal),
+        box-shadow var(--eros-transition-normal),
+        opacity var(--eros-transition-normal);
+    
+    /* Overflow handling */
+    overflow: hidden;
+}
+
+.rpg-floating-window.dragging {
+    cursor: grabbing;
+    box-shadow: 
+        0 0 0 1px rgba(0, 0, 0, 0.3),
+        0 8px 24px rgba(0, 0, 0, 0.3),
+        0 16px 48px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    z-index: var(--eros-z-modal);
+}
+
+.rpg-floating-window.collapsed {
+    min-height: auto;
+    height: auto;
+}
+
+/* ============================================================================
+   WINDOW TITLE BAR
+   ============================================================================ */
+
+.rpg-window-title-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--eros-space-2) var(--eros-space-3);
+    min-height: 36px;
+    
+    /* Gradient background */
+    background: linear-gradient(
+        180deg,
+        var(--eros-surface-hover) 0%,
+        var(--eros-surface) 50%,
+        var(--eros-bg-secondary) 100%
+    );
+    
+    /* Border at bottom */
+    border-bottom: 1px solid var(--eros-border);
+    
+    /* Draggable cursor */
+    cursor: grab;
+    
+    /* Accent glow based on variant */
+    border-left: 3px solid var(--rpg-accent, var(--eros-highlight));
+}
+
+.rpg-window-title-bar:active {
+    cursor: grabbing;
+}
+
+.rpg-window-title {
+    display: flex;
+    align-items: center;
+    gap: var(--eros-space-2);
+    flex: 1;
+    min-width: 0;
+}
+
+.rpg-window-icon {
+    font-size: var(--eros-font-size-base);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.rpg-window-title-text {
+    font-family: var(--eros-font-primary);
+    font-size: var(--eros-font-size-sm);
+    font-weight: var(--eros-font-weight-semibold);
+    color: var(--eros-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* Window Controls */
+.rpg-window-controls {
+    display: flex;
+    align-items: center;
+    gap: var(--eros-space-1);
+    flex-shrink: 0;
+}
+
+.rpg-window-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    border: none;
+    border-radius: var(--eros-radius-sm);
+    cursor: pointer;
+    transition: all var(--eros-transition-fast);
+    background: var(--eros-surface);
+    border: 1px solid var(--eros-border);
+}
+
+.rpg-window-btn:hover {
+    background: var(--eros-surface-hover);
+    transform: scale(1.05);
+}
+
+.rpg-window-btn-icon {
+    font-size: var(--eros-font-size-sm);
+    line-height: 1;
+    color: var(--eros-text-secondary);
+}
+
+.rpg-window-btn:hover .rpg-window-btn-icon {
+    color: var(--eros-text);
+}
+
+/* Close button - red */
+.rpg-window-btn-close {
+    background: var(--eros-danger);
+    border-color: var(--eros-danger);
+}
+
+.rpg-window-btn-close:hover {
+    background: #dc2626;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+}
+
+.rpg-window-btn-close .rpg-window-btn-icon {
+    color: white;
+}
+
+/* Minimize button */
+.rpg-window-btn-minimize .rpg-window-btn-icon {
+    font-size: var(--eros-font-size-xs);
+}
+
+/* Maximize button */
+.rpg-window-btn-maximize .rpg-window-btn-icon {
+    font-size: var(--eros-font-size-xs);
+}
+
+/* ============================================================================
+   WINDOW CONTENT
+   ============================================================================ */
+
+.rpg-window-content {
+    flex: 1;
+    padding: var(--eros-space-3);
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+    /* Scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: var(--eros-border) transparent;
+}
+
+.rpg-window-content::-webkit-scrollbar {
+    width: 6px;
+}
+
+.rpg-window-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.rpg-window-content::-webkit-scrollbar-thumb {
+    background: var(--eros-border);
+    border-radius: var(--eros-radius-full);
+}
+
+.rpg-window-content::-webkit-scrollbar-thumb:hover {
+    background: var(--eros-border-light);
+}
+
+/* ============================================================================
+   WINDOW FOOTER
+   ============================================================================ */
+
+.rpg-window-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: var(--eros-space-2);
+    padding: var(--eros-space-2) var(--eros-space-3);
+    min-height: 32px;
+    background: var(--eros-bg-secondary);
+    border-top: 1px solid var(--eros-border);
+}
+
+/* ============================================================================
+   INLINE FLOATING WINDOW
+   ============================================================================ */
+
+.rpg-floating-inline {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--eros-space-2);
+    padding: var(--eros-space-2) var(--eros-space-3);
+    background: linear-gradient(
+        135deg,
+        var(--eros-surface) 0%,
+        var(--eros-bg-secondary) 100%
+    );
+    border: 1px solid var(--eros-border);
+    border-radius: var(--eros-radius-md);
+    box-shadow: 
+        0 1px 2px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+/* ============================================================================
+   GAME PANEL CONTAINER
+   ============================================================================ */
+
+.rpg-panel-container {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    width: var(--rpg-panel-width, 320px);
+    min-width: var(--rpg-panel-min-width, 240px);
+    max-width: var(--rpg-panel-max-width, 500px);
+    background: linear-gradient(
+        180deg,
+        var(--eros-surface) 0%,
+        var(--eros-bg-secondary) 100%
+    );
+    border: 2px solid var(--eros-border);
+    border-radius: var(--eros-radius-lg);
+    box-shadow: 
+        0 0 0 1px rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.25),
+        0 8px 24px rgba(0, 0, 0, 0.2),
+        0 16px 48px rgba(0, 0, 0, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: width var(--eros-transition-smooth);
+    z-index: var(--eros-z-sticky);
+    overflow: hidden;
+}
+
+/* Position variants */
+.rpg-panel-left {
+    left: var(--eros-space-4);
+    margin-top: var(--eros-space-4);
+    margin-bottom: var(--eros-space-4);
+    border-radius: var(--eros-radius-lg) var(--eros-radius-lg) var(--eros-radius-lg) var(--eros-radius-lg);
+}
+
+.rpg-panel-right {
+    right: var(--eros-space-4);
+    margin-top: var(--eros-space-4);
+    margin-bottom: var(--eros-space-4);
+    border-radius: var(--eros-radius-lg) var(--eros-radius-lg) var(--eros-radius-lg) var(--eros-radius-lg);
+}
+
+.rpg-panel-center {
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: var(--eros-space-4);
+    margin-bottom: var(--eros-space-4);
+    border-radius: var(--eros-radius-lg);
+}
+
+/* Collapsed state */
+.rpg-panel-container.collapsed {
+    width: auto;
+    min-width: auto;
+}
+
+.rpg-panel-container.collapsed .rpg-panel-header {
+    border-radius: var(--eros-radius-lg);
+}
+
+/* Resizing state */
+.rpg-panel-container.resizing {
+    transition: none;
+    user-select: none;
+}
+
+/* ============================================================================
+   GAME PANEL HEADER
+   ============================================================================ */
+
+.rpg-panel-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: var(--eros-space-3);
+    min-height: 48px;
+    background: linear-gradient(
+        180deg,
+        var(--eros-surface-hover) 0%,
+        var(--eros-surface) 50%,
+        var(--eros-bg-secondary) 100%
+    );
+    border-bottom: 2px solid var(--eros-border);
+    
+    /* Accent border at top */
+    border-top: 3px solid var(--rpg-accent-color, var(--eros-highlight));
+}
+
+.rpg-panel-header-left {
+    display: flex;
+    align-items: center;
+    gap: var(--eros-space-2);
+    flex: 1;
+    min-width: 0;
+}
+
+.rpg-panel-icon {
+    font-size: var(--eros-font-size-lg);
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.rpg-panel-title {
+    font-family: var(--eros-font-primary);
+    font-size: var(--eros-font-size-base);
+    font-weight: var(--eros-font-weight-bold);
+    color: var(--eros-text);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: 0.025em;
+    text-transform: uppercase;
+}
+
+.rpg-panel-header-right {
+    display: flex;
+    align-items: center;
+    gap: var(--eros-space-2);
+    flex-shrink: 0;
+}
+
+.rpg-panel-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border: none;
+    border-radius: var(--eros-radius-sm);
+    cursor: pointer;
+    transition: all var(--eros-transition-fast);
+    background: var(--eros-surface);
+    border: 1px solid var(--eros-border);
+}
+
+.rpg-panel-btn:hover {
+    background: var(--eros-surface-hover);
+    transform: scale(1.1);
+    box-shadow: 0 0 8px var(--eros-shadow);
+}
+
+.rpg-panel-btn-icon {
+    font-size: var(--eros-font-size-sm);
+    line-height: 1;
+    color: var(--eros-text-secondary);
+}
+
+.rpg-panel-btn:hover .rpg-panel-btn-icon {
+    color: var(--eros-text);
+}
+
+.rpg-panel-btn-close {
+    background: var(--eros-danger);
+    border-color: var(--eros-danger);
+}
+
+.rpg-panel-btn-close:hover {
+    background: #dc2626;
+    box-shadow: 0 0 10px rgba(239, 68, 68, 0.5);
+}
+
+.rpg-panel-btn-close .rpg-panel-btn-icon {
+    color: white;
+    font-size: var(--eros-font-size-base);
+}
+
+/* ============================================================================
+   GAME PANEL CONTENT
+   ============================================================================ */
+
+.rpg-panel-content {
+    flex: 1;
+    padding: var(--eros-space-3);
+    overflow-y: auto;
+    overflow-x: hidden;
+    
+    /* Scrollbar styling */
+    scrollbar-width: thin;
+    scrollbar-color: var(--eros-border) transparent;
+}
+
+.rpg-panel-content::-webkit-scrollbar {
+    width: 8px;
+}
+
+.rpg-panel-content::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.rpg-panel-content::-webkit-scrollbar-thumb {
+    background: var(--eros-border);
+    border-radius: var(--eros-radius-full);
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+.rpg-panel-content::-webkit-scrollbar-thumb:hover {
+    background: var(--eros-border-light);
+    background-clip: content-box;
+}
+
+/* ============================================================================
+   GAME PANEL RESIZE HANDLE
+   ============================================================================ */
+
+.rpg-panel-resize-handle {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 8px;
+    cursor: ew-resize;
+    background: transparent;
+    z-index: 10;
+}
+
+.rpg-panel-left .rpg-panel-resize-handle {
+    right: -4px;
+}
+
+.rpg-panel-right .rpg-panel-resize-handle {
+    left: -4px;
+}
+
+.rpg-panel-resize-handle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 48px;
+    background: var(--eros-border);
+    border-radius: var(--eros-radius-full);
+    opacity: 0;
+    transition: opacity var(--eros-transition-fast);
+}
+
+.rpg-panel-resize-handle:hover::after {
+    opacity: 1;
+    background: var(--eros-highlight);
+}
+
+/* ============================================================================
+   GAME PANEL SECTIONS
+   ============================================================================ */
+
+.rpg-panel-section {
+    margin-bottom: var(--eros-space-4);
+    background: var(--eros-bg-secondary);
+    border: 1px solid var(--eros-border);
+    border-radius: var(--eros-radius-md);
+    overflow: hidden;
+}
+
+.rpg-panel-section-header {
+    display: flex;
+    align-items: center;
+    gap: var(--eros-space-2);
+    padding: var(--eros-space-2) var(--eros-space-3);
+    background: var(--eros-surface);
+    border-bottom: 1px solid var(--eros-border);
+    cursor: pointer;
+    transition: background var(--eros-transition-fast);
+}
+
+.rpg-panel-section-header:hover {
+    background: var(--eros-surface-hover);
+}
+
+.rpg-panel-section-icon {
+    font-size: var(--eros-font-size-base);
+}
+
+.rpg-panel-section-title {
+    font-family: var(--eros-font-primary);
+    font-size: var(--eros-font-size-sm);
+    font-weight: var(--eros-font-weight-semibold);
+    color: var(--eros-text);
+    flex: 1;
+}
+
+.rpg-panel-section-toggle {
+    font-size: var(--eros-font-size-xs);
+    color: var(--eros-text-muted);
+    transition: transform var(--eros-transition-fast);
+}
+
+.rpg-panel-section.collapsed .rpg-panel-section-toggle {
+    transform: rotate(-90deg);
+}
+
+.rpg-panel-section-content {
+    padding: var(--eros-space-3);
+}
+
+/* ============================================================================
+   STAT CARD COMPONENT
+   ============================================================================ */
+
+.rpg-stat-card {
+    display: flex;
+    align-items: center;
+    gap: var(--eros-space-3);
+    padding: var(--eros-space-3);
+    background: var(--eros-bg-secondary);
+    border: 1px solid var(--eros-border);
+    border-radius: var(--eros-radius-md);
+    transition: 
+        transform var(--eros-transition-fast),
+        box-shadow var(--eros-transition-fast),
+        border-color var(--eros-transition-fast);
+}
+
+.rpg-stat-card.hoverable:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+        0 4px 12px rgba(0, 0, 0, 0.2),
+        0 0 0 1px var(--stat-color);
+    border-color: var(--stat-color);
+}
+
+.rpg-stat-card.interactive {
+    cursor: pointer;
+}
+
+.rpg-stat-card.interactive:active {
+    transform: translateY(0);
+    box-shadow: 
+        0 2px 4px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.rpg-stat-card.disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.rpg-stat-card.animated {
+    animation: rpg-stat-appear 0.3s ease-out;
+}
+
+@keyframes rpg-stat-appear {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Stat Icon */
+.rpg-stat-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    font-size: var(--eros-font-size-lg);
+    background: linear-gradient(
+        135deg,
+        var(--eros-surface) 0%,
+        var(--eros-bg-secondary) 100%
+    );
+    border: 1px solid var(--eros-border);
+    border-radius: var(--eros-radius-md);
+    flex-shrink: 0;
+}
+
+/* Stat Content */
+.rpg-stat-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.rpg-stat-label {
+    font-family: var(--eros-font-primary);
+    font-size: var(--eros-font-size-xs);
+    font-weight: var(--eros-font-weight-medium);
+    color: var(--eros-text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--eros-space-1);
+}
+
+.rpg-stat-value {
+    font-family: var(--eros-font-mono);
+    font-size: var(--eros-font-size-sm);
+    font-weight: var(--eros-font-weight-semibold);
+    color: var(--stat-color);
+    text-align: right;
+}
+
+/* Progress Bar Styles */
+.rpg-stat-progress {
+    display: flex;
+    gap: 2px;
+    margin-bottom: var(--eros-space-1);
+}
+
+.rpg-stat-progress-segments {
+    align-items: center;
+}
+
+.rpg-stat-segment {
+    width: 8px;
+    height: 12px;
+    border-radius: 2px;
+    transition: all var(--eros-transition-fast);
+}
+
+.rpg-stat-segment.empty {
+    background: var(--eros-border);
+    opacity: 0.3;
+}
+
+.rpg-stat-segment.filled {
+    background: var(--segment-color);
+}
+
+.rpg-stat-segment.glow {
+    box-shadow: 0 0 6px var(--segment-color);
+    animation: rpg-stat-glow 2s ease-in-out infinite;
+}
+
+@keyframes rpg-stat-glow {
+    0%, 100% {
+        box-shadow: 0 0 4px var(--segment-color);
+    }
+    50% {
+        box-shadow: 0 0 10px var(--segment-color);
+    }
+}
+
+/* Fill style progress bar */
+.rpg-stat-progress-fill-container {
+    width: 100%;
+    height: 8px;
+    background: var(--eros-border);
+    border-radius: var(--eros-radius-full);
+    overflow: hidden;
+}
+
+.rpg-stat-progress-fill {
+    height: 100%;
+    border-radius: var(--eros-radius-full);
+    transition: width var(--eros-progress-transition);
+}
+
+/* Glow style progress bar */
+.rpg-stat-progress-glow-container {
+    width: 100%;
+    height: 12px;
+    background: var(--eros-border);
+    border-radius: var(--eros-radius-full);
+    overflow: hidden;
+    box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.rpg-stat-progress-glow {
+    height: 100%;
+    border-radius: var(--eros-radius-full);
+    transition: width var(--eros-progress-transition);
+    box-shadow: 
+        0 0 8px var(--segment-color),
+        0 0 16px var(--segment-color);
+}
+
+/* ============================================================================
+   STAT CARD COMPACT
+   ============================================================================ */
+
+.rpg-stat-card-compact {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--eros-space-1);
+    padding: var(--eros-space-1) var(--eros-space-2);
+    background: var(--eros-bg-secondary);
+    border: 1px solid var(--eros-border);
+    border-radius: var(--eros-radius-sm);
+    font-size: var(--eros-font-size-sm);
+    transition: all var(--eros-transition-fast);
+}
+
+.rpg-stat-card-compact:hover {
+    border-color: var(--stat-color);
+    box-shadow: 0 0 8px var(--stat-color);
+}
+
+.rpg-stat-compact-icon {
+    font-size: var(--eros-font-size-base);
+}
+
+.rpg-stat-compact-value {
+    font-family: var(--eros-font-mono);
+    font-weight: var(--eros-font-weight-semibold);
+    color: var(--stat-color);
+}
+
+/* ============================================================================
+   STAT CARD ROW
+   ============================================================================ */
+
+.rpg-stat-row {
+    display: flex;
+    gap: var(--eros-space-2);
+}
+
+.rpg-stat-row.horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.rpg-stat-row.vertical {
+    flex-direction: column;
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 640px) {
+    .rpg-panel-container {
+        left: var(--eros-space-2) !important;
+        right: var(--eros-space-2) !important;
+        transform: none !important;
+        width: auto !important;
+        max-width: none !important;
+        margin: var(--eros-space-2) !important;
+    }
+    
+    .rpg-floating-window {
+        width: 100% !important;
+        min-width: auto !important;
+    }
+    
+    .rpg-stat-row.horizontal {
+        flex-direction: column;
+    }
+}
+
+/* ============================================================================
+   DARK THEME ACCENT GLOW
+   ============================================================================ */
+
+[data-theme="dark"] .rpg-floating-window,
+[data-theme="dark"] .rpg-panel-container {
+    box-shadow: 
+        0 0 0 1px rgba(0, 0, 0, 0.5),
+        0 2px 4px rgba(0, 0, 0, 0.3),
+        0 4px 8px rgba(0, 0, 0, 0.25),
+        0 8px 16px rgba(0, 0, 0, 0.2),
+        0 0 20px rgba(139, 92, 246, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.03);
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+    .rpg-stat-card.animated {
+        animation: none;
+    }
+    
+    .rpg-stat-segment.glow {
+        animation: none;
+    }
+    
+    .rpg-stat-progress-glow {
+        box-shadow: none;
+    }
+}

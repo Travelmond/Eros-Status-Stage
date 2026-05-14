@@ -1,0 +1,676 @@
+/**
+ * Eros Status Stage - Character Components CSS
+ * Character cards, list, and detail modal styles
+ * Phase 3.2 - Character Management
+ */
+
+/* Import base variables */
+@import '../variables.css';
+
+/* ============================================================================
+   CHARACTER CARD STYLES
+   ============================================================================ */
+
+.character-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--eros-space-4);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-lg);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+  overflow: hidden;
+  text-align: left;
+  width: 100%;
+}
+
+.character-card:hover {
+  border-color: var(--eros-highlight);
+  transform: translateY(-2px);
+}
+
+.character-card:hover .character-card-glow {
+  opacity: 1;
+}
+
+.character-card.selected {
+  border-color: var(--eros-highlight);
+  background-color: var(--eros-surface-hover);
+}
+
+.character-card.in-scene {
+  border-left: 3px solid var(--eros-interactive);
+}
+
+/* Avatar */
+.character-card-avatar {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin-bottom: var(--eros-space-3);
+  flex-shrink: 0;
+}
+
+.character-avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--eros-radius-full);
+  object-fit: cover;
+  border: 2px solid var(--eros-border);
+}
+
+.character-avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--eros-radius-full);
+  background: linear-gradient(135deg, var(--eros-highlight), var(--eros-interactive));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-initial {
+  font-size: var(--eros-font-size-xl);
+  font-weight: var(--eros-font-weight-bold);
+  color: var(--eros-text-inverse);
+}
+
+.character-scene-indicator {
+  position: absolute;
+  bottom: -4px;
+  right: -4px;
+  font-size: var(--eros-font-size-sm);
+  background-color: var(--eros-surface);
+  border-radius: var(--eros-radius-full);
+  padding: 2px;
+}
+
+/* Card Content */
+.character-card-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--eros-space-1);
+  width: 100%;
+}
+
+.character-card-name {
+  font-size: var(--eros-font-size-base);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0;
+  text-align: center;
+}
+
+.character-card-role {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-secondary);
+  text-align: center;
+}
+
+.character-card-importance {
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+}
+
+.character-card-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--eros-space-1);
+  margin-top: var(--eros-space-2);
+  width: 100%;
+}
+
+.stat-label {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+}
+
+.stat-value {
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-affection);
+}
+
+/* Glow Effect */
+.character-card-glow {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--eros-radius-lg);
+  background: radial-gradient(
+    circle at center,
+    rgba(139, 92, 246, 0.15) 0%,
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity var(--eros-transition-normal);
+  pointer-events: none;
+}
+
+/* ============================================================================
+   CHARACTER CARD SKELETON
+   ============================================================================ */
+
+.character-card-skeleton {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: var(--eros-space-4);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-lg);
+}
+
+.skeleton-avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: var(--eros-radius-full);
+  background: linear-gradient(90deg, var(--eros-surface) 25%, var(--eros-surface-hover) 50%, var(--eros-surface) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+  margin-bottom: var(--eros-space-3);
+}
+
+.skeleton-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--eros-space-2);
+  width: 100%;
+}
+
+.skeleton-name,
+.skeleton-role,
+.skeleton-stat {
+  height: 16px;
+  border-radius: var(--eros-radius-sm);
+  background: linear-gradient(90deg, var(--eros-surface) 25%, var(--eros-surface-hover) 50%, var(--eros-surface) 75%);
+  background-size: 200% 100%;
+  animation: skeleton-shimmer 1.5s ease-in-out infinite;
+}
+
+.skeleton-name {
+  width: 80%;
+}
+
+.skeleton-role {
+  width: 50%;
+  height: 12px;
+}
+
+.skeleton-stat {
+  width: 60%;
+  height: 12px;
+  margin-top: var(--eros-space-2);
+}
+
+@keyframes skeleton-shimmer {
+  0% { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+/* ============================================================================
+   CHARACTER LIST STYLES
+   ============================================================================ */
+
+.character-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-4);
+}
+
+.character-list-header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-3);
+}
+
+.character-list-title {
+  font-size: var(--eros-font-size-lg);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0;
+}
+
+.character-list-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--eros-space-2);
+}
+
+.filter-button {
+  padding: var(--eros-space-1) var(--eros-space-3);
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-secondary);
+  background-color: var(--eros-surface);
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.filter-button:hover {
+  background-color: var(--eros-surface-hover);
+  color: var(--eros-text);
+  border-color: var(--eros-border-light);
+}
+
+.filter-button.active {
+  background-color: var(--eros-highlight);
+  color: var(--eros-text-inverse);
+  border-color: var(--eros-highlight);
+}
+
+.filter-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.filter-count {
+  margin-left: var(--eros-space-1);
+  font-size: var(--eros-font-size-xs);
+  opacity: 0.8;
+}
+
+.character-list-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: var(--eros-space-4);
+}
+
+.character-list-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--eros-space-12);
+  text-align: center;
+}
+
+.character-list-empty .empty-icon {
+  font-size: 3rem;
+  margin-bottom: var(--eros-space-4);
+  opacity: 0.5;
+}
+
+.character-list-empty .empty-message {
+  font-size: var(--eros-font-size-base);
+  color: var(--eros-text-secondary);
+  margin: 0;
+}
+
+/* ============================================================================
+   CHARACTER DETAIL MODAL STYLES
+   ============================================================================ */
+
+.character-modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  z-index: calc(var(--eros-z-modal) - 1);
+  animation: fade-in 0.2s ease-out;
+}
+
+.character-detail-modal {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 400px;
+  max-width: 90vw;
+  height: 100vh;
+  background-color: var(--eros-bg);
+  border-left: 1px solid var(--eros-border);
+  z-index: var(--eros-z-modal);
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform var(--eros-transition-smooth);
+  box-shadow: var(--eros-shadow-lg);
+}
+
+.character-detail-modal.open {
+  transform: translateX(0);
+}
+
+/* Header */
+.character-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--eros-space-4);
+  background-color: var(--eros-surface);
+  border-bottom: 1px solid var(--eros-border);
+  flex-shrink: 0;
+}
+
+.character-modal-title-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-1);
+}
+
+.character-modal-title {
+  font-size: var(--eros-font-size-lg);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0;
+}
+
+.character-modal-importance {
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+}
+
+.character-modal-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+}
+
+.character-modal-edit {
+  padding: var(--eros-space-1) var(--eros-space-3);
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+  background-color: transparent;
+  border: 1px solid var(--eros-border);
+  border-radius: var(--eros-radius-md);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.character-modal-edit:hover {
+  background-color: var(--eros-surface-hover);
+  color: var(--eros-text);
+}
+
+.character-modal-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.5rem;
+  color: var(--eros-text-secondary);
+  background-color: transparent;
+  border: none;
+  border-radius: var(--eros-radius-md);
+  cursor: pointer;
+  transition: all var(--eros-transition-fast);
+}
+
+.character-modal-close:hover {
+  background-color: var(--eros-surface-hover);
+  color: var(--eros-text);
+}
+
+/* Content */
+.character-modal-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--eros-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-6);
+}
+
+.character-modal-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.character-modal-content::-webkit-scrollbar-track {
+  background: var(--eros-bg-secondary);
+}
+
+.character-modal-content::-webkit-scrollbar-thumb {
+  background: var(--eros-border);
+  border-radius: var(--eros-radius-full);
+}
+
+/* Avatar Section */
+.character-modal-avatar-section {
+  display: flex;
+  justify-content: center;
+}
+
+.character-modal-avatar {
+  position: relative;
+  width: 120px;
+  height: 120px;
+}
+
+.character-modal-avatar .avatar-image {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--eros-radius-full);
+  object-fit: cover;
+  border: 3px solid var(--eros-border);
+}
+
+.character-modal-avatar .avatar-placeholder {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--eros-radius-full);
+  background: linear-gradient(135deg, var(--eros-highlight), var(--eros-interactive));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--eros-border);
+}
+
+.character-modal-avatar .avatar-initial {
+  font-size: 3rem;
+  font-weight: var(--eros-font-weight-bold);
+  color: var(--eros-text-inverse);
+}
+
+.avatar-scene-badge {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: var(--eros-space-1) var(--eros-space-3);
+  font-size: var(--eros-font-size-xs);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text-inverse);
+  background-color: var(--eros-interactive);
+  border-radius: var(--eros-radius-full);
+  white-space: nowrap;
+}
+
+/* Section */
+.character-modal-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-3);
+}
+
+.character-modal-section .section-title {
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0;
+  padding-bottom: var(--eros-space-2);
+  border-bottom: 1px solid var(--eros-border);
+}
+
+.character-modal-section .section-content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.info-label {
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-muted);
+}
+
+.info-value {
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text);
+  font-weight: var(--eros-font-weight-medium);
+}
+
+/* Affection Display */
+.affection-display {
+  display: flex;
+  flex-direction: column;
+  gap: var(--eros-space-2);
+}
+
+.affection-hearts {
+  font-size: var(--eros-font-size-lg);
+  text-align: center;
+  letter-spacing: 2px;
+}
+
+.affection-bar {
+  width: 100%;
+  height: 8px;
+  background-color: var(--eros-surface);
+  border-radius: var(--eros-radius-full);
+  overflow: hidden;
+}
+
+.affection-bar-fill {
+  height: 100%;
+  border-radius: var(--eros-radius-full);
+  transition: width var(--eros-transition-smooth);
+}
+
+.affection-value {
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  text-align: center;
+}
+
+/* Notes */
+.notes-content {
+  font-size: var(--eros-font-size-sm);
+  color: var(--eros-text-secondary);
+  line-height: var(--eros-line-height-relaxed);
+  margin: 0;
+}
+
+/* Relationships */
+.relationship-item {
+  display: flex;
+  align-items: center;
+  gap: var(--eros-space-2);
+  padding: var(--eros-space-2);
+  background-color: var(--eros-surface);
+  border-radius: var(--eros-radius-md);
+}
+
+.relationship-type {
+  font-size: var(--eros-font-size-sm);
+  font-weight: var(--eros-font-weight-medium);
+  color: var(--eros-text);
+}
+
+.relationship-strength {
+  font-size: var(--eros-font-size-xs);
+  color: var(--eros-text-muted);
+  margin-left: auto;
+}
+
+.relationship-romantic {
+  font-size: var(--eros-font-size-sm);
+}
+
+/* ============================================================================
+   CHARACTER TAB STYLES
+   ============================================================================ */
+
+.character-tab {
+  display: flex;
+  flex-direction: column;
+}
+
+.character-tab-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--eros-space-12);
+  text-align: center;
+}
+
+.character-tab-empty .empty-icon {
+  font-size: 4rem;
+  margin-bottom: var(--eros-space-4);
+  opacity: 0.4;
+}
+
+.character-tab-empty .empty-title {
+  font-size: var(--eros-font-size-lg);
+  font-weight: var(--eros-font-weight-semibold);
+  color: var(--eros-text);
+  margin: 0 0 var(--eros-space-2) 0;
+}
+
+.character-tab-empty .empty-description {
+  font-size: var(--eros-font-size-base);
+  color: var(--eros-text-secondary);
+  margin: 0;
+  max-width: 300px;
+}
+
+/* ============================================================================
+   ANIMATIONS
+   ============================================================================ */
+
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ============================================================================
+   RESPONSIVE
+   ============================================================================ */
+
+@media (max-width: 640px) {
+  .character-detail-modal {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .character-list-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--eros-space-3);
+  }
+
+  .character-modal-avatar {
+    width: 100px;
+    height: 100px;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .character-detail-modal {
+    width: 350px;
+  }
+
+  .character-list-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  .character-card,
+  .character-detail-modal,
+  .character-modal-overlay {
+    transition: none;
+    animation: none;
+  }
+}
