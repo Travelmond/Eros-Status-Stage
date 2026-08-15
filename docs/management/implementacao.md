@@ -4,7 +4,7 @@
 Materializar o Eros Status Terminal (ESS) v3.0 como um Stage funcional para Chub Venus AI, utilizando a estrutura oficial de Stages em TypeScript (`@chub-ai/stages-ts`, `StageBase`) e portando toda a lógica, parser, middleware, componentes e estética cyberpunk documentados em `/docs`.
 
 ## Fase Atual
-T02 — Backend / Lógica de Stage reconstituído e integrado ao T01/T03. T01 — UI/UX e Frontend já existia; o `ErosTerminal.tsx` foi reconstruído para usar os componentes reais do T01. T03 — Dados / Schemas / Metadata concluído. Próxima etapa: validação de build (`npm install` / `typecheck` / `lint`) e revisão obrigatória da `equipe-revisao`.
+T04 — DevOps / Deploy / Git concluído. Build validado (`npm install`, `npm run typecheck`, `npm run lint`, `npm run build`). Workflows GitHub Actions criados e estratégia de branches configurada (`old`, `dev`, `main`). Código novo commitado na branch `dev`. Próxima etapa: revisão obrigatória da `equipe-revisao` e, com aprovação do usuário, push para `origin/dev` e deploy para stage de teste no Chub.
 
 ## Stack Decidida
 - **Framework:** React 18 + TypeScript + Vite 6
@@ -27,6 +27,8 @@ T02 — Backend / Lógica de Stage reconstituído e integrado ao T01/T03. T01 �
 8. **Build standalone** — O núcleo `ErosTerminal` continua renderizável fora do Chub para testes locais via `App.tsx` (modo dev).
 9. **Schemas versionados** — `state_schema.version`, `meta.schema_version`, `init.schema_version` e `chat.schema_version` fixados em `3.0.0` para permitir migrações futuras.
 10. **Mapeamento de estado documentado** — `docs/architecture/state-mapping.md` define claramente o que vai para `messageState`, `chatState`, `initState` e `localStorage`.
+11. **Tipos oficiais do StageBase** — `src/types/chub.ts` re-exporta `Message`, `Character`, `InitialData`, `StageResponse` e `LoadResponse` de `@chub-ai/stages-ts` para garantir compatibilidade total com a assinatura genérica de `StageBase`.
+12. **Configuração de projeto TypeScript unificada** — `tsconfig.json` inclui `vite.config.ts` e remove `references` problemático, eliminando erro TS6310 e permitindo `tsc --noEmit` limpo.
 
 ## Contratos de Execução
 - `T01` — UI/UX e Frontend (`/docs/management/contratos/T01-ui-ux-frontend.json`)
@@ -35,12 +37,11 @@ T02 — Backend / Lógica de Stage reconstituído e integrado ao T01/T03. T01 �
 - `T04` — DevOps / Deploy / Git (`/docs/management/contratos/T04-devops-deploy-git.json`)
 
 ## Próximos Passos
-1. Validar build local: `npm install`, `npm run typecheck`, `npm run lint`.
-2. `equipe-revisao` auditar obrigatoriamente o entregável integrado (T01 + T02 + T03).
-3. Tier 3 corrigir eventuais issues apontadas pelos revisores.
-4. @arquiteto-geral validar interface entre T01/T02 e os schemas de T03.
-5. @devops iniciar T04 — configurar GitHub Actions e estratégia de branches.
-6. Após aprovação da revisão, promover para deploy em stage de teste.
+1. `equipe-revisao` auditar obrigatoriamente o entregável integrado (T01 + T02 + T03 + T04).
+2. Tier 3 corrigir eventuais issues apontadas pelos revisores.
+3. @arquiteto-geral validar interface entre T01/T02/T04 e os schemas de T03.
+4. Com aprovação do usuário, fazer push de `dev` para `origin/dev` e validar deploy de teste no Chub.
+5. Após validação de staging, promover `dev` → `main` mediante solicitação explícita do usuário.
 
 ## Observações do Juiz
 - 2026-08-15: T01 entregue com design system, wireframes, componentes shadcn/ui stubs, componentes do terminal e TestRunner standalone.

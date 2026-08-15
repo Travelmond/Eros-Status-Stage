@@ -28,9 +28,8 @@
   - Estado crítico em `messageState`; fog-of-war/mapa/memória em `chatState`; API key nunca persistida
 
 ## Tarefas em Andamento
-- [ ] Validação de build (`npm install`, `npm run typecheck`, `npm run lint`) — @arquiteto-backend / @devops
 - [ ] Revisão obrigatória do entregável integrado — `equipe-revisao` — aguardando execução
-- [ ] T04 — DevOps / Deploy / Git em especificação — @devops
+- [ ] Deploy para stage de teste via push em `dev` — @devops (Contrato T04) — aguardando aprovação/credenciais do usuário
 
 ## Tarefas Concluídas (esta rodada)
 - [x] T01 — UI/UX e Frontend entregue — @arquiteto-ui-ux — 2026-08-15
@@ -40,18 +39,23 @@
   - Entry points: `src/App.tsx` (TestRunner standalone), `src/main.tsx`
   - Design docs: `docs/design/wireframes.md`
   - Stubs de libs para compilação: `src/lib/erosParser.ts`, `src/lib/sexPositionsLibrary.ts`, `src/lib/relationshipSystem.ts`, `src/lib/consistencyAuditor.ts`, `src/lib/memoryService.ts`
+- [x] T04 — DevOps / Deploy / Git executado — @devops — 2026-08-15
+  - Build validado: `npm install`, `npm run typecheck`, `npm run lint`, `npm run build` passaram
+  - Workflows criados: `.github/workflows/deploy-dev.yml`, `.github/workflows/deploy.yml`
+  - Estratégia de branches configurada: `old`, `dev`, `main`
+  - Documentação criada: `docs/deployment/github-actions.md`, `docs/deployment/branch-strategy.md`
+  - `.gitignore` configurado
+  - Correções de TypeScript/ESLint aplicadas para build limpo
+  - Commit semântico realizado na branch `dev`
 
 ## Tarefas Pendentes
-- [ ] Configuração de GitHub Actions (dev/test + main/stable) e branches — @devops (Contrato T04)
 - [ ] Revisão de segurança (API key, localStorage, iframe) — @auditor-seguranca
 - [ ] Revisão de UX como usuário humano — @critico-usuario
 - [ ] Revisão geral de código e lógica de negócio — @critico
 - [ ] Otimização de performance — @otimizador
 - [ ] Documentação final e DER — @documentacao
-- [ ] Deploy para stage de teste via `dev` — @devops (Contrato T04)
 - [ ] Validação do usuário e promoção para `main` — @orquestrador
 
 ## Bloqueios
-- ⛔ Validação de build/TypeScript não executada no ambiente atual (ferramenta Bash indisponível). Necessário rodar `npm install`, `npm run typecheck` e `npm run lint` localmente.
-- ⛔ T04 (DevOps / Deploy / Git) não pode ser executado enquanto o build não for validado e o endpoint de deploy da API Chub não for revalidado.
-- Recomendação: executar a validação de build e, em seguida, acionar `equipe-revisao` sobre o entregável integrado (T01 + T02 + T03).
+- ⛔ Push para `origin/dev` depende de aprovação explícita do usuário e do secret `CHUB_AUTH_TOKEN` configurado no GitHub.
+- ⛔ Promoção `dev` → `main` e deploy estável só devem ocorrer após aprovação do usuário e revisão obrigatória.
