@@ -1,5 +1,7 @@
 project_name: "Eros Status Terminal"
 tagline: "Painel visual cyberpunk de status, progressões, inventário, localização, NPCs e módulos NSFW para roleplay no Chub Venus AI."
+description: "Stage avançado de status para Chub Venus AI. Exibe progressões emocionais, sistema de localização e minimapa, inventário, slots de vestimenta, módulos sexuais, reações, gatilhos NTR, auditoria de consistência e geração de imagens. Mantém estado estruturado por turno e oferece comandos de UI para focar a narrativa."
+author: "Travelmond"
 visibility: PUBLIC
 position: ADJACENT
 tags:
@@ -130,6 +132,24 @@ state_schema:
   message:
     type: object
     additionalProperties: false
+    required:
+      - system
+      - character
+      - userCharacter
+      - progressions
+      - clothingSlots
+      - body
+      - location
+      - inventory
+      - goals
+      - npcs
+      - sexModule
+      - reactionModule
+      - ntrModule
+      - ui_commands
+      - meta
+      - img_module
+      - audit
     properties:
       system:
         type: object
