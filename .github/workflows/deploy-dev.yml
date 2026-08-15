@@ -8,7 +8,7 @@ on:
 
 env:
   NODE_VERSION: '24.x'
-  CHUB_EXTENSION_ID: 'eros-status-stage-b47cccbfa255'
+  CHUB_EXTENSION_ID: ${{ secrets.CHUB_EXTENSION_ID_DEV }}
 
 jobs:
   build-and-deploy:
@@ -52,6 +52,11 @@ jobs:
         run: |
           if [ -z "$CHUB_AUTH_TOKEN" ]; then
             echo "::error::CHUB_AUTH_TOKEN secret is not configured."
+            exit 1
+          fi
+
+          if [ -z "${{ env.CHUB_EXTENSION_ID }}" ]; then
+            echo "::error::CHUB_EXTENSION_ID_DEV secret is not configured. Set it in Settings > Secrets and variables > Actions."
             exit 1
           fi
 
