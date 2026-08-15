@@ -18,7 +18,14 @@ import type {
   UICommands,
 } from '../types/eros-status';
 import type { ConfigType } from '../types/config';
-import { createInitialState, createDefaultChatState, mergePartialState } from './state';
+import {
+  createInitialState,
+  createDefaultChatState,
+  mergePartialState,
+  DEFAULT_SEX_MODULE,
+  DEFAULT_REACTION_MODULE,
+  deepClone,
+} from './state';
 import { runAudit } from './audit';
 import { appendTurnToHistory, buildMemoryContext } from '../systems/memory';
 
@@ -351,6 +358,40 @@ export function enforceNTRGate(state: ErosStatusState, ntrEnabled: boolean): str
   return blocked;
 }
 
+export function enforceSexGate(state: ErosStatusState, sexEnabled: boolean): string[] {
+  if (sexEnabled) return [];
+  const blocked: string[] = [];
+
+  if (state.sexModule?.active || state.sexModule?.phase !== 'none') {
+    state.sexModule = deepClone(DEFAULT_SEX_MODULE);
+    blocked.push('SEX_MODULE_BLOCKED (toggle=OFF)');
+  }
+
+  if (state.ui_commands?.suggested_tab === 'sex') {
+    state.ui_commands.suggested_tab = '';
+    blocked.push('SEX_TAB_SWITCH_BLOCKED');
+  }
+
+  return blocked;
+}
+
+export function enforceReactionGate(state: ErosStatusState, reactionEnabled: boolean): string[] {
+  if (reactionEnabled) return [];
+  const blocked: string[] = [];
+
+  if (state.reactionModule?.active || (state.reactionModule?.reactions?.length || 0) > 0) {
+    state.reactionModule = deepClone(DEFAULT_REACTION_MODULE);
+    blocked.push('REACTION_MODULE_BLOCKED (toggle=OFF)');
+  }
+
+  if (state.ui_commands?.suggested_tab === 'reaction') {
+    state.ui_commands.suggested_tab = '';
+    blocked.push('REACTION_TAB_SWITCH_BLOCKED');
+  }
+
+  return blocked;
+}
+
 export function validateInitialState(parsedState: ErosStatusState): { state: ErosStatusState; invalidations: string[] } {
   const invalidations: string[] = [];
   if (parsedState.system?.day !== undefined && parsedState.system.day < 1) {
@@ -379,7 +420,15 @@ export function processIncomingState(
   parsedState: Partial<ErosStatusState>,
   options: ProcessOptions = {},
 ): ProcessResult {
-  const { ntrEnabled = false, auditorEnabled = true, imgAuditorEnabled = true, currentTurnId = 't0_v0', parentTurnId = '', previousChatState } = options;
+  const {
+    ntrEnabled = false,
+    auditorEnabled = true,
+    imgAuditorEnabled = true,
+    config,
+    currentTurnId = 't0_v0',
+    parentTurnId = '',
+    previousChatState,
+  } = options;
 
   const invalidations: string[] = [];
   const allNotifications: Notification[] = [];
@@ -394,6 +443,11 @@ export function processIncomingState(
   // NTR gate
   const ntrBlocked = enforceNTRGate(candidate, ntrEnabled);
   invalidations.push(...ntrBlocked);
+
+  // Sex / Reaction gates (driven by config toggles)
+  const sexBlocked = enforceSexGate(candidate, config?.enableSexModule ?? true);
+  const reactionBlocked = enforceReactionGate(candidate, config?.enableReactionModule ?? true);
+  invalidations.push(...sexBlocked, ...reactionBlocked);
 
   // Schema enforcement
   const schemaCoerced = enforceSchema(candidate);
@@ -438,7 +492,12 @@ export function processIncomingState(
   const finalTabSwitch = candidate.ui_commands?.suggested_tab || autoTabSwitch || null;
   candidate.meta.validated = invalidations.length === 0;
   candidate.meta.coerced_fields = invalidations;
-  candidate.audit = { issues: auditIssues, ignoredIds: [], correctedIds: [] };
+  // Preserva correctedIds/ignoredIds entre turnos, a menos que explicitamente alterados pelo usuario.
+  candidate.audit = {
+    issues: auditIssues,
+    ignoredIds: prev.audit?.ignoredIds ? [...prev.audit.ignoredIds] : [],
+    correctedIds: prev.audit?.correctedIds ? [...prev.audit.correctedIds] : [],
+  };
   candidate.meta.turn_id = currentTurnId;
   candidate.meta.parent_turn_id = parentTurnId;
 

@@ -26,21 +26,21 @@ function IssueCard({
   return (
     <div
       className="rounded mb-1.5 overflow-hidden"
-      style={{ border: `1px solid ${color}60`, background: 'var(--terminal-card)' }}
+      style={{ border: `1px solid color-mix(in srgb, ${color} 60%, transparent)`, background: 'var(--terminal-card)' }}
     >
       <div
         className="px-2 py-1 flex items-center gap-2 cursor-pointer"
-        style={{ background: `${color}10`, borderBottom: expanded ? `1px solid ${color}30` : 'none' }}
+        style={{ background: `color-mix(in srgb, ${color} 10%, transparent)`, borderBottom: expanded ? `1px solid color-mix(in srgb, ${color} 30%, transparent)` : 'none' }}
         onClick={() => setExpanded((v) => !v)}
       >
         <span className="text-xs">{typeIcon}</span>
         <span className="text-xs font-mono flex-1" style={{ color }}>{issue.message}</span>
-        <span className="text-xs font-mono" style={{ color: `${color}80` }}>{expanded ? '▲' : '▼'}</span>
+        <span className="text-xs font-mono" style={{ color: `color-mix(in srgb, ${color} 80%, transparent)` }}>{expanded ? '▲' : '▼'}</span>
       </div>
       {expanded && (
         <div className="px-2 py-2 space-y-2">
           {issue.suggestedValue !== undefined && (
-            <div className="text-xs font-mono" style={{ color: '#ffffff40' }}>
+            <div className="text-xs font-mono" style={{ color: 'var(--terminal-text-hint)' }}>
               <span style={{ color: '#ffffff60' }}>Suggested: </span>
               <span style={{ borderBottom: `2px dashed ${color}`, color }}>{String(issue.suggestedValue).slice(0, 80)}</span>
             </div>
@@ -57,7 +57,7 @@ function IssueCard({
                 <button
                   onClick={() => manualValue && onCorrect?.(issue.id, manualValue)}
                   className="text-xs font-mono px-2 py-1 rounded"
-                  style={{ border: `1px solid ${color}`, color, background: `${color}15` }}
+                  style={{ border: `1px solid ${color}`, color, background: `color-mix(in srgb, ${color} 15%, transparent)` }}
                 >
                   APPLY
                 </button>
@@ -69,11 +69,11 @@ function IssueCard({
               Narrative contradictions cannot be auto-corrected. Review the AI's output and decide whether to accept it as a creative choice.
             </div>
           )}
-          <div className="pt-1" style={{ borderTop: `1px solid ${color}15` }}>
+          <div className="pt-1" style={{ borderTop: `1px solid color-mix(in srgb, ${color} 15%, transparent)` }}>
             <button
               onClick={() => onIgnore?.(issue.id)}
               className="text-xs font-mono px-2 py-0.5 rounded transition-all"
-              style={{ border: '1px solid #ffffff15', color: '#ffffff40', background: 'transparent' }}
+              style={{ border: '1px solid #ffffff15', color: 'var(--terminal-text-hint)', background: 'transparent' }}
             >
               ✗ Ignore Audit
             </button>
@@ -95,11 +95,11 @@ export function CorrectionAlert({ issues = [], onCorrect, onIgnore }: Correction
   return (
     <div
       className="mx-3 mb-2 rounded overflow-hidden animate-fade-in-up"
-      style={{ border: `1px solid ${borderColor}50`, background: '#0A0A0A' }}
+      style={{ border: `1px solid color-mix(in srgb, ${borderColor} 50%, transparent)`, background: 'var(--terminal-bg)' }}
     >
       <div
         className="px-3 py-1.5 flex items-center justify-between"
-        style={{ background: `${borderColor}10`, borderBottom: `1px solid ${borderColor}30` }}
+        style={{ background: `color-mix(in srgb, ${borderColor} 10%, transparent)`, borderBottom: `1px solid color-mix(in srgb, ${borderColor} 30%, transparent)` }}
       >
         <div className="flex items-center gap-2">
           <span className="text-sm animate-pulse-neon">⚠</span>
@@ -108,9 +108,9 @@ export function CorrectionAlert({ issues = [], onCorrect, onIgnore }: Correction
           </span>
         </div>
         <div className="flex items-center gap-1.5 text-xs font-mono">
-          {counts.data > 0 && <span style={{ color: 'var(--neon-gold)80' }}>DATA:{counts.data}</span>}
-          {counts.narrative > 0 && <span style={{ color: 'var(--neon-purple)80' }}>NARR:{counts.narrative}</span>}
-          {counts.img > 0 && <span style={{ color: 'var(--neon-cyan)80' }}>IMG:{counts.img}</span>}
+          {counts.data > 0 && <span style={{ color: 'color-mix(in srgb, var(--neon-gold) 80%, transparent)' }}>DATA:{counts.data}</span>}
+          {counts.narrative > 0 && <span style={{ color: 'color-mix(in srgb, var(--neon-purple) 80%, transparent)' }}>NARR:{counts.narrative}</span>}
+          {counts.img > 0 && <span style={{ color: 'color-mix(in srgb, var(--neon-cyan) 80%, transparent)' }}>IMG:{counts.img}</span>}
         </div>
       </div>
       <div className="px-2 py-2 max-h-48 overflow-y-auto">

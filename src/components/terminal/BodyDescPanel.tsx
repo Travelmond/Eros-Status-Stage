@@ -31,34 +31,34 @@ export function BodyDescPanel({ body, character }: BodyDescPanelProps) {
   return (
     <div
       className="mx-3 mb-2 rounded overflow-hidden"
-      style={{ border: '1px solid var(--neon-gold)30' }}
+      style={{ border: '1px solid color-mix(in srgb, var(--neon-gold) 30%, transparent)' }}
     >
       <div
         className="px-3 py-1.5 flex items-center justify-between cursor-pointer"
         style={{
-          background: 'var(--neon-gold)08',
-          borderBottom: expanded ? '1px solid var(--neon-gold)20' : 'none',
+          background: 'color-mix(in srgb, var(--neon-gold) 8%, transparent)',
+          borderBottom: expanded ? '1px solid color-mix(in srgb, var(--neon-gold) 20%, transparent)' : 'none',
         }}
         onClick={() => setExpanded((e) => !e)}
       >
         <span className="text-xs font-mono font-bold neon-gold tracking-widest">🧬 BODY DESCRIPTION</span>
         <div className="flex items-center gap-2">
           <span className="text-xs text-gray-600">{character?.name || ''}</span>
-          <span className="text-xs font-mono" style={{ color: 'var(--neon-gold)60' }}>
+          <span className="text-xs font-mono" style={{ color: 'color-mix(in srgb, var(--neon-gold) 60%, transparent)' }}>
             {expanded ? '▲' : '▼'}
           </span>
         </div>
       </div>
       {expanded && (
-        <div className="px-3 py-1.5" style={{ background: '#0A0A0A' }}>
+        <div className="px-3 py-1.5" style={{ background: 'var(--terminal-bg)' }}>
           {parts.map(({ key, label, emoji }) => (
             <div
               key={key}
               className="flex items-start gap-2 py-0.5 text-xs font-mono border-b"
-              style={{ borderColor: 'var(--neon-gold)08' }}
+              style={{ borderColor: 'color-mix(in srgb, var(--neon-gold) 8%, transparent)' }}
             >
               <span className="flex-shrink-0 text-sm w-5 text-center">{emoji}</span>
-              <span className="w-16 flex-shrink-0" style={{ color: 'var(--neon-gold)70' }}>
+              <span className="w-16 flex-shrink-0" style={{ color: 'color-mix(in srgb, var(--neon-gold) 70%, transparent)' }}>
                 {label}:
               </span>
               <span className="text-gray-300 leading-relaxed">{desc[key as keyof typeof desc]}</span>

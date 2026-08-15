@@ -13,14 +13,14 @@ interface AuditPanelProps {
 
 function LogEntry({ entry }: { entry: AuditIssue }) {
   const [expanded, setExpanded] = useState(false);
-  const statusColor = entry.corrected ? 'var(--neon-green)' : entry.ignored ? '#ffffff40' : 'var(--neon-pink)';
+  const statusColor = entry.corrected ? 'var(--neon-green)' : entry.ignored ? 'var(--terminal-text-hint)' : 'var(--neon-pink)';
   const statusIcon = entry.corrected ? '✓' : entry.ignored ? '○' : '⚠';
   const statusLabel = entry.corrected ? 'CORRECTED' : entry.ignored ? 'IGNORED' : 'PENDING';
 
   return (
     <div
       className="rounded mb-1 overflow-hidden"
-      style={{ border: `1px solid ${statusColor}20`, background: 'var(--terminal-card)' }}
+      style={{ border: `1px solid color-mix(in srgb, ${statusColor} 20%, transparent)`, background: 'var(--terminal-card)' }}
     >
       <div
         className="px-2 py-1 flex items-center gap-2 cursor-pointer text-xs font-mono"
@@ -29,14 +29,14 @@ function LogEntry({ entry }: { entry: AuditIssue }) {
         <span style={{ color: statusColor }}>{statusIcon}</span>
         <span className="flex-1 truncate" style={{ color: '#ffffff60' }}>{entry.message}</span>
         <span style={{ color: statusColor, fontSize: '9px' }}>{statusLabel}</span>
-        <span style={{ color: '#ffffff20', fontSize: '9px' }}>{expanded ? '▲' : '▼'}</span>
+        <span style={{ color: 'var(--terminal-text-faint)', fontSize: '9px' }}>{expanded ? '▲' : '▼'}</span>
       </div>
       {expanded && (
-        <div className="px-2 py-1.5 text-xs font-mono space-y-1" style={{ borderTop: `1px solid ${statusColor}15` }}>
+        <div className="px-2 py-1.5 text-xs font-mono space-y-1" style={{ borderTop: `1px solid color-mix(in srgb, ${statusColor} 15%, transparent)` }}>
           {entry.suggestedValue !== undefined && (
-            <div style={{ color: '#ffffff40' }}>Suggested: {String(entry.suggestedValue).slice(0, 100)}</div>
+            <div style={{ color: 'var(--terminal-text-hint)' }}>Suggested: {String(entry.suggestedValue).slice(0, 100)}</div>
           )}
-          <div style={{ color: '#ffffff20', fontSize: '9px' }}>Type: {entry.category} | Severity: {entry.severity}</div>
+          <div style={{ color: 'var(--terminal-text-faint)', fontSize: '9px' }}>Type: {entry.category} | Severity: {entry.severity}</div>
         </div>
       )}
     </div>
@@ -58,9 +58,9 @@ function PendingIssueInline({
   return (
     <div
       className="rounded mb-1.5 overflow-hidden"
-      style={{ border: `1px solid ${color}40`, background: '#0A0A0A' }}
+      style={{ border: `1px solid color-mix(in srgb, ${color} 40%, transparent)`, background: 'var(--terminal-bg)' }}
     >
-      <div className="px-2 py-1" style={{ background: `${color}08` }}>
+      <div className="px-2 py-1" style={{ background: `color-mix(in srgb, ${color} 8%, transparent)` }}>
         <div className="flex items-center gap-2">
           <span className="text-xs font-mono flex-1" style={{ color }}>{issue.message}</span>
         </div>
@@ -77,21 +77,21 @@ function PendingIssueInline({
             <button
               onClick={() => manualValue && onCorrect?.(issue.id, manualValue)}
               className="text-xs font-mono px-1.5 py-0.5 rounded"
-              style={{ border: `1px solid ${color}`, color, background: `${color}15` }}
+              style={{ border: `1px solid ${color}`, color, background: `color-mix(in srgb, ${color} 15%, transparent)` }}
             >
               OK
             </button>
           </div>
         )}
         {issue.category === 'narrative' && (
-          <div className="text-xs font-mono" style={{ color: '#ffffff40' }}>
+          <div className="text-xs font-mono" style={{ color: 'var(--terminal-text-hint)' }}>
             Review the AI output — narrative contradictions require your judgment.
           </div>
         )}
         <button
           onClick={() => onIgnore?.(issue.id)}
           className="text-xs font-mono px-1.5 py-0.5 rounded"
-          style={{ border: '1px solid #ffffff15', color: '#ffffff40' }}
+          style={{ border: '1px solid #ffffff15', color: 'var(--terminal-text-hint)' }}
         >
           ✗ Ignore
         </button>
@@ -116,13 +116,13 @@ export function AuditPanel({ issues = [], auditLog = [], onCorrect, onIgnore, on
         className="rounded overflow-hidden"
         style={{ border: '1px solid var(--terminal-border)', background: 'var(--terminal-card)' }}
       >
-        <div className="px-3 py-1.5" style={{ background: 'var(--neon-cyan)08', borderBottom: '1px solid var(--terminal-border)' }}>
+        <div className="px-3 py-1.5" style={{ background: 'color-mix(in srgb, var(--neon-cyan) 8%, transparent)', borderBottom: '1px solid var(--terminal-border)' }}>
           <span className="text-xs font-mono font-bold neon-cyan tracking-widest">🔍 AUDIT LOG</span>
         </div>
         <div className="px-3 py-2 grid grid-cols-4 gap-2">
           <StatBox value={stats.pending} label="PENDING" color="var(--neon-gold)" />
           <StatBox value={stats.corrected} label="CORRECTED" color="var(--neon-green)" />
-          <StatBox value={stats.ignored} label="IGNORED" color="#ffffff40" />
+          <StatBox value={stats.ignored} label="IGNORED" color="var(--terminal-text-hint)" />
           <StatBox value={stats.total} label="TOTAL" color="var(--neon-cyan)" />
         </div>
       </div>
@@ -130,9 +130,9 @@ export function AuditPanel({ issues = [], auditLog = [], onCorrect, onIgnore, on
       {pending.length > 0 && (
         <div
           className="rounded overflow-hidden"
-          style={{ border: '1px solid var(--neon-gold)30', background: 'var(--terminal-card)' }}
+          style={{ border: '1px solid color-mix(in srgb, var(--neon-gold) 30%, transparent)', background: 'var(--terminal-card)' }}
         >
-          <div className="px-3 py-1.5" style={{ background: 'var(--neon-gold)08', borderBottom: '1px solid var(--neon-gold)20' }}>
+          <div className="px-3 py-1.5" style={{ background: 'color-mix(in srgb, var(--neon-gold) 8%, transparent)', borderBottom: '1px solid color-mix(in srgb, var(--neon-gold) 20%, transparent)' }}>
             <span className="text-xs font-mono font-bold" style={{ color: 'var(--neon-gold)' }}>
               ⚠ ACTIVE ISSUES ({pending.length})
             </span>
@@ -151,7 +151,7 @@ export function AuditPanel({ issues = [], auditLog = [], onCorrect, onIgnore, on
       >
         <div
           className="px-3 py-1.5 flex items-center justify-between cursor-pointer"
-          style={{ background: 'var(--neon-cyan)08', borderBottom: showLog ? '1px solid var(--terminal-border)' : 'none' }}
+          style={{ background: 'color-mix(in srgb, var(--neon-cyan) 8%, transparent)', borderBottom: showLog ? '1px solid var(--terminal-border)' : 'none' }}
           onClick={() => setShowLog((v) => !v)}
         >
           <span className="text-xs font-mono font-bold neon-cyan">📋 HISTORY ({auditLog.length})</span>
@@ -163,18 +163,18 @@ export function AuditPanel({ issues = [], auditLog = [], onCorrect, onIgnore, on
                   onClearLog?.();
                 }}
                 className="text-xs font-mono px-1.5 py-0.5 rounded"
-                style={{ border: '1px solid var(--neon-pink)30', color: 'var(--neon-pink)80', background: 'transparent' }}
+                style={{ border: '1px solid color-mix(in srgb, var(--neon-pink) 30%, transparent)', color: 'color-mix(in srgb, var(--neon-pink) 80%, transparent)', background: 'transparent' }}
               >
                 CLEAR
               </button>
             )}
-            <span className="text-xs font-mono" style={{ color: '#ffffff40' }}>{showLog ? '▲' : '▼'}</span>
+            <span className="text-xs font-mono" style={{ color: 'var(--terminal-text-hint)' }}>{showLog ? '▲' : '▼'}</span>
           </div>
         </div>
         {showLog && (
           <div className="px-2 py-2 max-h-64 overflow-y-auto">
             {auditLog.length === 0 ? (
-              <div className="text-xs font-mono text-center py-4" style={{ color: '#ffffff20' }}>
+              <div className="text-xs font-mono text-center py-4" style={{ color: 'var(--terminal-text-faint)' }}>
                 No audit events recorded yet.
               </div>
             ) : (
@@ -191,7 +191,7 @@ function StatBox({ value, label, color }: { value: number; label: string; color:
   return (
     <div className="text-center">
       <div className="text-lg font-mono" style={{ color }}>{value}</div>
-      <div className="text-xs font-mono" style={{ color: '#ffffff30', fontSize: '8px' }}>{label}</div>
+      <div className="text-xs font-mono" style={{ color: 'var(--terminal-text-muted)', fontSize: '8px' }}>{label}</div>
     </div>
   );
 }

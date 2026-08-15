@@ -19,7 +19,7 @@ export function RawOutputPanel({ rawBlock, lastMessage }: RawOutputPanelProps) {
         <div className="text-xs font-mono neon-cyan opacity-60 tracking-widest">RAW TERMINAL OUTPUT</div>
         <div className="flex items-center gap-1">
           <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: 'var(--neon-green)' }} />
-          <span className="text-xs font-mono" style={{ color: 'var(--neon-green)80' }}>
+          <span className="text-xs font-mono" style={{ color: 'color-mix(in srgb, var(--neon-green) 80%, transparent)' }}>
             LIVE
           </span>
         </div>
@@ -50,7 +50,7 @@ export function RawOutputPanel({ rawBlock, lastMessage }: RawOutputPanelProps) {
         <button
           onClick={() => setShowFull((v) => !v)}
           className="w-full py-1 text-xs font-mono transition-all"
-          style={{ color: 'var(--neon-cyan)60', borderTop: '1px solid var(--neon-cyan)10' }}
+          style={{ color: 'color-mix(in srgb, var(--neon-cyan) 60%, transparent)', borderTop: '1px solid color-mix(in srgb, var(--neon-cyan) 10%, transparent)' }}
         >
           {showFull ? '▲ COLLAPSE' : '▼ SHOW FULL'}
         </button>

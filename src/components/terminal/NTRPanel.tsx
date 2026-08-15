@@ -8,40 +8,40 @@ export function NTRPanel({ ntrModule }: NTRPanelProps) {
   return (
     <div
       className="mx-3 mb-2 rounded overflow-hidden"
-      style={{ border: '1px solid var(--neon-purple)40' }}
+      style={{ border: '1px solid color-mix(in srgb, var(--neon-purple) 40%, transparent)' }}
     >
       <div
         className="px-3 py-1.5"
-        style={{ background: 'var(--neon-purple)10', borderBottom: '1px solid var(--neon-purple)25' }}
+        style={{ background: 'color-mix(in srgb, var(--neon-purple) 10%, transparent)', borderBottom: '1px solid color-mix(in srgb, var(--neon-purple) 25%, transparent)' }}
       >
         <span className="text-xs font-mono font-bold neon-purple tracking-widest">💔 NTR MODULE</span>
       </div>
-      <div className="px-3 py-2 text-xs font-mono" style={{ background: '#0A0A0A' }}>
+      <div className="px-3 py-2 text-xs font-mono" style={{ background: 'var(--terminal-bg)' }}>
         {ntrModule && ntrModule.active ? (
           <div className="space-y-1">
             {ntrModule.ntrCharacter && (
               <div className="flex gap-2">
-                <span style={{ color: 'var(--neon-purple)80' }}>Character:</span>
+                <span style={{ color: 'color-mix(in srgb, var(--neon-purple) 80%, transparent)' }}>Character:</span>
                 <span className="text-gray-300">{ntrModule.ntrCharacter}</span>
               </div>
             )}
             {ntrModule.ntrPartner && (
               <div className="flex gap-2">
-                <span style={{ color: 'var(--neon-purple)80' }}>Partner:</span>
+                <span style={{ color: 'color-mix(in srgb, var(--neon-purple) 80%, transparent)' }}>Partner:</span>
                 <span className="text-gray-300">{ntrModule.ntrPartner}</span>
               </div>
             )}
             {ntrModule.betrayalStage && (
               <div className="flex gap-2">
-                <span style={{ color: 'var(--neon-purple)80' }}>Stage:</span>
+                <span style={{ color: 'color-mix(in srgb, var(--neon-purple) 80%, transparent)' }}>Stage:</span>
                 <span className="text-gray-300">{ntrModule.betrayalStage}</span>
               </div>
             )}
             {(ntrModule.jealousyLevel || 0) > 0 && (
               <div className="flex gap-2">
-                <span style={{ color: 'var(--neon-purple)80' }}>Jealousy:</span>
+                <span style={{ color: 'color-mix(in srgb, var(--neon-purple) 80%, transparent)' }}>Jealousy:</span>
                 <div className="flex items-center gap-1">
-                  <div className="h-1.5 rounded-full" style={{ background: '#ffffff10', width: '80px' }}>
+                  <div className="h-1.5 rounded-full" style={{ background: 'var(--terminal-text-ghost)', width: '80px' }}>
                     <div
                       className="h-full rounded-full"
                       style={{

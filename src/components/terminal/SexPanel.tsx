@@ -34,20 +34,20 @@ function NeonBar({ value = 0, color = 'var(--neon-pink)', label }: { value?: num
   const pct = Math.max(0, Math.min(100, value));
   return (
     <div className="flex items-center gap-2 py-0.5 text-xs">
-      <span className="flex-shrink-0 font-mono w-20" style={{ color: `${color}90` }}>
+      <span className="flex-shrink-0 font-mono w-20" style={{ color: `color-mix(in srgb, ${color} 90%, transparent)` }}>
         {label}
       </span>
-      <div className="flex-1 rounded-full overflow-hidden" style={{ height: '5px', background: '#ffffff08' }}>
+      <div className="flex-1 rounded-full overflow-hidden" style={{ height: '5px', background: 'var(--terminal-text-subtle)' }}>
         <div
           className="h-full rounded-full transition-all duration-500"
           style={{
             width: `${pct}%`,
             background: `linear-gradient(90deg, ${color}, ${color}bb)`,
-            boxShadow: `0 0 6px ${color}, 0 0 12px ${color}50`,
+            boxShadow: `0 0 6px ${color}, 0 0 12px color-mix(in srgb, ${color} 50%, transparent)`,
           }}
         />
       </div>
-      <span className="font-mono text-xs w-8 text-right" style={{ color: `${color}80` }}>
+      <span className="font-mono text-xs w-8 text-right" style={{ color: `color-mix(in srgb, ${color} 80%, transparent)` }}>
         {pct}%
       </span>
     </div>
@@ -89,12 +89,12 @@ export function SexPanel({ sexModule }: SexPanelProps) {
   return (
     <div
       className="mx-3 mb-2 rounded overflow-hidden"
-      style={{ border: `1px solid ${phaseColor}40` }}
+      style={{ border: `1px solid color-mix(in srgb, ${phaseColor} 40%, transparent)` }}
     >
       {sexModule.position && <ASCIIPositionViewer positionName={sexModule.position} phase={phase} />}
       <div
         className="px-3 py-1.5 flex items-center justify-between"
-        style={{ background: `${phaseColor}15`, borderBottom: `1px solid ${phaseColor}30` }}
+        style={{ background: `color-mix(in srgb, ${phaseColor} 15%, transparent)`, borderBottom: `1px solid color-mix(in srgb, ${phaseColor} 30%, transparent)` }}
       >
         <div className="flex items-center gap-2">
           <span className="text-xs font-mono font-bold" style={{ color: phaseColor }}>
@@ -103,7 +103,7 @@ export function SexPanel({ sexModule }: SexPanelProps) {
           {(sexModule.orgasmCount || 0) > 0 && (
             <span
               className="text-xs font-mono px-1.5 rounded"
-              style={{ color: 'var(--neon-gold)', background: 'var(--neon-gold)15', border: '1px solid var(--neon-gold)30' }}
+              style={{ color: 'var(--neon-gold)', background: 'color-mix(in srgb, var(--neon-gold) 15%, transparent)', border: '1px solid color-mix(in srgb, var(--neon-gold) 30%, transparent)' }}
             >
               ★×{sexModule.orgasmCount}
             </span>
@@ -117,9 +117,9 @@ export function SexPanel({ sexModule }: SexPanelProps) {
                 onClick={() => setTab(t.id)}
                 className="text-xs font-mono px-1.5 py-0.5 rounded transition-all"
                 style={{
-                  color: tab === t.id ? phaseColor : '#ffffff40',
-                  background: tab === t.id ? `${phaseColor}15` : 'transparent',
-                  border: `1px solid ${tab === t.id ? phaseColor : '#ffffff10'}`,
+                  color: tab === t.id ? phaseColor : 'var(--terminal-text-faint)',
+                  background: tab === t.id ? `color-mix(in srgb, ${phaseColor} 15%, transparent)` : 'transparent',
+                  border: `1px solid ${tab === t.id ? phaseColor : 'var(--terminal-text-ghost)'}`,
                 }}
               >
                 {t.label}
@@ -129,7 +129,7 @@ export function SexPanel({ sexModule }: SexPanelProps) {
         )}
       </div>
 
-      <div className="px-3 py-2" style={{ background: '#0A0A0A' }}>
+      <div className="px-3 py-2" style={{ background: 'var(--terminal-bg)' }}>
         {tab === 'overview' && (
           <div className="space-y-0.5">
             {sexModule.pace && <Row label="Pace" value={sexModule.pace} color={phaseColor} />}
@@ -137,7 +137,7 @@ export function SexPanel({ sexModule }: SexPanelProps) {
               <Row label="Intimacy" value={sexModule.stimulusDescription} color={phaseColor} />
             )}
             {(metrics.intensity || 0) > 0 || (metrics.threshold || 0) > 0 ? (
-              <div className="mt-1.5 pt-1.5 space-y-1" style={{ borderTop: `1px solid ${phaseColor}20` }}>
+              <div className="mt-1.5 pt-1.5 space-y-1" style={{ borderTop: `1px solid color-mix(in srgb, ${phaseColor} 20%, transparent)` }}>
                 {(metrics.intensity || 0) > 0 && (
                   <NeonBar value={metrics.intensity} color={phaseColor} label="Intensity" />
                 )}
@@ -147,7 +147,7 @@ export function SexPanel({ sexModule }: SexPanelProps) {
               </div>
             ) : null}
             {hasMale && (
-              <div className="mt-1.5 pt-1.5" style={{ borderTop: `1px solid ${phaseColor}20` }}>
+              <div className="mt-1.5 pt-1.5" style={{ borderTop: `1px solid color-mix(in srgb, ${phaseColor} 20%, transparent)` }}>
                 <div className="text-xs font-mono mb-0.5" style={{ color: phaseColor, opacity: 0.6 }}>
                   ♂ MALE
                 </div>
@@ -156,7 +156,7 @@ export function SexPanel({ sexModule }: SexPanelProps) {
                   <Row label="Ejac" value={`×${male.ejaculationCount}`} />
                 )}
                 {!!male.ejaculation_location && (
-                  <Row label="Location" value={String(male.ejaculation_location)} color="var(--neon-pink)80" />
+                  <Row label="Location" value={String(male.ejaculation_location)} color="color-mix(in srgb, var(--neon-pink) 80%, transparent)" />
                 )}
               </div>
             )}
@@ -166,7 +166,7 @@ export function SexPanel({ sexModule }: SexPanelProps) {
         {tab === 'senses' && (
           <div className="space-y-1">
             {(metrics.intensity || 0) > 0 || (metrics.threshold || 0) > 0 ? (
-              <div className="space-y-1 mb-2 pb-2" style={{ borderBottom: `1px solid ${phaseColor}20` }}>
+              <div className="space-y-1 mb-2 pb-2" style={{ borderBottom: `1px solid color-mix(in srgb, ${phaseColor} 20%, transparent)` }}>
                 {(metrics.intensity || 0) > 0 && (
                   <NeonBar value={metrics.intensity} color={phaseColor} label="Intensity" />
                 )}
@@ -191,14 +191,14 @@ export function SexPanel({ sexModule }: SexPanelProps) {
             <div className="text-xs font-mono mb-1" style={{ color: 'var(--neon-pink)', opacity: 0.6 }}>
               ♀ FEMALE ANATOMY
             </div>
-            {female.arousalState && <Row label="State" value={female.arousalState} color="var(--neon-pink)80" />}
-            {female.lubrication && <Row label="Wetness" value={female.lubrication} color="var(--neon-pink)80" />}
-            {female.vagina && <Row label="Vagina" value={female.vagina} color="var(--neon-pink)80" />}
-            {female.cervix && <Row label="Cervix" value={female.cervix} color="var(--neon-pink)80" />}
-            {female.uterus && <Row label="Uterus" value={female.uterus} color="var(--neon-pink)80" />}
-            {female.ovaries && <Row label="Ovaries" value={female.ovaries} color="var(--neon-pink)80" />}
+            {female.arousalState && <Row label="State" value={female.arousalState} color="color-mix(in srgb, var(--neon-pink) 80%, transparent)" />}
+            {female.lubrication && <Row label="Wetness" value={female.lubrication} color="color-mix(in srgb, var(--neon-pink) 80%, transparent)" />}
+            {female.vagina && <Row label="Vagina" value={female.vagina} color="color-mix(in srgb, var(--neon-pink) 80%, transparent)" />}
+            {female.cervix && <Row label="Cervix" value={female.cervix} color="color-mix(in srgb, var(--neon-pink) 80%, transparent)" />}
+            {female.uterus && <Row label="Uterus" value={female.uterus} color="color-mix(in srgb, var(--neon-pink) 80%, transparent)" />}
+            {female.ovaries && <Row label="Ovaries" value={female.ovaries} color="color-mix(in srgb, var(--neon-pink) 80%, transparent)" />}
             {cycleInfo && (
-              <div className="mt-1.5 pt-1.5" style={{ borderTop: '1px solid var(--neon-pink)20' }}>
+              <div className="mt-1.5 pt-1.5" style={{ borderTop: '1px solid color-mix(in srgb, var(--neon-pink) 20%, transparent)' }}>
                 <div className="text-xs font-mono mb-1" style={{ color: cycleInfo.color }}>
                   🩸 MENSTRUAL CYCLE
                 </div>
@@ -207,8 +207,8 @@ export function SexPanel({ sexModule }: SexPanelProps) {
                     className="text-xs font-mono px-2 py-0.5 rounded"
                     style={{
                       color: cycleInfo.color,
-                      background: `${cycleInfo.color}15`,
-                      border: `1px solid ${cycleInfo.color}30`,
+                      background: `color-mix(in srgb, ${cycleInfo.color} 15%, transparent)`,
+                      border: `1px solid color-mix(in srgb, ${cycleInfo.color} 30%, transparent)`,
                     }}
                   >
                     {cycleInfo.label}
@@ -223,8 +223,8 @@ export function SexPanel({ sexModule }: SexPanelProps) {
                       className="text-xs font-mono px-1.5 py-0.5 rounded"
                       style={{
                         color: 'var(--neon-green)',
-                        background: 'var(--neon-green)15',
-                        border: '1px solid var(--neon-green)30',
+                        background: 'color-mix(in srgb, var(--neon-green) 15%, transparent)',
+                        border: '1px solid color-mix(in srgb, var(--neon-green) 30%, transparent)',
                       }}
                     >
                       ♻ FERTILE
@@ -242,25 +242,25 @@ export function SexPanel({ sexModule }: SexPanelProps) {
 
         {tab === 'marking' && (
           <div>
-            <div className="text-xs font-mono mb-1.5" style={{ color: 'var(--neon-pink)70' }}>
+            <div className="text-xs font-mono mb-1.5" style={{ color: 'color-mix(in srgb, var(--neon-pink) 70%, transparent)' }}>
               💧 MARKING LOG
             </div>
             {(sexModule.marking_history || []).length === 0 ? (
-              <div className="text-xs font-mono text-center py-2" style={{ color: '#ffffff20' }}>
+              <div className="text-xs font-mono text-center py-2" style={{ color: 'var(--terminal-text-faint)' }}>
                 No marking events recorded
               </div>
             ) : (
-              <div className="overflow-hidden rounded" style={{ border: '1px solid var(--neon-pink)20' }}>
+              <div className="overflow-hidden rounded" style={{ border: '1px solid color-mix(in srgb, var(--neon-pink) 20%, transparent)' }}>
                 <table className="w-full text-xs font-mono">
                   <thead>
-                    <tr style={{ background: 'var(--neon-pink)10', borderBottom: '1px solid var(--neon-pink)20' }}>
-                      <th className="text-left px-2 py-1" style={{ color: 'var(--neon-pink)70' }}>
+                    <tr style={{ background: 'color-mix(in srgb, var(--neon-pink) 10%, transparent)', borderBottom: '1px solid color-mix(in srgb, var(--neon-pink) 20%, transparent)' }}>
+                      <th className="text-left px-2 py-1" style={{ color: 'color-mix(in srgb, var(--neon-pink) 70%, transparent)' }}>
                         Location
                       </th>
-                      <th className="text-center px-2 py-1" style={{ color: 'var(--neon-pink)70' }}>
+                      <th className="text-center px-2 py-1" style={{ color: 'color-mix(in srgb, var(--neon-pink) 70%, transparent)' }}>
                         Count
                       </th>
-                      <th className="text-right px-2 py-1" style={{ color: 'var(--neon-pink)70' }}>
+                      <th className="text-right px-2 py-1" style={{ color: 'color-mix(in srgb, var(--neon-pink) 70%, transparent)' }}>
                         Time
                       </th>
                     </tr>
@@ -272,7 +272,7 @@ export function SexPanel({ sexModule }: SexPanelProps) {
                         <tr
                           key={i}
                           style={{
-                            borderBottom: i < arr.length - 1 ? '1px solid var(--neon-pink)10' : 'none',
+                            borderBottom: i < arr.length - 1 ? '1px solid color-mix(in srgb, var(--neon-pink) 10%, transparent)' : 'none',
                           }}
                         >
                           <td className="px-2 py-1 text-gray-300">{entry.location || '--'}</td>

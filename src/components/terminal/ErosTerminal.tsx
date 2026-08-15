@@ -32,7 +32,6 @@ import { RelationshipPanel } from './RelationshipPanel';
 import { EmotionPanel } from './EmotionPanel';
 import type { ErosStatusState, ErosChatState, AuditIssue } from '@/types/eros-status';
 import type { ConfigType, BarStyle } from '@/types/config';
-import { loadMemory, condenseNow, clearMemory, type MemoryState } from '@/lib/memoryService';
 
 export interface ErosTerminalProps {
   state?: ErosStatusState;
@@ -40,8 +39,11 @@ export interface ErosTerminalProps {
   config?: ConfigType | null;
   barStyle?: BarStyle;
   onParse?: (text: string) => void;
+  onConfigChange?: (patch: Partial<ConfigType>) => void;
   onIgnoreAudit?: (issueId: string) => void;
   onCorrectAudit?: (issueId: string, value: unknown) => void;
+  onCondenseMemory?: () => void;
+  onClearMemory?: () => void;
 }
 
 const ALL_TABS = [
@@ -57,7 +59,7 @@ const ALL_TABS = [
   { id: 'raw', label: 'RAW', icon: '📄', color: 'var(--neon-cyan)' },
   { id: 'audit', label: 'AUDIT', icon: '🔍', color: 'var(--neon-pink)' },
   { id: 'config', label: 'CONFIG', icon: '⚙️', color: 'var(--neon-purple)' },
-  { id: 'aiconfig', label: 'AI', icon: '🤖', color: '#39FF14' },
+  { id: 'aiconfig', label: 'AI', icon: '🤖', color: 'var(--neon-green)' },
 ];
 
 export default function ErosTerminal({
@@ -68,17 +70,19 @@ export default function ErosTerminal({
   onParse,
   onIgnoreAudit,
   onCorrectAudit,
+  onConfigChange,
+  onCondenseMemory,
+  onClearMemory,
 }: ErosTerminalProps) {
   const [activeTab, setActiveTab] = useState('status');
   const [inputText, setInputText] = useState('');
   const [toasts, setToasts] = useState<Toast[]>([]);
-  const [ntrEnabled, setNtrEnabled] = useState(config?.enableNTR ?? false);
   const [showNTRModal, setShowNTRModal] = useState(false);
   const [auditLog, setAuditLog] = useState<AuditIssue[]>([]);
-  const [memory, setMemory] = useState<MemoryState | null>(null);
   const [lastRaw, setLastRaw] = useState('');
   const prevStateRef = useRef<ErosStatusState | null>(null);
 
+  const ntrEnabled = config?.enableNTR ?? false;
   const currentState = state ?? ({} as ErosStatusState);
   const auditIssues = currentState.audit?.issues || [];
   const turnCount = chatState?.globalMeta?.totalTurns || 0;
@@ -87,10 +91,6 @@ export default function ErosTerminal({
   const addToast = useCallback((level: ToastLevel, message: string, duration = 3500) => {
     const id = `${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
     setToasts((prev) => [...prev, { id, level, message, duration }]);
-  }, []);
-
-  useEffect(() => {
-    setMemory(loadMemory());
   }, []);
 
   useEffect(() => {
@@ -142,12 +142,12 @@ export default function ErosTerminal({
 
   const handleNTRToggle = () => {
     if (!ntrEnabled) setShowNTRModal(true);
-    else setNtrEnabled(false);
+    else onConfigChange?.({ enableNTR: false });
   };
 
   const handleNTRConfirm = () => {
-    setNtrEnabled(true);
     setShowNTRModal(false);
+    onConfigChange?.({ enableNTR: true });
     addToast('critical', '💔 NTR module enabled', 5000);
   };
 
@@ -164,7 +164,7 @@ export default function ErosTerminal({
   return (
     <div
       className="flex flex-col h-full font-mono overflow-hidden crt-overlay relative"
-      style={{ background: 'var(--terminal-bg)', color: '#e2e8f0' }}
+      style={{ background: 'var(--terminal-bg)', color: 'var(--terminal-text-secondary)' }}
     >
       {showNTRModal && <NTRModal onConfirm={handleNTRConfirm} onCancel={() => setShowNTRModal(false)} />}
       <NotificationToast toasts={toasts} onRemove={removeToast} />
@@ -175,7 +175,7 @@ export default function ErosTerminal({
       {/* Tabs */}
       <div
         className="flex flex-wrap items-center flex-shrink-0"
-        style={{ borderBottom: '1px solid var(--neon-cyan)20', background: 'var(--terminal-bg)' }}
+        style={{ borderBottom: '1px solid color-mix(in srgb, var(--neon-cyan) 20%, transparent)', background: 'var(--terminal-bg)' }}
       >
         {visibleTabs.map((tab) => {
           const isActive = activeTab === tab.id;
@@ -187,8 +187,8 @@ export default function ErosTerminal({
               className="flex flex-col items-center justify-center px-2 py-1.5 flex-shrink-0 transition-all border-b-2"
               style={{
                 borderBottomColor: isActive ? tab.color : 'transparent',
-                background: isActive ? `${tab.color}10` : 'transparent',
-                color: isActive ? tab.color : '#ffffff30',
+                background: isActive ? `color-mix(in srgb, ${tab.color} 10%, transparent)` : 'transparent',
+                color: isActive ? tab.color : 'var(--terminal-text-muted)',
                 textShadow: isActive ? `0 0 8px ${tab.color}` : 'none',
                 minWidth: '36px',
                 gap: '2px',
@@ -217,7 +217,7 @@ export default function ErosTerminal({
               <div className="pb-2 animate-fade-in-up">
                 <StatusPanel state={currentState} barStyle={barStyle} />
                 <EmotionPanel character={currentState.character} body={currentState.body} />
-                <GoalsPanel goals={currentState.goals} aiInstructions={(currentState as unknown as { aiInstructions?: string[] }).aiInstructions} />
+                <GoalsPanel goals={currentState.goals} aiInstructions={currentState.aiInstructions} />
               </div>
             )}
             {activeTab === 'inventory' && (
@@ -276,7 +276,11 @@ export default function ErosTerminal({
             )}
             {activeTab === 'aiconfig' && (
               <div className="pb-2 animate-fade-in-up">
-                <AIConfigPanel onParsed={(text) => onParse?.(text)} />
+                <AIConfigPanel
+                  onParsed={(text) => onParse?.(text)}
+                  config={config}
+                  onConfigChange={onConfigChange}
+                />
               </div>
             )}
             {activeTab === 'audit' && (
@@ -293,14 +297,13 @@ export default function ErosTerminal({
             {activeTab === 'config' && (
               <div className="pb-2 animate-fade-in-up">
                 <ConfigPanel
-                  memory={memory}
-                  config={{ auditorEnabled: config?.auditorEnabled, imgAuditorEnabled: config?.imgAuditorEnabled }}
-                  onCondense={() => setMemory((prev) => (prev ? condenseNow(prev) : prev))}
-                  onClearMemory={() => setMemory(clearMemory())}
-                  onToggleMode={(mode) => setMemory((prev) => (prev ? { ...prev, mode } : prev))}
-                  onToggleDiary={(value) => setMemory((prev) => (prev ? { ...prev, registerDiary: value } : prev))}
-                  onToggleAuditor={(_value) => {}}
-                  onToggleImgAuditor={(_value) => {}}
+                  chatState={chatState}
+                  config={config}
+                  onConfigChange={onConfigChange}
+                  onCondense={onCondenseMemory}
+                  onClearMemory={onClearMemory}
+                  onToggleAuditor={(value) => onConfigChange?.({ auditorEnabled: value })}
+                  onToggleImgAuditor={(value) => onConfigChange?.({ imgAuditorEnabled: value })}
                 />
               </div>
             )}
@@ -312,7 +315,7 @@ export default function ErosTerminal({
       <form onSubmit={handleSubmit} className="px-3 pb-3 pt-2 flex-shrink-0">
         <div
           className="flex items-center gap-1 rounded px-2 py-1.5"
-          style={{ border: '1px solid var(--neon-cyan)30', background: '#050505' }}
+          style={{ border: '1px solid color-mix(in srgb, var(--neon-cyan) 30%, transparent)', background: 'var(--terminal-bg-deep)' }}
         >
           <span className="text-xs neon-cyan flex-shrink-0">▸</span>
           <input
@@ -320,12 +323,12 @@ export default function ErosTerminal({
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
             placeholder="Paste AI output to parse..."
-            className="flex-1 bg-transparent text-xs font-mono outline-none text-gray-300 placeholder-gray-700"
+            className="flex-1 bg-transparent text-xs font-mono outline-none text-[var(--terminal-text-primary)] placeholder:text-[var(--terminal-text-ghost)]"
           />
           <button
             type="submit"
             className="text-xs px-2 py-0.5 rounded font-mono transition-all flex-shrink-0"
-            style={{ border: '1px solid var(--neon-cyan)40', color: 'var(--neon-cyan)', background: 'var(--neon-cyan)10' }}
+            style={{ border: '1px solid color-mix(in srgb, var(--neon-cyan) 40%, transparent)', color: 'var(--neon-cyan)', background: 'color-mix(in srgb, var(--neon-cyan) 10%, transparent)' }}
           >
             PARSE
           </button>

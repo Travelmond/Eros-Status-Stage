@@ -42,8 +42,8 @@ export function TerminalFooter({
             className="px-1 rounded text-[9px]"
             style={{
               color: 'var(--neon-gold)',
-              background: 'var(--neon-gold)10',
-              border: '1px solid var(--neon-gold)30',
+              background: 'color-mix(in srgb, var(--neon-gold) 10%, transparent)',
+              border: '1px solid color-mix(in srgb, var(--neon-gold) 30%, transparent)',
             }}
           >
             v{branchIndex}
@@ -52,7 +52,7 @@ export function TerminalFooter({
         {coercedCount > 0 && (
           <span
             className="text-[9px]"
-            style={{ color: 'var(--neon-pink)60' }}
+            style={{ color: 'color-mix(in srgb, var(--neon-pink) 60%, transparent)' }}
             title={meta?.coerced_fields?.join(', ')}
           >
             ⚠{coercedCount}
@@ -64,8 +64,8 @@ export function TerminalFooter({
             className="text-[9px] px-1 rounded cursor-pointer"
             style={{
               color: 'var(--neon-gold)',
-              background: 'var(--neon-gold)10',
-              border: '1px solid var(--neon-gold)30',
+              background: 'color-mix(in srgb, var(--neon-gold) 10%, transparent)',
+              border: '1px solid color-mix(in srgb, var(--neon-gold) 30%, transparent)',
             }}
             title="Open AUDIT tab"
           >
@@ -80,9 +80,9 @@ export function TerminalFooter({
           onClick={onToggleNTR}
           className="text-xs font-mono px-1.5 py-0.5 rounded transition-all"
           style={{
-            border: `1px solid ${ntrEnabled ? 'var(--neon-purple)' : '#ffffff15'}`,
-            color: ntrEnabled ? 'var(--neon-purple)' : '#ffffff30',
-            background: ntrEnabled ? 'var(--neon-purple)15' : 'transparent',
+            border: `1px solid ${ntrEnabled ? 'var(--neon-purple)' : 'var(--terminal-text-ghost)'}`,
+            color: ntrEnabled ? 'var(--neon-purple)' : 'var(--terminal-text-muted)',
+            background: ntrEnabled ? 'color-mix(in srgb, var(--neon-purple) 15%, transparent)' : 'transparent',
           }}
           title="Toggle NTR Module"
         >

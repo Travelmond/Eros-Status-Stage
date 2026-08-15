@@ -11,7 +11,7 @@ function Badge({ label, color, icon }: { label: string; color: string; icon?: st
   return (
     <span
       className="inline-flex items-center gap-1 text-xs font-mono px-1.5 py-0.5 rounded"
-      style={{ color, background: `${color}18`, border: `1px solid ${color}40` }}
+      style={{ color, background: `color-mix(in srgb, ${color} 18%, transparent)`, border: `1px solid color-mix(in srgb, ${color} 40%, transparent)` }}
     >
       {icon && <span style={{ fontSize: '11px' }}>{icon}</span>}
       {label}
@@ -37,7 +37,7 @@ function RelRow({
       <span className="flex-shrink-0 w-4 text-center" style={{ fontSize: '12px' }}>
         {icon}
       </span>
-      <span className="w-24 flex-shrink-0" style={{ color: '#ffffff40' }}>
+      <span className="w-24 flex-shrink-0" style={{ color: 'var(--terminal-text-hint)' }}>
         {label}:
       </span>
       <span style={{ color: valueColor || color }}>{value}</span>
@@ -60,29 +60,29 @@ export function RelationshipPanel({ state }: RelationshipPanelProps) {
   return (
     <div
       className="mx-3 mb-2 rounded overflow-hidden"
-      style={{ border: '1px solid var(--neon-purple)40' }}
+      style={{ border: '1px solid color-mix(in srgb, var(--neon-purple) 40%, transparent)' }}
     >
       <div
         className="px-3 py-1.5 flex items-center justify-between cursor-pointer"
         style={{
-          background: 'var(--neon-purple)08',
-          borderBottom: open ? '1px solid var(--neon-purple)20' : 'none',
+          background: 'color-mix(in srgb, var(--neon-purple) 8%, transparent)',
+          borderBottom: open ? '1px solid color-mix(in srgb, var(--neon-purple) 20%, transparent)' : 'none',
         }}
         onClick={() => setOpen((o) => !o)}
       >
         <span className="text-xs font-mono font-bold tracking-widest" style={{ color: 'var(--neon-purple)' }}>
           🤝 RELATIONSHIPS
         </span>
-        <span className="text-xs font-mono" style={{ color: 'var(--neon-purple)40' }}>
+        <span className="text-xs font-mono" style={{ color: 'color-mix(in srgb, var(--neon-purple) 40%, transparent)' }}>
           {open ? '▲' : '▼'}
         </span>
       </div>
       {open && (
-        <div className="px-3 py-2 space-y-3" style={{ background: '#0A0A0A' }}>
+        <div className="px-3 py-2 space-y-3" style={{ background: 'var(--terminal-bg)' }}>
           <div>
             <div
               className="text-xs font-mono mb-1 tracking-widest"
-              style={{ color: 'var(--neon-purple)70' }}
+              style={{ color: 'color-mix(in srgb, var(--neon-purple) 70%, transparent)' }}
             >
               {charName} → {userName}
             </div>
@@ -102,9 +102,9 @@ export function RelationshipPanel({ state }: RelationshipPanelProps) {
               <div
                 className="mt-1.5 text-xs font-mono px-2 py-1 rounded"
                 style={{
-                  background: 'var(--neon-pink)08',
-                  border: '1px solid var(--neon-pink)20',
-                  color: 'var(--neon-pink)80',
+                  background: 'color-mix(in srgb, var(--neon-pink) 8%, transparent)',
+                  border: '1px solid color-mix(in srgb, var(--neon-pink) 20%, transparent)',
+                  color: 'color-mix(in srgb, var(--neon-pink) 80%, transparent)',
                 }}
               >
                 🔒 {[...ctx.hiddenStats].join(', ')} hidden — relationship threshold not reached
@@ -113,13 +113,13 @@ export function RelationshipPanel({ state }: RelationshipPanelProps) {
             <div className="flex gap-2 mt-1.5 flex-wrap">
               <span
                 className="text-xs font-mono"
-                style={{ color: ctx.effectiveAllowsRomance ? 'var(--neon-green)' : 'var(--neon-pink)60' }}
+                style={{ color: ctx.effectiveAllowsRomance ? 'var(--neon-green)' : 'color-mix(in srgb, var(--neon-pink) 60%, transparent)' }}
               >
                 {ctx.effectiveAllowsRomance ? '✓' : '✗'} Romance
               </span>
               <span
                 className="text-xs font-mono"
-                style={{ color: ctx.effectiveAllowsErotics ? 'var(--neon-green)' : 'var(--neon-pink)60' }}
+                style={{ color: ctx.effectiveAllowsErotics ? 'var(--neon-green)' : 'color-mix(in srgb, var(--neon-pink) 60%, transparent)' }}
               >
                 {ctx.effectiveAllowsErotics ? '✓' : '✗'} Erotics
               </span>
@@ -130,7 +130,7 @@ export function RelationshipPanel({ state }: RelationshipPanelProps) {
             <div>
               <div
                 className="text-xs font-mono mb-1 tracking-widest"
-                style={{ color: 'var(--neon-purple)70' }}
+                style={{ color: 'color-mix(in srgb, var(--neon-purple) 70%, transparent)' }}
               >
                 NPCs → {charName}
               </div>
@@ -149,7 +149,7 @@ export function RelationshipPanel({ state }: RelationshipPanelProps) {
                         />
                       )}
                       {npc.mood && npc.mood !== 'neutral' && (
-                        <span className="text-xs" style={{ color: 'var(--neon-purple)80' }}>
+                        <span className="text-xs" style={{ color: 'color-mix(in srgb, var(--neon-purple) 80%, transparent)' }}>
                           {npc.mood}
                         </span>
                       )}
@@ -164,7 +164,7 @@ export function RelationshipPanel({ state }: RelationshipPanelProps) {
             <div>
               <div
                 className="text-xs font-mono mb-1 tracking-widest"
-                style={{ color: 'var(--neon-purple)70' }}
+                style={{ color: 'color-mix(in srgb, var(--neon-purple) 70%, transparent)' }}
               >
                 Other bonds
               </div>

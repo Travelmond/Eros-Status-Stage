@@ -28,7 +28,7 @@ function EmptyState({ icon, title, subtitle }: { icon: string; title: string; su
   return (
     <div
       className="mx-3 mb-2 rounded flex flex-col items-center justify-center py-8 text-gray-700 text-xs font-mono"
-      style={{ border: '1px solid var(--terminal-border)', background: '#0A0A0A' }}
+      style={{ border: '1px solid var(--terminal-border)', background: 'var(--terminal-bg)' }}
     >
       <div className="text-2xl mb-2">{icon}</div>
       <div>{title}</div>

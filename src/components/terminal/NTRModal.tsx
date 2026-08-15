@@ -29,12 +29,12 @@ export function NTRModal({ onConfirm, onCancel }: NTRModalProps) {
         className="rounded overflow-hidden font-mono text-xs"
         style={{
           width: '320px',
-          border: '1px solid var(--neon-pink)60',
+          border: '1px solid color-mix(in srgb, var(--neon-pink) 60%, transparent)',
           background: 'var(--terminal-card)',
-          boxShadow: '0 0 30px var(--neon-pink)20',
+          boxShadow: '0 0 30px color-mix(in srgb, var(--neon-pink) 20%, transparent)',
         }}
       >
-        <div className="px-4 py-2.5" style={{ background: 'var(--neon-pink)15', borderBottom: '1px solid var(--neon-pink)40' }}>
+        <div className="px-4 py-2.5" style={{ background: 'color-mix(in srgb, var(--neon-pink) 15%, transparent)', borderBottom: '1px solid color-mix(in srgb, var(--neon-pink) 40%, transparent)' }}>
           <div className="text-sm font-bold neon-pink tracking-widest">⚠ NTR MODULE</div>
           <div className="text-gray-500 mt-0.5">Netorare / Cuckold System v1.0</div>
         </div>
@@ -50,7 +50,7 @@ export function NTRModal({ onConfirm, onCancel }: NTRModalProps) {
               <div className="text-xs mb-1.5" style={{ color: 'var(--neon-green)' }}>✓ PROS</div>
               {PROS.map((p, i) => (
                 <div key={i} className="flex gap-2 py-0.5 text-gray-500">
-                  <span style={{ color: 'var(--neon-green)80' }}>›</span>
+                  <span style={{ color: 'color-mix(in srgb, var(--neon-green) 80%, transparent)' }}>›</span>
                   <span>{p}</span>
                 </div>
               ))}
@@ -59,19 +59,19 @@ export function NTRModal({ onConfirm, onCancel }: NTRModalProps) {
               <div className="text-xs mb-1.5" style={{ color: 'var(--neon-pink)' }}>✗ CONS</div>
               {CONS.map((c, i) => (
                 <div key={i} className="flex gap-2 py-0.5 text-gray-500">
-                  <span style={{ color: 'var(--neon-pink)80' }}>›</span>
+                  <span style={{ color: 'color-mix(in srgb, var(--neon-pink) 80%, transparent)' }}>›</span>
                   <span>{c}</span>
                 </div>
               ))}
             </div>
-            <div className="text-gray-600 text-xs mb-4 p-2 rounded" style={{ background: 'var(--neon-pink)08', border: '1px solid var(--neon-pink)20' }}>
+            <div className="text-gray-600 text-xs mb-4 p-2 rounded" style={{ background: 'color-mix(in srgb, var(--neon-pink) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--neon-pink) 20%, transparent)' }}>
               This module is <strong style={{ color: 'var(--neon-pink)' }}>irreversible</strong> once activated for this session. Proceed with caution.
             </div>
             <div className="flex gap-2">
               <Button
                 onClick={onCancel}
                 variant="outline"
-                className="flex-1 text-xs font-mono border-[var(--neon-cyan)40] text-[var(--neon-cyan)]"
+                className="flex-1 text-xs font-mono border-[color-mix(in_srgb,_var(--neon-cyan)_40%,_transparent)] text-[var(--neon-cyan)]"
               >
                 CANCEL
               </Button>
@@ -98,7 +98,7 @@ export function NTRModal({ onConfirm, onCancel }: NTRModalProps) {
               <Button
                 onClick={() => setStep(1)}
                 variant="outline"
-                className="flex-1 text-xs font-mono border-[var(--neon-cyan)40] text-[var(--neon-cyan)]"
+                className="flex-1 text-xs font-mono border-[color-mix(in_srgb,_var(--neon-cyan)_40%,_transparent)] text-[var(--neon-cyan)]"
               >
                 ← GO BACK
               </Button>

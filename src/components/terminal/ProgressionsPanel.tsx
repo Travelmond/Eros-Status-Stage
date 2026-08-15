@@ -73,7 +73,7 @@ export function ProgressionsPanel({ progressions, barStyle = 'bar', compact = fa
     >
       <div className="flex items-center justify-between mb-1.5">
         <div className="text-xs font-mono neon-cyan opacity-60 tracking-widest">PROGRESSIONS</div>
-        {contextNote && <div className="text-xs font-mono" style={{ color: 'var(--neon-pink)70' }}>{contextNote}</div>}
+        {contextNote && <div className="text-xs font-mono" style={{ color: 'color-mix(in srgb, var(--neon-pink) 70%, transparent)' }}>{contextNote}</div>}
       </div>
       <div className="space-y-0.5">
         {stats.map(({ key, label, emoji, color }) => (

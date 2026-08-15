@@ -1,34 +1,102 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { AIProviderSection } from './AIProviderSection';
+import { callOpenRouter, extractJsonFromResponse } from '@/services/openRouter';
+import { parseErosStatusFromMessage } from '@/core/parser';
+import { toast } from '@/components/ui/use-toast';
+import type { ConfigType } from '@/types/config';
 
 interface AIConfigPanelProps {
   onParsed?: (text: string) => void;
+  config?: ConfigType | null;
+  onConfigChange?: (patch: Partial<ConfigType>) => void;
 }
 
-export function AIConfigPanel({ onParsed }: AIConfigPanelProps) {
-  const [text, setText] = useState('');
-  const [model, setModel] = useState('openai/gpt-4o-mini');
-  const [apiKey, setApiKey] = useState('');
-  const [raw, setRaw] = useState('');
+const EXTRACTION_PROMPT = `You are Eros Status Terminal v3.0 — a structured state extractor.
+Read the raw AI roleplay output below and extract all status markers into a single JSON object matching the ESS schema.
+Include: system (day, time, weather, location), character (name, role, mood, expression), progressions (affection, obedience, libido, arousal, trust, happiness, embarrassment, love, desire, etc.), clothingSlots, body description, location, inventory items, goals, npcs, sexModule, reactionModule, ntrModule, img_module, ui_commands, meta, audit issues, aiInstructions.
+Return ONLY valid JSON. Do not wrap in markdown. If a field is unknown, omit it.`;
 
-  const handleProcess = () => {
-    // Stub: apenas repassa o texto bruto para o callback de parse.
-    // A extração via OpenRouter será implementada no contrato T02.
-    setRaw(`// Stub response\n${text.slice(0, 400)}...`);
-    onParsed?.(text);
+export function AIConfigPanel({ onParsed, config, onConfigChange }: AIConfigPanelProps) {
+  const [text, setText] = useState('');
+  const [model, setModel] = useState(config?.openRouterModel || 'openai/gpt-4o-mini');
+  const [apiKey, setApiKey] = useState(config?.openRouterApiKey || '');
+  const [raw, setRaw] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleModelChange = useCallback((newModel: string) => {
+    setModel(newModel);
+    onConfigChange?.({ openRouterModel: newModel });
+  }, [onConfigChange]);
+
+  const handleApiKeyChange = useCallback((newKey: string) => {
+    setApiKey(newKey);
+    onConfigChange?.({ openRouterApiKey: newKey });
+  }, [onConfigChange]);
+
+  const handleProcess = async () => {
+    if (!text.trim()) {
+      toast({ variant: 'destructive', title: 'Empty input', description: 'Paste raw AI output before processing.' });
+      return;
+    }
+    if (!apiKey.trim()) {
+      toast({ variant: 'destructive', title: 'API key missing', description: 'Enter your OpenRouter API key in the AI Provider section.' });
+      return;
+    }
+
+    setIsLoading(true);
+    toast({ title: 'Processing...', description: 'Calling OpenRouter AI extraction.' });
+
+    try {
+      const response = await callOpenRouter({
+        apiKey,
+        model,
+        systemPrompt: EXTRACTION_PROMPT,
+        userMessage: text,
+      });
+
+      setRaw(response);
+
+      const json = extractJsonFromResponse(response);
+      if (!json) {
+        toast({ variant: 'destructive', title: 'Extraction failed', description: 'Could not extract valid JSON from AI response. Falling back to local parser.' });
+        onParsed?.(text);
+        return;
+      }
+
+      const jsonText = JSON.stringify(json);
+      const parsedState = parseErosStatusFromMessage(jsonText);
+      if (!parsedState || Object.keys(parsedState).length === 0) {
+        toast({ variant: 'destructive', title: 'Parse failed', description: 'AI returned JSON, but local parser found no status markers.' });
+        onParsed?.(jsonText);
+        return;
+      }
+
+      toast({ title: 'Extraction successful', description: `Parsed ${Object.keys(parsedState).length} status blocks.` });
+      onParsed?.(jsonText);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Unknown error during AI extraction.';
+      toast({ variant: 'destructive', title: 'OpenRouter error', description: message });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="mx-3 mb-2 space-y-2 pb-2 animate-fade-in-up">
-      <AIProviderSection apiKey={apiKey} selectedModel={model} onApiKeyChange={setApiKey} onModelChange={setModel} />
+      <AIProviderSection
+        apiKey={apiKey}
+        selectedModel={model}
+        onApiKeyChange={handleApiKeyChange}
+        onModelChange={handleModelChange}
+      />
 
       <div
         className="rounded overflow-hidden"
         style={{ border: '1px solid var(--terminal-border)', background: 'var(--terminal-card)' }}
       >
-        <div className="px-3 py-1.5" style={{ background: 'var(--neon-cyan)08', borderBottom: '1px solid var(--terminal-border)' }}>
+        <div className="px-3 py-1.5" style={{ background: 'color-mix(in srgb, var(--neon-cyan) 8%, transparent)', borderBottom: '1px solid var(--terminal-border)' }}>
           <span className="text-xs font-mono font-bold neon-cyan tracking-widest">🧠 PROCESS AI OUTPUT</span>
         </div>
         <div className="px-3 py-2 space-y-2">
@@ -36,13 +104,14 @@ export function AIConfigPanel({ onParsed }: AIConfigPanelProps) {
             value={text}
             onChange={(e) => setText(e.target.value)}
             placeholder="Paste raw AI output here to extract status markers..."
-            className="min-h-[120px] text-xs font-mono bg-black/30 border-[var(--terminal-border)]"
+            className="min-h-[120px] text-xs font-mono bg-[var(--terminal-bg-deep)] border-[var(--terminal-border)]"
           />
           <Button
             onClick={handleProcess}
-            className="w-full text-xs font-mono bg-[var(--neon-cyan)] text-black hover:bg-[var(--neon-cyan)]/80"
+            disabled={isLoading}
+            className="w-full text-xs font-mono bg-[var(--neon-cyan)] text-black hover:bg-[var(--neon-cyan)]/80 disabled:opacity-50"
           >
-            PROCESS WITH AI
+            {isLoading ? 'PROCESSING...' : 'PROCESS WITH AI'}
           </Button>
         </div>
       </div>
@@ -50,9 +119,9 @@ export function AIConfigPanel({ onParsed }: AIConfigPanelProps) {
       {raw && (
         <div
           className="rounded overflow-hidden"
-          style={{ border: '1px solid var(--neon-green)20', background: 'var(--terminal-card)' }}
+          style={{ border: '1px solid color-mix(in srgb, var(--neon-green) 20%, transparent)', background: 'var(--terminal-card)' }}
         >
-          <div className="px-3 py-1.5" style={{ background: 'var(--neon-green)08', borderBottom: '1px solid var(--neon-green)20' }}>
+          <div className="px-3 py-1.5" style={{ background: 'color-mix(in srgb, var(--neon-green) 8%, transparent)', borderBottom: '1px solid color-mix(in srgb, var(--neon-green) 20%, transparent)' }}>
             <span className="text-xs font-mono font-bold neon-green tracking-widest">📄 RAW RESPONSE</span>
           </div>
           <pre

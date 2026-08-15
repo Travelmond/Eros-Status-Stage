@@ -70,7 +70,7 @@ export function MiniMapPanel({ location, system }: MiniMapPanelProps) {
     >
       <div
         className="px-3 py-1.5 flex items-center justify-between"
-        style={{ background: 'var(--neon-cyan)08', borderBottom: '1px solid var(--terminal-border)' }}
+        style={{ background: 'color-mix(in srgb, var(--neon-cyan) 8%, transparent)', borderBottom: '1px solid var(--terminal-border)' }}
       >
         <span className="text-xs font-mono font-bold neon-cyan tracking-widest">🗺️ MINI MAP</span>
         <span className="text-xs font-mono text-gray-600">
@@ -78,7 +78,7 @@ export function MiniMapPanel({ location, system }: MiniMapPanelProps) {
         </span>
       </div>
 
-      <div className="p-3" style={{ background: '#0A0A0A' }}>
+      <div className="p-3" style={{ background: 'var(--terminal-bg)' }}>
         <div className="grid grid-cols-3 gap-1 max-w-[160px] mx-auto">
           {grid.map((cell) => {
             const isCurrent = cell.state === 'current';
@@ -90,21 +90,21 @@ export function MiniMapPanel({ location, system }: MiniMapPanelProps) {
                 className="aspect-square rounded flex items-center justify-center text-[9px] font-mono text-center leading-tight"
                 style={{
                   background: isCurrent
-                    ? 'var(--neon-cyan)20'
+                    ? 'color-mix(in srgb, var(--neon-cyan) 20%, transparent)'
                     : isVisited
-                    ? 'var(--neon-green)10'
+                    ? 'color-mix(in srgb, var(--neon-green) 10%, transparent)'
                     : isKnown
-                    ? 'var(--neon-gold)08'
-                    : '#050505',
+                    ? 'color-mix(in srgb, var(--neon-gold) 8%, transparent)'
+                    : 'var(--terminal-bg-deep)',
                   border: isCurrent
                     ? '1px solid var(--neon-cyan)'
                     : isVisited
-                    ? '1px solid var(--neon-green)30'
+                    ? '1px solid color-mix(in srgb, var(--neon-green) 30%, transparent)'
                     : isKnown
-                    ? '1px solid var(--neon-gold)20'
+                    ? '1px solid color-mix(in srgb, var(--neon-gold) 20%, transparent)'
                     : '1px solid #ffffff08',
-                  color: isCurrent ? 'var(--neon-cyan)' : isVisited ? 'var(--neon-green)' : isKnown ? 'var(--neon-gold)' : '#ffffff15',
-                  boxShadow: isCurrent ? '0 0 8px var(--neon-cyan)40' : 'none',
+                  color: isCurrent ? 'var(--neon-cyan)' : isVisited ? 'var(--neon-green)' : isKnown ? 'var(--neon-gold)' : 'var(--terminal-text-ghost)',
+                  boxShadow: isCurrent ? '0 0 8px color-mix(in srgb, var(--neon-cyan) 40%, transparent)' : 'none',
                 }}
               >
                 {cell.key.startsWith('cell') ? '·' : cell.key}
@@ -115,15 +115,15 @@ export function MiniMapPanel({ location, system }: MiniMapPanelProps) {
 
         <div className="flex items-center justify-center gap-3 mt-2 text-[9px] font-mono text-gray-500">
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-sm" style={{ background: 'var(--neon-cyan)20', border: '1px solid var(--neon-cyan)' }} />
+            <span className="w-2 h-2 rounded-sm" style={{ background: 'color-mix(in srgb, var(--neon-cyan) 20%, transparent)', border: '1px solid var(--neon-cyan)' }} />
             You
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-sm" style={{ background: 'var(--neon-green)10', border: '1px solid var(--neon-green)30' }} />
+            <span className="w-2 h-2 rounded-sm" style={{ background: 'color-mix(in srgb, var(--neon-green) 10%, transparent)', border: '1px solid color-mix(in srgb, var(--neon-green) 30%, transparent)' }} />
             Visited
           </span>
           <span className="flex items-center gap-1">
-            <span className="w-2 h-2 rounded-sm" style={{ background: 'var(--neon-gold)08', border: '1px solid var(--neon-gold)20' }} />
+            <span className="w-2 h-2 rounded-sm" style={{ background: 'color-mix(in srgb, var(--neon-gold) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--neon-gold) 20%, transparent)' }} />
             Known
           </span>
         </div>
@@ -131,7 +131,7 @@ export function MiniMapPanel({ location, system }: MiniMapPanelProps) {
         <button
           onClick={() => setShowLegend((v) => !v)}
           className="w-full mt-2 text-[9px] font-mono text-center"
-          style={{ color: 'var(--neon-cyan)60' }}
+          style={{ color: 'color-mix(in srgb, var(--neon-cyan) 60%, transparent)' }}
         >
           {showLegend ? '▲ Hide legend' : '▼ Show legend'} — {counts.visited} visited / {counts.known} known / {counts.unknown} unknown
         </button>

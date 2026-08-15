@@ -20,19 +20,19 @@ const LEVEL_STYLES: Record<
   { border: string; text: string; icon: string; glow: string }
 > = {
   info: {
-    border: 'var(--neon-cyan)40',
+    border: 'color-mix(in srgb, var(--neon-cyan) 40%, transparent)',
     text: 'var(--neon-cyan)',
     icon: 'ℹ️',
     glow: 'var(--neon-cyan)',
   },
   warning: {
-    border: 'var(--neon-gold)40',
+    border: 'color-mix(in srgb, var(--neon-gold) 40%, transparent)',
     text: 'var(--neon-gold)',
     icon: '⚠️',
     glow: 'var(--neon-gold)',
   },
   critical: {
-    border: 'var(--neon-pink)40',
+    border: 'color-mix(in srgb, var(--neon-pink) 40%, transparent)',
     text: 'var(--neon-pink)',
     icon: '💔',
     glow: 'var(--neon-pink)',
@@ -70,10 +70,10 @@ function ToastItem({ toast, onRemove }: { toast: Toast; onRemove: (id: string | 
       transition={{ duration: 0.25, ease: 'easeOut' }}
       className="pointer-events-auto w-full rounded px-3 py-2 text-xs font-mono flex items-start gap-2 cursor-pointer"
       style={{
-        background: '#0A0A0A',
+        background: 'var(--terminal-bg)',
         border: `1px solid ${style.border}`,
         color: style.text,
-        boxShadow: `0 0 8px ${style.glow}20`,
+        boxShadow: `0 0 8px color-mix(in srgb, ${style.glow} 20%, transparent)`,
       }}
       onClick={() => onRemove(toast.id)}
     >

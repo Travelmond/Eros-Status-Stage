@@ -38,18 +38,18 @@ function CopyBlock({ label, content, color = 'var(--neon-cyan)', hint }: { label
           style={{
             border: `1px solid ${copied ? 'var(--neon-green)' : color + '40'}`,
             color: copied ? 'var(--neon-green)' : color + '99',
-            background: copied ? 'var(--neon-green)10' : 'transparent',
+            background: copied ? 'color-mix(in srgb, var(--neon-green) 10%, transparent)' : 'transparent',
           }}
         >
           {copied ? '✓ COPIED' : 'COPY'}
         </button>
       </div>
-      {hint && <div className="text-xs font-mono mb-1" style={{ color: '#ffffff30' }}>{hint}</div>}
+      {hint && <div className="text-xs font-mono mb-1" style={{ color: 'var(--terminal-text-muted)' }}>{hint}</div>}
       <div
         className="text-xs font-mono leading-relaxed p-2 rounded select-all cursor-text"
         style={{
-          background: '#0A0A0A',
-          border: `1px solid ${color}20`,
+          background: 'var(--terminal-bg)',
+          border: `1px solid color-mix(in srgb, ${color} 20%, transparent)`,
           color: '#c0c0c0',
           whiteSpace: 'pre-wrap',
           lineHeight: '1.7',
@@ -227,7 +227,7 @@ export function ImagePromptPanel({ state, imgAuditIssues = [] }: ImagePromptPane
     >
       <div
         className="px-3 py-1.5 flex items-center justify-between"
-        style={{ background: 'var(--neon-cyan)08', borderBottom: '1px solid var(--terminal-border)' }}
+        style={{ background: 'color-mix(in srgb, var(--neon-cyan) 8%, transparent)', borderBottom: '1px solid var(--terminal-border)' }}
       >
         <span className="text-xs font-mono font-bold neon-cyan tracking-widest">🖼️ IMAGE GEN TAGS</span>
         <span className="text-xs font-mono text-gray-600">Auto-generated from state</span>
@@ -236,13 +236,13 @@ export function ImagePromptPanel({ state, imgAuditIssues = [] }: ImagePromptPane
       {pendingImgIssues.length > 0 && (
         <div
           className="px-3 py-2"
-          style={{ background: 'var(--neon-gold)05', borderBottom: '1px solid var(--neon-gold)20' }}
+          style={{ background: 'color-mix(in srgb, var(--neon-gold) 5%, transparent)', borderBottom: '1px solid color-mix(in srgb, var(--neon-gold) 20%, transparent)' }}
         >
           <div className="text-xs font-mono font-bold mb-1" style={{ color: 'var(--neon-gold)' }}>
             ⚠ IMG AUDITOR: {pendingImgIssues.length} mismatch{pendingImgIssues.length > 1 ? 'es' : ''}
           </div>
           {pendingImgIssues.map((issue) => (
-            <div key={issue.id} className="text-xs font-mono mb-1" style={{ color: 'var(--neon-gold)80', fontSize: '10px' }}>
+            <div key={issue.id} className="text-xs font-mono mb-1" style={{ color: 'color-mix(in srgb, var(--neon-gold) 80%, transparent)', fontSize: '10px' }}>
               • {issue.message}
             </div>
           ))}
@@ -251,7 +251,7 @@ export function ImagePromptPanel({ state, imgAuditIssues = [] }: ImagePromptPane
 
       <div
         className="flex overflow-x-auto"
-        style={{ borderBottom: '1px solid var(--neon-cyan)15', background: '#0A0A0A', scrollbarWidth: 'none' }}
+        style={{ borderBottom: '1px solid color-mix(in srgb, var(--neon-cyan) 15%, transparent)', background: 'var(--terminal-bg)', scrollbarWidth: 'none' }}
       >
         {tabs.map((t) => (
           <button
@@ -260,8 +260,8 @@ export function ImagePromptPanel({ state, imgAuditIssues = [] }: ImagePromptPane
             className="flex-1 text-xs font-mono py-1.5 transition-all border-b-2 whitespace-nowrap px-1"
             style={{
               borderBottomColor: tab === t.id ? t.color : 'transparent',
-              color: tab === t.id ? t.color : '#ffffff30',
-              background: tab === t.id ? `${t.color}10` : 'transparent',
+              color: tab === t.id ? t.color : 'var(--terminal-text-muted)',
+              background: tab === t.id ? `color-mix(in srgb, ${t.color} 10%, transparent)` : 'transparent',
               textShadow: tab === t.id ? `0 0 6px ${t.color}` : 'none',
               minWidth: '48px',
             }}

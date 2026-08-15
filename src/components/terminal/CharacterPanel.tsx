@@ -52,9 +52,9 @@ export function CharacterPanel({ character, body }: CharacterPanelProps) {
               <span
                 className="text-xs px-1.5 py-0.5 rounded font-mono"
                 style={{
-                  border: '1px solid var(--neon-pink)40',
+                  border: '1px solid color-mix(in srgb, var(--neon-pink) 40%, transparent)',
                   color: 'var(--neon-pink)',
-                  background: 'var(--neon-pink)10',
+                  background: 'color-mix(in srgb, var(--neon-pink) 10%, transparent)',
                 }}
               >
                 {role}

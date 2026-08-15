@@ -42,6 +42,32 @@ npm run lint
 npm run typecheck
 ```
 
+## Testes
+
+A suite de testes é executada com **Vitest** e cobre o núcleo ESS (`parser`, `middleware`, `audit`) e a integração com OpenRouter.
+
+```bash
+npm run test         # executa todos os testes uma vez
+npm run test:watch   # modo observação
+npm run test:ui      # interface visual do Vitest
+npm run coverage     # relatório de cobertura
+```
+
+- **Cobertura atual:** 34 testes passando.
+- Arquivos de teste:
+  - `src/core/parser.test.ts`
+  - `src/core/middleware.test.ts`
+  - `src/core/audit.test.ts`
+  - `src/services/openRouter.test.ts`
+
+Para validação adicional:
+
+```bash
+npm run typecheck
+npm run lint
+npm run build
+```
+
 ## Estrutura
 
 ```text
@@ -75,6 +101,13 @@ public/
 - **localStorage**: apenas cache opcional de backup e preferencias locais.
 - **API keys**: nunca sao persistidas. Vem da configuracao segura do Chub (`config_schema` com `secret: true`).
 
+> **⚠️ Aviso sobre `localStorage` no iframe do Chub:** o Stage roda dentro de um **iframe sandbox** hospedado em subdomínio separado. O `localStorage` do navegador dentro desse iframe pode ser **inacessível, isolado ou limpo** a qualquer momento. Por isso, **nunca confie em `localStorage` para estado critico**. O ESS v3.0 persiste o estado essencial exclusivamente pelo ciclo de vida do `StageBase` (`messageState` e `chatState`), que sao retornados pelos metodos `load`, `beforePrompt` e `afterResponse`. O `localStorage` e usado apenas como cache opcional de backup e preferencias de UI.
+
 ## Deploy
 
-O deploy e feito automaticamente via GitHub Actions para `api.chub.ai/extension/{id}/upload`. Veja o contrato T04 para detalhes de CI/CD e branches (`old`, `dev`, `main`).
+O deploy e feito automaticamente via GitHub Actions para `api.chub.ai/extension/{id}/upload`. Veja `docs/deployment/branch-strategy.md` e `docs/deployment/github-actions.md` para detalhes de CI/CD e branches (`old`, `dev`, `main`).
+
+**Secrets obrigatorios no GitHub:**
+
+- `CHUB_AUTH_TOKEN` — token de autenticacao da API do Chub.
+- `CHUB_EXTENSION_ID_DEV` — ID do Stage de desenvolvimento/testes (diferente do ID de producao).

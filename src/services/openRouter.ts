@@ -11,6 +11,7 @@
 export const OPENROUTER_BASE_URL = 'https://openrouter.ai/api/v1/chat/completions';
 export const DEFAULT_TEMPERATURE = 0.25;
 export const DEFAULT_MAX_TOKENS = 3000;
+export const DEFAULT_TIMEOUT_MS = 30000;
 
 export interface OpenRouterModel {
   id: string;
@@ -63,33 +64,46 @@ export async function callOpenRouter({
   if (!model) throw new OpenRouterError('Modelo e obrigatorio.', 400, null);
   if (!userMessage?.trim()) throw new OpenRouterError('Mensagem do usuario esta vazia.', 400, null);
 
-  const response = await fetch(OPENROUTER_BASE_URL, {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${apiKey}`,
-      'Content-Type': 'application/json',
-      'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://chub.ai',
-      'X-Title': appTitle,
-    },
-    body: JSON.stringify({
-      model,
-      messages: [
-        { role: 'system', content: systemPrompt || '' },
-        { role: 'user', content: userMessage },
-      ],
-      temperature,
-      max_tokens: maxTokens,
-    }),
-  });
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
 
-  const raw = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    const msg = (raw as { error?: { message?: string } })?.error?.message || `HTTP ${response.status}`;
-    throw new OpenRouterError(msg, response.status, raw);
+  try {
+    const response = await fetch(OPENROUTER_BASE_URL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${apiKey}`,
+        'Content-Type': 'application/json',
+        'HTTP-Referer': typeof window !== 'undefined' ? window.location.origin : 'https://chub.ai',
+        'X-Title': appTitle,
+      },
+      body: JSON.stringify({
+        model,
+        messages: [
+          { role: 'system', content: systemPrompt || '' },
+          { role: 'user', content: userMessage },
+        ],
+        temperature,
+        max_tokens: maxTokens,
+      }),
+      signal: controller.signal,
+    });
+
+    const raw = await response.json().catch(() => ({}));
+    clearTimeout(timeoutId);
+    if (!response.ok) {
+      const msg = (raw as { error?: { message?: string } })?.error?.message || `HTTP ${response.status}`;
+      throw new OpenRouterError(msg, response.status, raw);
+    }
+    const content = (raw as { choices?: Array<{ message?: { content?: string } }> })?.choices?.[0]?.message?.content;
+    if (!content) throw new OpenRouterError('Resposta vazia da API.', 200, raw);
+    return content;
+  } catch (err) {
+    clearTimeout(timeoutId);
+    if ((err instanceof Error || (err && typeof err === 'object' && 'name' in err)) && (err as { name?: string }).name === 'AbortError') {
+      throw new OpenRouterError('Request timeout: OpenRouter did not respond within 30s.', 408, err);
+    }
+    throw err;
   }
-  const content = (raw as { choices?: Array<{ message?: { content?: string } }> })?.choices?.[0]?.message?.content;
-  if (!content) throw new OpenRouterError('Resposta vazia da API.', 200, raw);
-  return content;
 }
 
 /**

@@ -12,6 +12,7 @@ import type { ErosStatusState, ErosChatState } from '../types/eros-status';
 
 const STORAGE_PREFIX = 'eros_char_cache_v3_';
 const STORAGE_META = 'eros_char_cache_meta_v3';
+const PREFERENCE_PREFIX = 'eros_pref_v3_';
 
 // ---------------------------------------------------------------------------
 // Deep merge generico
@@ -56,9 +57,12 @@ export function mergeCharacterState(
 }
 
 // ---------------------------------------------------------------------------
-// Cache local opcional (backup apenas)
+// Cache local de personagem — NAO USADO no ciclo de vida do StageBase.
+// Mantido apenas para compatibilidade com codigo legado/ferramentas externas.
+// O estado critico do ESS vive em messageState/chatState gerenciados pelo Chub.
 // ---------------------------------------------------------------------------
 
+/** @deprecated Nao persistir estado de personagem em localStorage. Use messageState/chatState. */
 export function saveCharacterCache(charKey: string, state: ErosStatusState): void {
   try {
     if (typeof window === 'undefined') return;
@@ -68,6 +72,7 @@ export function saveCharacterCache(charKey: string, state: ErosStatusState): voi
   }
 }
 
+/** @deprecated Nao carregar estado critico de localStorage. Use o messageState recebido pelo StageBase. */
 export function loadCharacterCache(charKey: string): ErosStatusState | null {
   try {
     if (typeof window === 'undefined') return null;
@@ -78,6 +83,7 @@ export function loadCharacterCache(charKey: string): ErosStatusState | null {
   }
 }
 
+/** @deprecated Removido do ciclo de vida do Stage. */
 export function deleteCharacterCache(charKey: string): void {
   try {
     if (typeof window === 'undefined') return;
@@ -87,6 +93,7 @@ export function deleteCharacterCache(charKey: string): void {
   }
 }
 
+/** @deprecated Removido do ciclo de vida do Stage. */
 export function listCachedCharacters(): Array<{ key: string; name: string; savedAt?: string }> {
   try {
     if (typeof window === 'undefined') return [];
@@ -98,6 +105,7 @@ export function listCachedCharacters(): Array<{ key: string; name: string; saved
   }
 }
 
+/** @deprecated Removido do ciclo de vida do Stage. */
 export function updateCacheMeta(charKey: string, name: string): void {
   try {
     if (typeof window === 'undefined') return;
@@ -107,6 +115,62 @@ export function updateCacheMeta(charKey: string, name: string): void {
     localStorage.setItem(STORAGE_META, JSON.stringify(meta));
   } catch {
     // ignore
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Preferencias leves do usuario (tema, densidade, etc.) — unico dado local.
+// Protegido por debounce e tratamento de QuotaExceededError.
+// ---------------------------------------------------------------------------
+
+const pendingPreferences = new Map<string, unknown>();
+const preferenceTimers = new Map<string, ReturnType<typeof setTimeout>>();
+const PREFERENCE_DEBOUNCE_MS = 300;
+
+function schedulePreferenceFlush(key: string): void {
+  const existing = preferenceTimers.get(key);
+  if (existing) clearTimeout(existing);
+  preferenceTimers.set(
+    key,
+    setTimeout(() => {
+      flushPreference(key);
+    }, PREFERENCE_DEBOUNCE_MS),
+  );
+}
+
+function flushPreference(key: string): void {
+  const value = pendingPreferences.get(key);
+  pendingPreferences.delete(key);
+  preferenceTimers.delete(key);
+  if (value === undefined) return;
+  try {
+    if (typeof window === 'undefined') return;
+    localStorage.setItem(PREFERENCE_PREFIX + key, JSON.stringify(value));
+  } catch (err) {
+    if (err instanceof DOMException && err.name === 'QuotaExceededError') {
+      // eslint-disable-next-line no-console
+      console.warn(`[Eros] localStorage quota exceeded for preference ${key}`);
+    }
+    // Silently ignore other write failures (sandboxed iframe, private mode, etc.)
+  }
+}
+
+export function setPreference<T>(key: string, value: T): void {
+  pendingPreferences.set(key, value);
+  schedulePreferenceFlush(key);
+}
+
+export function getPreference<T>(key: string, defaultValue: T): T {
+  try {
+    if (typeof window === 'undefined') return defaultValue;
+    if (pendingPreferences.has(key)) {
+      return pendingPreferences.get(key) as T;
+    }
+    const raw = localStorage.getItem(PREFERENCE_PREFIX + key);
+    if (raw === null) return defaultValue;
+    return JSON.parse(raw) as T;
+  } catch {
+    return defaultValue;
   }
 }
 

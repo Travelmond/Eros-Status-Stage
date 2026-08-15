@@ -1,9 +1,16 @@
 /**
+ * @deprecated Use `@/systems/memory` instead. This compatibility adapter will be removed in a future release.
+ *
  * Adaptador de compatibilidade para o serviço de memória.
  *
  * A implementação real do memory service está em `src/systems/memory.ts`.
  * Este arquivo expõe uma API simplificada usada pelos componentes do terminal,
  * mantendo compatibilidade com a interface documentada original.
+ *
+ * IMPORTANTE: este adapter e destinado ao modo standalone/TestRunner. Ele NAO
+ * persiste dados entre sessões — toda a memória de longo prazo e histórico de
+ * turnos vivem no `chatState` gerenciado pelo StageBase do Chub. Em producao,
+ * use `src/systems/memory.ts` e o `chatState` oficial.
  */
 
 import {

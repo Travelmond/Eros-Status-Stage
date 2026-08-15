@@ -34,14 +34,14 @@ export function EmotionPanel({ character, body }: EmotionPanelProps) {
       <div className="flex gap-2">
         <div
           className="flex-shrink-0 w-16 h-20 rounded flex items-center justify-center relative overflow-hidden"
-          style={{ border: '1px solid var(--terminal-border)', background: '#050505' }}
+          style={{ border: '1px solid var(--terminal-border)', background: 'var(--terminal-bg-deep)' }}
         >
           {avatarUrl ? (
             <img src={avatarUrl} alt="character" className="w-full h-full object-cover" />
           ) : (
             <div className="text-center">
               <div className="text-4xl">{exprEmoji}</div>
-              <div className="text-xs mt-1 font-mono" style={{ color: 'var(--neon-cyan)80', fontSize: '8px' }}>
+              <div className="text-xs mt-1 font-mono" style={{ color: 'color-mix(in srgb, var(--neon-cyan) 80%, transparent)', fontSize: '8px' }}>
                 [expression]
               </div>
             </div>
@@ -64,9 +64,9 @@ export function EmotionPanel({ character, body }: EmotionPanelProps) {
                   title={expr.label}
                   className="w-6 h-6 flex items-center justify-center rounded text-sm cursor-default transition-all"
                   style={{
-                    border: isActive ? '1px solid var(--neon-cyan)' : '1px solid var(--neon-cyan)15',
-                    background: isActive ? 'var(--neon-cyan)20' : 'transparent',
-                    boxShadow: isActive ? '0 0 6px var(--neon-cyan)40' : 'none',
+                    border: isActive ? '1px solid var(--neon-cyan)' : '1px solid color-mix(in srgb, var(--neon-cyan) 15%, transparent)',
+                    background: isActive ? 'color-mix(in srgb, var(--neon-cyan) 20%, transparent)' : 'transparent',
+                    boxShadow: isActive ? '0 0 6px color-mix(in srgb, var(--neon-cyan) 40%, transparent)' : 'none',
                     fontSize: '14px',
                   }}
                 >

@@ -14,11 +14,11 @@ export function ASCIIPositionViewer({ positionName, phase }: ASCIIPositionViewer
   return (
     <div
       className="mx-0 mb-0 rounded overflow-hidden"
-      style={{ border: `1px solid ${phaseColor}30`, background: '#060606' }}
+      style={{ border: `1px solid color-mix(in srgb, ${phaseColor} 30%, transparent)`, background: '#060606' }}
     >
       <div
         className="px-3 py-1.5 flex items-center justify-between"
-        style={{ background: `${phaseColor}10`, borderBottom: `1px solid ${phaseColor}20` }}
+        style={{ background: `color-mix(in srgb, ${phaseColor} 10%, transparent)`, borderBottom: `1px solid color-mix(in srgb, ${phaseColor} 20%, transparent)` }}
       >
         <div className="flex items-center gap-2">
           <span className="text-base">{data?.emoji || '🔥'}</span>
@@ -29,9 +29,9 @@ export function ASCIIPositionViewer({ positionName, phase }: ASCIIPositionViewer
             <span
               className="text-xs font-mono px-1.5 py-0.5 rounded"
               style={{
-                color: `${phaseColor}90`,
-                background: `${phaseColor}10`,
-                border: `1px solid ${phaseColor}20`,
+                color: `color-mix(in srgb, ${phaseColor} 90%, transparent)`,
+                background: `color-mix(in srgb, ${phaseColor} 10%, transparent)`,
+                border: `1px solid color-mix(in srgb, ${phaseColor} 20%, transparent)`,
                 fontSize: '9px',
               }}
             >
@@ -44,8 +44,8 @@ export function ASCIIPositionViewer({ positionName, phase }: ASCIIPositionViewer
         <div
           className="flex-shrink-0 rounded px-2 py-1.5 overflow-hidden"
           style={{
-            background: '#0A0A0A',
-            border: `1px solid ${phaseColor}20`,
+            background: 'var(--terminal-bg)',
+            border: `1px solid color-mix(in srgb, ${phaseColor} 20%, transparent)`,
             minWidth: '72px',
             maxWidth: '90px',
           }}
@@ -58,7 +58,7 @@ export function ASCIIPositionViewer({ positionName, phase }: ASCIIPositionViewer
                 fontSize: '10px',
                 whiteSpace: 'pre',
                 overflow: 'hidden',
-                textShadow: `0 0 6px ${phaseColor}60`,
+                textShadow: `0 0 6px color-mix(in srgb, ${phaseColor} 60%, transparent)`,
               }}
             >
               {data.ascii.join('\n')}
@@ -66,7 +66,7 @@ export function ASCIIPositionViewer({ positionName, phase }: ASCIIPositionViewer
           ) : (
             <pre
               className="font-mono text-center"
-              style={{ color: `${phaseColor}40`, fontSize: '10px' }}
+              style={{ color: `color-mix(in srgb, ${phaseColor} 40%, transparent)`, fontSize: '10px' }}
             >{`  /\\ \n (  )\n  \\/ `}</pre>
           )}
         </div>
@@ -76,7 +76,7 @@ export function ASCIIPositionViewer({ positionName, phase }: ASCIIPositionViewer
               {data.description}
             </p>
           ) : (
-            <p className="text-xs font-mono" style={{ color: '#ffffff30' }}>
+            <p className="text-xs font-mono" style={{ color: 'var(--terminal-text-muted)' }}>
               Position not in library — rendering name only.
             </p>
           )}

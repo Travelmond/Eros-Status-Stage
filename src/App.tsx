@@ -1,6 +1,9 @@
 import { useState, useCallback } from 'react';
 import ErosTerminal from '@/components/terminal/ErosTerminal';
 import { createInitialState } from '@/core/state';
+import { parseErosStatusFromMessage } from '@/core/parser';
+import { processIncomingState } from '@/core/middleware';
+import { condenseChatMemory } from '@/systems/memory';
 import type { ErosStatusState, ErosChatState } from '@/types/eros-status';
 import type { ConfigType } from '@/types/config';
 import { Button } from '@/components/ui/button';
@@ -146,38 +149,106 @@ function buildDemoState(variant: 'default' | 'sex' | 'reaction' | 'ntr' = 'defau
 
 export default function App() {
   const [state, setState] = useState<ErosStatusState>(buildDemoState('default'));
-  const [chatState] = useState<ErosChatState>({
+  const [chatState, setChatState] = useState<ErosChatState>({
     schema_version: '3.0.0',
     visitedRooms: ['Home', 'Bedroom'],
     revealedRooms: ['Home', 'Bedroom', 'Kitchen'],
   });
+  const [config, setConfig] = useState<ConfigType>(DEMO_CONFIG);
   const [log, setLog] = useState<string[]>([]);
+
+  const handleCondenseMemory = useCallback(() => {
+    setChatState((prev) => condenseChatMemory(prev));
+  }, []);
+
+  const handleClearMemory = useCallback(() => {
+    setChatState((prev) => ({
+      ...prev,
+      longTermMemory: { facts: [], narrativeSummary: '', lastCondensedTurn: undefined },
+      turnHistory: [],
+    }));
+  }, []);
+
+  const handleCorrectAudit = useCallback((issueId: string, value: unknown) => {
+    setState((prev) => {
+      const currentAudit = prev.audit ?? { issues: [], correctedIds: [], ignoredIds: [] };
+      const correctedIds = currentAudit.correctedIds ?? [];
+      const ignoredIds = currentAudit.ignoredIds ?? [];
+      return {
+        ...prev,
+        audit: {
+          ...currentAudit,
+          issues: currentAudit.issues.map((issue) =>
+            issue.id === issueId ? { ...issue, corrected: true, ignored: false } : issue,
+          ),
+          correctedIds: correctedIds.includes(issueId) ? correctedIds : [...correctedIds, issueId],
+          ignoredIds: ignoredIds.filter((id) => id !== issueId),
+        },
+      };
+    });
+    setLog((prev) => [...prev, `[AUDIT] ${issueId} → ${String(value)}`]);
+  }, []);
+
+  const handleIgnoreAudit = useCallback((issueId: string) => {
+    setState((prev) => {
+      const currentAudit = prev.audit ?? { issues: [], correctedIds: [], ignoredIds: [] };
+      const correctedIds = currentAudit.correctedIds ?? [];
+      const ignoredIds = currentAudit.ignoredIds ?? [];
+      return {
+        ...prev,
+        audit: {
+          ...currentAudit,
+          issues: currentAudit.issues.map((issue) =>
+            issue.id === issueId ? { ...issue, ignored: true, corrected: false } : issue,
+          ),
+          ignoredIds: ignoredIds.includes(issueId) ? ignoredIds : [...ignoredIds, issueId],
+          correctedIds: correctedIds.filter((id) => id !== issueId),
+        },
+      };
+    });
+    setLog((prev) => [...prev, `[AUDIT IGNORE] ${issueId}`]);
+  }, []);
 
   const handleParse = useCallback((text: string) => {
     setLog((prev) => [...prev, `> ${text.slice(0, 80)}${text.length > 80 ? '…' : ''}`]);
-  }, []);
+    const parsed = parseErosStatusFromMessage(text);
+    if (!parsed) return;
+
+    const result = processIncomingState(state, parsed, {
+      ntrEnabled: config.enableNTR ?? false,
+      auditorEnabled: config.auditorEnabled ?? true,
+      imgAuditorEnabled: config.imgAuditorEnabled ?? true,
+      config,
+      currentTurnId: `t${Date.now()}`,
+      parentTurnId: state.meta?.turn_id || '',
+      previousChatState: chatState,
+    });
+
+    setState(result.messageState);
+    setChatState(result.chatState);
+  }, [state, chatState, config]);
 
   return (
-    <div className="h-screen w-screen bg-[#050505] flex overflow-hidden text-xs font-mono">
+    <div className="h-screen w-screen bg-[var(--terminal-bg)] flex overflow-hidden text-xs font-mono">
       <Toaster />
 
       {/* Simulated chat sidebar */}
-      <div className="hidden md:flex w-[360px] flex-col border-r border-[var(--terminal-border)] bg-[#080808]">
+      <div className="hidden md:flex w-[360px] flex-col border-r border-[var(--terminal-border)] bg-[var(--terminal-panel)]">
         <div className="p-3 border-b border-[var(--terminal-border)] neon-cyan tracking-widest">SIMULATED CHUB CHAT</div>
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
-          <div className="p-2 rounded bg-[#0D0D0D] border border-[var(--terminal-border)] text-gray-400">
+          <div className="p-2 rounded bg-[var(--terminal-card)] border border-[var(--terminal-border)]" style={{ color: 'var(--terminal-text-muted)' }}>
             <span className="neon-pink font-bold">Hanako:</span> Day 5 already? Time flies when you're around...
           </div>
-          <div className="p-2 rounded bg-[#0D0D0D] border border-[var(--terminal-border)] text-gray-400">
-            <span className="text-cyan-400 font-bold">User:</span> You seem flustered.
+          <div className="p-2 rounded bg-[var(--terminal-card)] border border-[var(--terminal-border)]" style={{ color: 'var(--terminal-text-muted)' }}>
+            <span className="neon-cyan font-bold">User:</span> You seem flustered.
           </div>
           {log.map((entry, i) => (
-            <div key={i} className="p-2 rounded bg-[#0D0D0D] border border-[var(--neon-green)20] text-gray-500">
+            <div key={i} className="p-2 rounded bg-[var(--terminal-card)] border border-[color-mix(in_srgb,var(--neon-green)_20%,transparent)]" style={{ color: 'var(--terminal-text-faint)' }}>
               <span className="text-[var(--neon-green)] font-bold">PARSE:</span> {entry}
             </div>
           ))}
         </div>
-        <div className="p-2 border-t border-[var(--terminal-border)] text-[10px] text-gray-600">
+        <div className="p-2 border-t border-[var(--terminal-border)] text-[10px]" style={{ color: 'var(--terminal-text-faint)' }}>
           Chat simulation — terminal receives postMessage from here.
         </div>
       </div>
@@ -187,20 +258,23 @@ export default function App() {
         <ErosTerminal
           state={state}
           chatState={chatState}
-          config={DEMO_CONFIG}
+          config={config}
           onParse={handleParse}
-          onCorrectAudit={(id, val) => setLog((prev) => [...prev, `[AUDIT] ${id} → ${String(val)}`])}
-          onIgnoreAudit={(id) => setLog((prev) => [...prev, `[AUDIT IGNORE] ${id}`])}
+          onConfigChange={setConfig}
+          onCorrectAudit={handleCorrectAudit}
+          onIgnoreAudit={handleIgnoreAudit}
+          onCondenseMemory={handleCondenseMemory}
+          onClearMemory={handleClearMemory}
         />
       </div>
 
       {/* Demo scenario controls */}
-      <div className="hidden lg:flex w-[220px] flex-col border-l border-[var(--terminal-border)] bg-[#080808] p-3 gap-2">
+      <div className="hidden lg:flex w-[220px] flex-col border-l border-[var(--terminal-border)] bg-[var(--terminal-panel)] p-3 gap-2">
         <div className="neon-gold tracking-widest mb-1">DEMO SCENES</div>
         <Button
           size="sm"
           variant="outline"
-          className="text-xs font-mono border-[var(--neon-cyan)40] text-[var(--neon-cyan)]"
+          className="text-xs font-mono border-[color-mix(in_srgb,var(--neon-cyan)_40%,transparent)] text-[var(--neon-cyan)]"
           onClick={() => setState(buildDemoState('default'))}
         >
           Default / Daily
@@ -208,7 +282,7 @@ export default function App() {
         <Button
           size="sm"
           variant="outline"
-          className="text-xs font-mono border-[var(--neon-pink)40] text-[var(--neon-pink)]"
+          className="text-xs font-mono border-[color-mix(in_srgb,var(--neon-pink)_40%,transparent)] text-[var(--neon-pink)]"
           onClick={() => setState(buildDemoState('sex'))}
         >
           Sex Module
@@ -216,7 +290,7 @@ export default function App() {
         <Button
           size="sm"
           variant="outline"
-          className="text-xs font-mono border-[var(--neon-purple)40] text-[var(--neon-purple)]"
+          className="text-xs font-mono border-[color-mix(in_srgb,var(--neon-purple)_40%,transparent)] text-[var(--neon-purple)]"
           onClick={() => setState(buildDemoState('reaction'))}
         >
           Reaction Module
@@ -224,12 +298,12 @@ export default function App() {
         <Button
           size="sm"
           variant="outline"
-          className="text-xs font-mono border-[var(--neon-purple)40] text-[var(--neon-purple)]"
+          className="text-xs font-mono border-[color-mix(in_srgb,var(--neon-purple)_40%,transparent)] text-[var(--neon-purple)]"
           onClick={() => setState(buildDemoState('ntr'))}
         >
           NTR Module
         </Button>
-        <div className="mt-auto text-[9px] text-gray-600">
+        <div className="mt-auto text-[9px]" style={{ color: 'var(--terminal-text-faint)' }}>
           Eros Status Terminal v3.0 — Stage TestRunner
         </div>
       </div>

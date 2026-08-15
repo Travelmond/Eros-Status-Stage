@@ -38,7 +38,7 @@ export function TerminalHeader({ system, location }: TerminalHeaderProps) {
       </div>
       <div
         className="flex items-center justify-center gap-1 text-xs font-mono py-1.5 px-2 rounded"
-        style={{ border: '1px solid var(--terminal-border)', background: '#00000060' }}
+        style={{ border: '1px solid var(--terminal-border)', background: 'color-mix(in srgb, var(--terminal-bg) 60%, transparent)' }}
       >
         <span className="text-white">Day {day}</span>
         <span className="text-gray-600 mx-1">│</span>

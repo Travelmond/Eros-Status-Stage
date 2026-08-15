@@ -409,6 +409,8 @@ export interface ErosStatusState {
   meta: MetaState;
   img_module: ImageModule;
   audit: AuditState;
+  /** Instrucoes extraidas do bloco AI_INSTRUCTIONS da narrativa. */
+  aiInstructions?: string[];
 }
 
 // ---------------------------------------------------------------------------

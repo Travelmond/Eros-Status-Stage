@@ -203,6 +203,7 @@ function toErosStatusState(state: ParsedState): Partial<ErosStatusState> {
     meta: state.meta,
     img_module: state.img_module,
     audit: state.audit,
+    aiInstructions: state.aiInstructions,
   };
 }
 
