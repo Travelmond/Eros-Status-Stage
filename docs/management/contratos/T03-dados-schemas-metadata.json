@@ -1,0 +1,48 @@
+{
+  "task_id": "T03",
+  "title": "Dados / Schemas / Metadata — Tipagens TypeScript e chub_meta.yaml",
+  "tier": 3,
+  "area": "banco-de-dados",
+  "manifesto_ref": "/docs/management/manifesto_de_intencao.md",
+  "task": "Definir schemas TypeScript e public/chub_meta.yaml para init, message, chat states e configurações avançadas do usuário. Mapear o estado ESS para os estados do Chub, garantindo que API key seja campo sensível e estado crítico não dependa de localStorage.",
+  "tech_spec": {
+    "files_to_modify": [
+      "public/chub_meta.yaml"
+    ],
+    "files_to_create": [
+      "src/types/chub.ts",
+      "src/types/eros-status.ts",
+      "src/types/config.ts",
+      "src/types/index.ts"
+    ],
+    "pattern_to_follow": "Tipagens TypeScript em src/types/ espelham os schemas declarados em public/chub_meta.yaml. Usar interfaces e type aliases; campos opcionais explicitamente marcados. chub_meta.yaml segue a especificação oficial do Chub Venus AI (config-metadata, state), com config_schema, state_schema (init/message/chat) e metadata. Estado crítico (personagem/progressões/location/inventory/relationships) mapeado para messageState; fog-of-war/mapa/global para chatState; preferências locais isoladas em localStorage. API key do OpenRouter marcada como secreta/sensível no config_schema.",
+    "dependencies": [
+      "Documentação oficial do Chub Venus AI (config-metadata e state)",
+      "Contrato T02 (StageBase consome as tipagens)",
+      "Contrato T01 (componentes consomem ErosStatusState)"
+    ]
+  },
+  "hard_rules": [
+    "Todo estado crítico deve estar tipado em messageState ou chatState; nunca apenas em localStorage.",
+    "API key do OpenRouter deve ser marcada como sensitive/secret no config_schema do chub_meta.yaml.",
+    "chub_meta.yaml deve validar sintaticamente como YAML e conter todos os campos obrigatórios do Chub.",
+    "Schemas devem ser versionados (ex: state_schema.version) para permitir migrações futuras.",
+    "Campos numéricos devem ter ranges explícitos (min/max) quando aplicável.",
+    "Não persistir estado de relacionamentos/inventário/progressões em localStorage.",
+    "Preferências locais (tema, densidade, preset) podem usar localStorage, mas devem ser opcionais e não afetar a lógica de negócio."
+  ],
+  "acceptance_criteria": [
+    "public/chub_meta.yaml contém config_schema, state_schema (init/message/chat) e metadata válidos.",
+    "src/types/chub.ts exporta InitStateType, ChatStateType, MessageStateType, ConfigType compatíveis com StageBase.",
+    "src/types/eros-status.ts exporta ErosStatusState completo com todos os painéis do ESS.",
+    "src/types/config.ts exporta ConfigType com flags de módulos (NTR, sexo, reação), modelo OpenRouter e campo de API key sensível.",
+    "Mapeamento entre ErosStatusState e messageState/chatState está documentado em /docs/architecture/state-mapping.md.",
+    "YAML é validado por um parser YAML sem erros de sintaxe.",
+    "TypeScript compila sem erros de tipo em todos os arquivos de src/types/."
+  ],
+  "contracts_to_respect": {
+    "api": "StageBase espera InitStateType, ChatStateType, MessageStateType, ConfigType.",
+    "schema": "chub_meta.yaml state_schema define init/message/chat states; tipagens devem espelhar.",
+    "component": "ErosStatusState é o contrato de dados consumido pelos componentes do Contrato T01."
+  }
+}

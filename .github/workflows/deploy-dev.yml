@@ -1,0 +1,71 @@
+name: Deploy to Chub (dev)
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch:
+
+env:
+  NODE_VERSION: '24.x'
+  CHUB_EXTENSION_ID: 'eros-status-stage-b47cccbfa255'
+
+jobs:
+  build-and-deploy:
+    name: Build, lint, typecheck and deploy
+    runs-on: ubuntu-latest
+    environment: development
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run lint
+        run: npm run lint
+
+      - name: Run typecheck
+        run: npm run typecheck
+
+      - name: Build production bundle
+        run: npm run build
+
+      - name: Prepare Chub extension package
+        run: |
+          mkdir -p chub-upload
+          cp -r dist chub-upload/dist
+          cp public/chub_meta.yaml chub-upload/chub_meta.yaml
+          cd chub-upload
+          zip -r ../eros-status-stage-dev.zip .
+          cd ..
+
+      - name: Upload to Chub (dev)
+        env:
+          CHUB_AUTH_TOKEN: ${{ secrets.CHUB_AUTH_TOKEN }}
+        run: |
+          if [ -z "$CHUB_AUTH_TOKEN" ]; then
+            echo "::error::CHUB_AUTH_TOKEN secret is not configured."
+            exit 1
+          fi
+
+          echo "Uploading Eros Status Terminal (dev) to Chub..."
+          HTTP_STATUS=$(curl -s -o response.json -w "%{http_code}" \
+            -X POST "https://api.chub.ai/extension/${{ env.CHUB_EXTENSION_ID }}/upload" \
+            -H "Authorization: Bearer ${CHUB_AUTH_TOKEN}" \
+            -H "Accept: application/json" \
+            -F "file=@eros-status-stage-dev.zip")
+
+          echo "Chub response status: ${HTTP_STATUS}"
+          cat response.json
+
+          if [[ "$HTTP_STATUS" != "200" && "$HTTP_STATUS" != "201" ]]; then
+            echo "::error::Deploy failed with status ${HTTP_STATUS}"
+            exit 1
+          fi

@@ -1,0 +1,577 @@
+project_name: "Eros Status Terminal"
+tagline: "Painel visual cyberpunk de status, progressões, inventário, localização, NPCs e módulos NSFW para roleplay no Chub Venus AI."
+visibility: PUBLIC
+position: ADJACENT
+tags:
+  - status
+  - terminal
+  - cyberpunk
+  - nsfw
+  - roleplay
+  - progressions
+  - inventory
+  - minimap
+  - image-generation
+  - eros-status
+
+config_schema:
+  type: object
+  additionalProperties: false
+  properties:
+    openRouterModel:
+      type: string
+      default: "openai/gpt-4o-mini"
+      description: "Modelo OpenRouter usado para extração estruturada de status."
+    openRouterApiKey:
+      type: string
+      default: ""
+      description: "Chave de API do OpenRouter. NUNCA compartilhe ou persista em localStorage."
+      secret: true
+    presets:
+      type: array
+      default: []
+      description: "Presets de personagem/cenário selecionáveis."
+      items:
+        type: object
+        additionalProperties: false
+        properties:
+          id:
+            type: string
+          name:
+            type: string
+          description:
+            type: string
+          initialStatePatch:
+            type: object
+    enableNTR:
+      type: boolean
+      default: false
+      description: "Habilita o módulo NTR e seus gatilhos."
+    enableSexModule:
+      type: boolean
+      default: true
+      description: "Habilita o módulo de status sexual detalhado."
+    enableReactionModule:
+      type: boolean
+      default: true
+      description: "Habilita o módulo de reações/emotes."
+    auditorEnabled:
+      type: boolean
+      default: true
+      description: "Habilita o auditor de consistência passivo."
+    imgAuditorEnabled:
+      type: boolean
+      default: true
+      description: "Habilita a auditoria de consistência do módulo de imagem."
+    theme:
+      type: string
+      default: "cyberpunk"
+      enum: ["dark", "cyberpunk", "midnight"]
+      description: "Tema de interface."
+    barStyle:
+      type: string
+      default: "bar"
+      enum: ["bar", "ascii", "emoji"]
+      description: "Estilo de renderização das barras de progressão."
+    density:
+      type: string
+      default: "comfortable"
+      enum: ["compact", "comfortable"]
+      description: "Densidade de informação exibida nos painéis."
+    startMinimized:
+      type: boolean
+      default: false
+      description: "Determina se o terminal inicia minimizado."
+
+state_schema:
+  version: "3.0.0"
+  init:
+    type: object
+    additionalProperties: false
+    required:
+      - schema_version
+    properties:
+      schema_version:
+        type: string
+        default: "3.0.0"
+      worldSeed:
+        type: string
+        default: ""
+      initialKnownRooms:
+        type: array
+        default: ["Home"]
+        items:
+          type: string
+      recurringNPCs:
+        type: array
+        default: []
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - name
+          properties:
+            name:
+              type: string
+            relation:
+              type: string
+            mood:
+              type: string
+            importance:
+              type: string
+              enum: ["high", "medium", "low"]
+            summary:
+              type: string
+            relationships:
+              type: array
+      createdAt:
+        type: string
+        default: ""
+  message:
+    type: object
+    additionalProperties: false
+    properties:
+      system:
+        type: object
+        additionalProperties: false
+        properties:
+          day:
+            type: integer
+            minimum: 1
+          time:
+            type: string
+          weather:
+            type: string
+          location:
+            type: string
+          sceneType:
+            type: string
+            enum: ["daily_life", "flirting", "sex", "post-sex", "conflict", "travel", "rest"]
+          ambiance:
+            type: string
+      character:
+        type: object
+        additionalProperties: false
+        properties:
+          name:
+            type: string
+          role:
+            type: string
+          avatarUrl:
+            type: string
+          expression:
+            type: string
+          mood:
+            type: string
+          thoughts:
+            type: string
+          shamefulThought:
+            type: string
+          relationship:
+            type: string
+      userCharacter:
+        type: object
+        additionalProperties: false
+        properties:
+          name:
+            type: string
+          relation:
+            type: string
+          mood:
+            type: string
+          summary:
+            type: string
+          relationships:
+            type: array
+      progressions:
+        type: object
+        additionalProperties: false
+        properties:
+          affection: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          obedience: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          libido: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          arousal: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          trust: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          corruption: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          happiness: { type: integer, minimum: 0, maximum: 100, default: 50 }
+          embarrassment: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          fatigue: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          love: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          jealousy: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          anxiety: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          fear: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          anger: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          nervousness: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          tension: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          shame: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          desire: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          awe: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          guilt: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          excitement: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          sadness: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          submission: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          health: { type: integer, minimum: 0, maximum: 100, default: 100 }
+      clothingSlots:
+        type: object
+        additionalProperties: false
+        properties:
+          head: { type: string, default: "" }
+          upper: { type: string, default: "" }
+          lower: { type: string, default: "" }
+          underwear: { type: string, default: "" }
+          footwear: { type: string, default: "" }
+          accessories: { type: string, default: "" }
+      body:
+        type: object
+        additionalProperties: false
+        properties:
+          expression: { type: string, default: "neutral" }
+          posture: { type: string, default: "standing" }
+          thoughts: { type: string, default: "" }
+          shamefulThought: { type: string, default: "" }
+          description:
+            type: object
+            additionalProperties: false
+            properties:
+              hair: { type: string, default: "" }
+              eyes: { type: string, default: "" }
+              face: { type: string, default: "" }
+              neck: { type: string, default: "" }
+              chest: { type: string, default: "" }
+              bust: { type: string, default: "" }
+              waist: { type: string, default: "" }
+              hips: { type: string, default: "" }
+              legs: { type: string, default: "" }
+              feet: { type: string, default: "" }
+              tail: { type: string, default: "" }
+              horns: { type: string, default: "" }
+              special: { type: string, default: "" }
+      location:
+        type: object
+        additionalProperties: false
+        properties:
+          currentRoom: { type: string, default: "Unknown" }
+          building: { type: string, default: "Unknown" }
+          description: { type: string, default: "" }
+          visitedRooms:
+            type: array
+            default: []
+            items: { type: string }
+          knownRooms:
+            type: array
+            default: []
+            items: { type: string }
+          objectsInRoom:
+            type: array
+            default: []
+            items: { type: string }
+          miniMapData:
+            type: array
+            default: []
+      inventory:
+        type: object
+        additionalProperties: false
+        properties:
+          items:
+            type: array
+            default: []
+            items:
+              type: object
+              additionalProperties: false
+              required:
+                - name
+              properties:
+                name: { type: string }
+                description: { type: string }
+                emoji: { type: string }
+                quantity: { type: integer }
+      goals:
+        type: array
+        default: []
+        items: { type: string }
+      npcs:
+        type: array
+        default: []
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - name
+          properties:
+            name: { type: string }
+            relation: { type: string }
+            mood: { type: string }
+            importance:
+              type: string
+              enum: ["high", "medium", "low"]
+            summary: { type: string }
+            relationships: { type: array }
+      sexModule:
+        type: object
+        additionalProperties: false
+        properties:
+          active: { type: boolean, default: false }
+          phase:
+            type: string
+            enum: ["none", "flirting", "sex", "post-sex"]
+            default: "none"
+          position: { type: string, default: "" }
+          pace: { type: string, default: "" }
+          orgasmCount: { type: integer, minimum: 0, default: 0 }
+          sensory_metrics:
+            type: object
+            additionalProperties: false
+            properties:
+              intensity: { type: integer, default: 0 }
+              threshold: { type: integer, default: 0 }
+          marking_history:
+            type: array
+            default: []
+          senses:
+            type: object
+            additionalProperties: false
+            properties:
+              sight: { type: string, default: "" }
+              sound: { type: string, default: "" }
+              smell: { type: string, default: "" }
+              touch: { type: string, default: "" }
+              taste: { type: string, default: "" }
+          male:
+            type: object
+            additionalProperties: true
+          female:
+            type: object
+            additionalProperties: false
+            properties:
+              arousalState: { type: string, default: "" }
+              lubrication: { type: string, default: "" }
+              vagina: { type: string, default: "" }
+              cervix: { type: string, default: "" }
+              uterus: { type: string, default: "" }
+              ovaries: { type: string, default: "" }
+              menstrualCycle:
+                type: object
+                additionalProperties: false
+                properties:
+                  day: { type: integer, default: 1 }
+                  phase: { type: string, default: "follicular" }
+                  fertile: { type: boolean, default: false }
+          stimulusDescription: { type: string, default: "" }
+      reactionModule:
+        type: object
+        additionalProperties: false
+        properties:
+          active: { type: boolean, default: false }
+          character: { type: string, default: "" }
+          stimulus: { type: string, default: "" }
+          reactions:
+            type: array
+            default: []
+            items:
+              type: object
+              additionalProperties: false
+              required:
+                - emoji
+                - label
+                - text
+              properties:
+                emoji: { type: string }
+                label: { type: string }
+                text: { type: string }
+      ntrModule:
+        type: object
+        additionalProperties: false
+        properties:
+          enabled: { type: boolean, default: false }
+          active: { type: boolean, default: false }
+          ntrCharacter: { type: string, default: "" }
+          ntrPartner: { type: string, default: "" }
+          jealousyLevel: { type: integer, minimum: 0, maximum: 100, default: 0 }
+          betrayalStage: { type: string, default: "" }
+          notes: { type: string, default: "" }
+      ui_commands:
+        type: object
+        additionalProperties: false
+        properties:
+          suggested_tab: { type: string, default: "" }
+          notification:
+            type: object
+            additionalProperties: false
+            properties:
+              level:
+                type: string
+                enum: ["info", "warn", "success", "error"]
+              message: { type: string }
+          map_focus: { type: string, default: "" }
+          map_reveal:
+            type: array
+            default: []
+            items: { type: string }
+      meta:
+        type: object
+        additionalProperties: false
+        properties:
+          turn_id: { type: string, default: "t0_v0" }
+          parent_turn_id: { type: string, default: "" }
+          branch_index: { type: integer, default: 0 }
+          validated: { type: boolean, default: false }
+          coerced_fields:
+            type: array
+            default: []
+            items: { type: string }
+          schema_version: { type: string, default: "3.0.0" }
+      img_module:
+        type: object
+        additionalProperties: false
+        properties:
+          anchors:
+            type: object
+            additionalProperties: true
+            properties:
+              char: { type: string, default: "" }
+              user: { type: string, default: "" }
+          scene:
+            type: object
+            additionalProperties: false
+            properties:
+              positive: { type: string, default: "" }
+              negative: { type: string, default: "" }
+              camera_suggestions:
+                type: array
+                default: []
+                items: { type: string }
+          params:
+            type: object
+            additionalProperties: false
+            properties:
+              checkpoint: { type: string, default: "" }
+              loras:
+                type: array
+                default: []
+                items: { type: string }
+              sampler: { type: string, default: "DPM++ 2M Karras" }
+              steps: { type: integer, minimum: 1, maximum: 150, default: 25 }
+              cfg: { type: number, minimum: 1, maximum: 30, default: 7 }
+              clip_skip: { type: integer, minimum: 1, maximum: 12, default: 2 }
+              hires_fix:
+                type: object
+                additionalProperties: false
+                properties:
+                  enabled: { type: boolean, default: false }
+                  upscale: { type: number, default: 1.5 }
+                  denoise: { type: number, default: 0.45 }
+              aspect_ratio: { type: string, default: "3:4" }
+              resolution: { type: string, default: "768x1024" }
+      audit:
+        type: object
+        additionalProperties: false
+        properties:
+          issues:
+            type: array
+            default: []
+            items:
+              type: object
+              additionalProperties: false
+              required:
+                - id
+                - category
+                - severity
+                - message
+              properties:
+                id: { type: string }
+                category:
+                  type: string
+                  enum: ["location", "inventory", "clothing", "relationship", "narrative", "img", "schema"]
+                severity:
+                  type: string
+                  enum: ["info", "warning", "error"]
+                field: { type: string }
+                message: { type: string }
+                suggestedValue: {}
+                ignored: { type: boolean, default: false }
+                corrected: { type: boolean, default: false }
+          ignoredIds:
+            type: array
+            default: []
+            items: { type: string }
+          correctedIds:
+            type: array
+            default: []
+            items: { type: string }
+  chat:
+    type: object
+    additionalProperties: false
+    required:
+      - schema_version
+      - visitedRooms
+      - revealedRooms
+    properties:
+      schema_version:
+        type: string
+        default: "3.0.0"
+      visitedRooms:
+        type: array
+        default: ["Home"]
+        items: { type: string }
+      revealedRooms:
+        type: array
+        default: ["Home"]
+        items: { type: string }
+      knownMap:
+        type: object
+        additionalProperties: false
+        properties:
+          rooms:
+            type: object
+            additionalProperties:
+              type: object
+              properties:
+                x: { type: number }
+                y: { type: number }
+                label: { type: string }
+          connections:
+            type: array
+            items:
+              type: array
+              minItems: 2
+              maxItems: 2
+              items: { type: string }
+      longTermMemory:
+        type: object
+        additionalProperties: false
+        properties:
+          facts:
+            type: array
+            default: []
+            items: { type: string }
+          narrativeSummary:
+            type: string
+            default: ""
+          lastCondensedTurn:
+            type: string
+            default: ""
+      turnHistory:
+        type: array
+        default: []
+        items:
+          type: object
+          additionalProperties: false
+          required:
+            - turn_id
+            - branch_index
+            - timestamp
+          properties:
+            turn_id: { type: string }
+            parent_turn_id: { type: string }
+            branch_index: { type: integer }
+            timestamp: { type: string }
+            summary: { type: string }
+      globalMeta:
+        type: object
+        additionalProperties: false
+        properties:
+          totalTurns: { type: integer, default: 0 }
+          currentBranch: { type: integer, default: 0 }
+
+github_path: "https://github.com/Travelmond/Eros-Status-Stage"
+extension_id: "eros-status-stage-b47cccbfa255"

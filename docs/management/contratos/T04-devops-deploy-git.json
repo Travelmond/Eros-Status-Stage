@@ -1,0 +1,50 @@
+{
+  "task_id": "T04",
+  "title": "DevOps / Deploy / Git — GitHub Actions e Estratégia de Branches",
+  "tier": 3,
+  "area": "devops",
+  "manifesto_ref": "/docs/management/manifesto_de_intencao.md",
+  "task": "Configurar GitHub Actions para deploy automatizado do Stage Chub: branch dev dispara deploy para stage de teste; branch main publica versão estável. Preservar/cirar branches old, dev e main; configurar secret CHUB_AUTH_TOKEN. Garantir que main só seja atualizada por solicitação explícita do usuário após validação.",
+  "tech_spec": {
+    "files_to_modify": [
+      ".gitignore"
+    ],
+    "files_to_create": [
+      ".github/workflows/deploy.yml",
+      ".github/workflows/deploy-dev.yml",
+      "docs/deployment/github-actions.md",
+      "docs/deployment/branch-strategy.md"
+    ],
+    "pattern_to_follow": "Workflows GitHub Actions usam triggers push em branches específicas (dev e main). Cada workflow faz checkout, setup Node 24, npm install, npm run build, upload do artefato zipado para api.chub.ai/extension/{id}/upload via secret CHUB_AUTH_TOKEN. Branch old criada a partir do estado atual de main antes de qualquer push para dev. Nunca fazer push direto em main; deploy estável só ocorre via workflow e após aprovação do usuário.",
+    "dependencies": [
+      "Repositório GitHub: https://github.com/Travelmond/Eros-Status-Stage",
+      "Secret CHUB_AUTH_TOKEN configurado no repositório",
+      "Contrato T03 (chub_meta.yaml presente e válido)",
+      "Contrato T02 (build do Stage funcional)"
+    ]
+  },
+  "hard_rules": [
+    "Nunca fazer push direto na branch main; main só atualizada por workflow de deploy estável e após validação explícita do usuário.",
+    "Branch old deve conter o snapshot do código antigo antes de qualquer alteração no repositório remoto.",
+    "Branch dev deve ser criada a partir de main após a criação de old.",
+    "CHUB_AUTH_TOKEN deve ser armazenado como GitHub Secret; nunca commitado em arquivo.",
+    "Nenhuma API key de OpenRouter deve ser commitada ou exposta em workflow.",
+    "Workflow deve falhar gracefulmente se build ou lint falhar, impedindo deploy.",
+    "Artefato enviado para Chub deve incluir dist/ e public/chub_meta.yaml conforme template oficial."
+  ],
+  "acceptance_criteria": [
+    ".github/workflows/deploy-dev.yml dispara em push para dev e faz deploy para stage de teste.",
+    ".github/workflows/deploy.yml dispara em push para main e faz deploy estável (após aprovação do usuário).",
+    "Branch old existe no repositório remoto com o código antigo preservado.",
+    "Branch dev existe e é a branch de trabalho padrão para novas implementações.",
+    "Secret CHUB_AUTH_TOKEN está configurado no repositório GitHub.",
+    "Build e lint são executados como steps obrigatórios antes do upload.",
+    "Documentação em docs/deployment/ explica o fluxo de branches e como promover dev → main.",
+    "Deploy de teste para dev é validado e responde 200/201 da API do Chub."
+  ],
+  "contracts_to_respect": {
+    "api": "api.chub.ai/extension/{id}/upload — endpoint de deploy do Stage Chub.",
+    "schema": "chub_meta.yaml (Contrato T03) deve estar presente no artefato de deploy.",
+    "component": "Build de produção (Contratos T01/T02) deve gerar dist/ utilizável pelos workflows."
+  }
+}

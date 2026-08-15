@@ -1,0 +1,59 @@
+{
+  "task_id": "T02",
+  "title": "Backend / Lógica de Stage — Porte do Parser, Middleware e Auditoria para TypeScript + StageBase",
+  "tier": 3,
+  "area": "backend",
+  "manifesto_ref": "/docs/management/manifesto_de_intencao.md",
+  "task": "Portar erosParser.js, stateMiddleware.js e consistencyAuditor.js para TypeScript, integrando-os com StageBase. Implementar src/Stage.tsx com os métodos load, beforePrompt, afterResponse, setState e render, retornando messageState e chatState corretos.",
+  "tech_spec": {
+    "files_to_modify": [
+      "src/Stage.tsx"
+    ],
+    "files_to_create": [
+      "src/core/parser.ts",
+      "src/core/middleware.ts",
+      "src/core/state.ts",
+      "src/core/audit.ts",
+      "src/systems/memory.ts",
+      "src/systems/relationships.ts",
+      "src/systems/sexPositions.ts",
+      "src/services/openRouter.ts",
+      "src/services/characterState.ts",
+      "src/types/chub.ts",
+      "src/types/eros-status.ts",
+      "src/utils/index.ts"
+    ],
+    "pattern_to_follow": "Stage.tsx herda StageBase<InitStateType, ChatStateType, MessageStateType, ConfigType> do pacote @chub-ai/stages-ts. Métodos do ciclo de vida retornam objetos contendo messageState e/ou chatState. Parser é 100% framework-agnostic (puro TypeScript), recebe string da IA e retorna estrutura ErosStatusState. Middleware aplica validações, defaults, clamping e integra memory/relationships. Auditoria verifica consistência do estado e emite warnings. Serviços isolam side-effects (OpenRouter fetch, characterState).",
+    "dependencies": [
+      "Contrato T03 (tipagens e schemas de estado)",
+      "Contrato T01 (componente ErosTerminal renderizado em render())",
+      "@chub-ai/stages-ts",
+      "OpenRouter API (fetch nativo)"
+    ]
+  },
+  "hard_rules": [
+    "Parser deve ser 100% framework-agnostic: nenhuma referência a React, StageBase ou DOM.",
+    "Middleware não pode depender de Base44 ou APIs externas não documentadas.",
+    "Stage.tsx deve implementar obrigatoriamente load, beforePrompt, afterResponse, setState e render conforme StageBase.",
+    "Todo estado crítico (personagem, progressões, inventário, localização, relacionamentos) deve retornar em messageState.",
+    "Estado de fog-of-war/mapa deve retornar em chatState.",
+    "Nenhuma API key pode ser persistida em localStorage; ela vem de config do Chub ou input por sessão.",
+    "OpenRouterService deve usar fetch nativo e tratar erros de rede/modelo sem quebrar o Stage.",
+    "Manter compatibilidade com renderização standalone via App.tsx para testes locais."
+  ],
+  "acceptance_criteria": [
+      "src/core/parser.ts compila sem erros e passa nos testes regressivos do parser (blocos ESS, HTML, fallback).",
+      "src/core/middleware.ts aplica defaults, validações e integra memory/relationships sem mutar estado original.",
+      "src/core/audit.ts detecta inconsistências (ex: stat fora de range, item sem categoria) e retorna warnings estruturados.",
+      "src/Stage.tsx implementa todos os métodos do StageBase e tipa corretamente InitStateType, ChatStateType, MessageStateType, ConfigType.",
+      "afterResponse atualiza messageState com base no texto da IA parseado pelo erosParser.",
+      "beforePrompt pode injetar contexto enriquecido (memory, estado atual) no prompt enviado à IA, sem ultrapassar limites de tokens.",
+      "Build (`npm run build`) e lint (`npm run lint`) passam sem erros.",
+      "Testes unitários cobrem pelo menos parser.ts, middleware.ts e audit.ts."
+  ],
+  "contracts_to_respect": {
+    "api": "StageBase da @chub-ai/stages-ts; métodos load/beforePrompt/afterResponse/setState/render.",
+    "schema": "Schemas de estado definidos no Contrato T03; messageState e chatState seguem tipagens.",
+    "component": "ErosTerminal do Contrato T01 é renderizado no método render() do StageBase."
+  }
+}

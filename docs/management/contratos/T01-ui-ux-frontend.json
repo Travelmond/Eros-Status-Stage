@@ -1,0 +1,67 @@
+{
+  "task_id": "T01",
+  "title": "UI/UX e Frontend — Design System Cyberpunk CRT e Componentes do Terminal",
+  "tier": 3,
+  "area": "frontend",
+  "manifesto_ref": "/docs/management/manifesto_de_intencao.md",
+  "task": "Preservar a estética cyberpunk CRT do ESS (fundo #0A0A0A, neon cyan/pink/gold, JetBrains Mono, scanlines, glitch) dentro da estrutura TypeScript do Stage Chub. Criar design tokens, wireframes 320px, adaptar componentes shadcn/ui, animações Framer Motion e os componentes ErosTerminal e painéis.",
+  "tech_spec": {
+    "files_to_modify": [
+      "src/index.css",
+      "tailwind.config.js",
+      "components.json"
+    ],
+    "files_to_create": [
+      "src/components/terminal/ErosTerminal.tsx",
+      "src/components/terminal/StatusPanel.tsx",
+      "src/components/terminal/ProgressPanel.tsx",
+      "src/components/terminal/EmotionPanel.tsx",
+      "src/components/terminal/InventoryPanel.tsx",
+      "src/components/terminal/LocationPanel.tsx",
+      "src/components/terminal/ImagePromptPanel.tsx",
+      "src/components/terminal/NPCPanel.tsx",
+      "src/components/terminal/ModulesPanel.tsx",
+      "src/components/terminal/TerminalHeader.tsx",
+      "src/components/terminal/TerminalFooter.tsx",
+      "src/components/ui/scroll-area.tsx",
+      "src/components/ui/separator.tsx",
+      "src/components/ui/tooltip.tsx",
+      "src/components/ui/badge.tsx",
+      "src/hooks/use-mobile.ts",
+      "src/utils/cn.ts"
+    ],
+    "pattern_to_follow": "Componentes puros React (function components + hooks), sem react-router-dom; todo estado visual derivado de props do tipo ErosStatusState. Usar Tailwind + CSS variables para tokens de cor e tipografia. Animações via Framer Motion com variants reutilizáveis. Componentes shadcn/ui devem ser instalados no estilo new-york e customizados via tokens. Layout responsivo com breakpoint mobile 320px e desktop em painel lateral fixo.",
+    "dependencies": [
+      "Contrato T03 (schemas de estado ErosStatusState)",
+      "Framer Motion",
+      "lucide-react",
+      "shadcn/ui (new-york)",
+      "Radix UI primitives",
+      "clsx + tailwind-merge"
+    ]
+  },
+  "hard_rules": [
+    "Nenhum componente pode depender de react-router-dom.",
+    "Todas as cores devem vir de CSS variables customizadas (tema cyberpunk CRT), nunca hardcoded como classes Tailwind arbitrárias sem token.",
+    "Fonte principal deve ser JetBrains Mono ou monoespaçada equivalente carregada via CSS.",
+    "Efeitos de scanline/glitch devem ser implementados em CSS puro, sem bibliotecas adicionais.",
+    "ErosTerminal deve aceitar ErosStatusState como prop obrigatória e opcionalmente callbacks de interação (onRequestRerunImage, onChangePreset).",
+    "Não persistir configurações de UI no localStorage sem criptografia ou sem alerta de risco; preferir messageState/chatState quando possível.",
+    "Apenas preferências locais (tema, densidade, preset ativo) podem usar localStorage.",
+    "Manter compatibilidade com renderização tanto dentro do StageBase quanto em App.tsx standalone."
+  ],
+  "acceptance_criteria": [
+    "O design system possui tokens documentados para: fundo (#0A0A0A), textos, neon cyan, neon pink, neon gold, bordas, alertas, fonte e tamanhos.",
+    "Wireframes mobile (>=320px) e desktop estão salvos em /docs/design/wireframes/.",
+    "ErosTerminal renderiza sem erros em App.tsx standalone e em Stage.tsx.",
+    "Todos os painéis documentados em docs/04-TERMINAL_CORE.md e docs/05-TERMINAL_PANELS_*.md possuem componente correspondente.",
+    "Animações de entrada/saída dos painéis usam Framer Motion variants.",
+    "Build de produção (`npm run build`) completa sem erros de tipo ou lint.",
+    "Contraste e acessibilidade mínima: textos principais com relação >= 4.5:1 contra o fundo."
+  ],
+  "contracts_to_respect": {
+    "api": "StageBase render() repassa messageState e chatState para ErosTerminal via props.",
+    "schema": "ErosStatusState definido no Contrato T03; painéis não devem acessar campos fora do schema.",
+    "component": "Componentes do terminal consomem ErosStatusState; componentes ui/ são genéricos e reutilizáveis."
+  }
+}
