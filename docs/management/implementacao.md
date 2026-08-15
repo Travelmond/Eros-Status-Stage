@@ -4,7 +4,7 @@
 Materializar o Eros Status Terminal (ESS) v3.0 como um Stage funcional para Chub Venus AI, utilizando a estrutura oficial de Stages em TypeScript (`@chub-ai/stages-ts`, `StageBase`) e portando toda a lógica, parser, middleware, componentes e estética cyberpunk documentados em `/docs`.
 
 ## Fase Atual
-T04 — DevOps / Deploy / Git concluído. Build validado (`npm install`, `npm run typecheck`, `npm run lint`, `npm run build`). Workflows GitHub Actions criados e estratégia de branches configurada (`old`, `dev`, `main`). Código novo commitado na branch `dev`. Próxima etapa: revisão obrigatória da `equipe-revisao` e, com aprovação do usuário, push para `origin/dev` e deploy para stage de teste no Chub.
+Revisão — Iteração 1: REPROVADO. Correções de backend/testes (C1, C3, A1/A2, A4, A5, M4-M8) aplicadas por @dev-backend. Correções de DevOps/metadata (C2, M6) aplicadas por @devops. Aguardando correções de frontend (A3, M1, M2) por @dev-frontend antes de reativar equipe-revisao para iteração 2.
 
 ## Stack Decidida
 - **Framework:** React 18 + TypeScript + Vite 6
@@ -29,6 +29,11 @@ T04 — DevOps / Deploy / Git concluído. Build validado (`npm install`, `npm ru
 10. **Mapeamento de estado documentado** — `docs/architecture/state-mapping.md` define claramente o que vai para `messageState`, `chatState`, `initState` e `localStorage`.
 11. **Tipos oficiais do StageBase** — `src/types/chub.ts` re-exporta `Message`, `Character`, `InitialData`, `StageResponse` e `LoadResponse` de `@chub-ai/stages-ts` para garantir compatibilidade total com a assinatura genérica de `StageBase`.
 12. **Configuração de projeto TypeScript unificada** — `tsconfig.json` inclui `vite.config.ts` e remove `references` problemático, eliminando erro TS6310 e permitindo `tsc --noEmit` limpo.
+13. **Suite de testes Vitest adicionada** — `package.json` inclui scripts `test`/`test:watch`/`test:ui`/`coverage`; `vite.config.ts` configura globals/jsdom; testes cobrem `parser.ts`, `middleware.ts` e `audit.ts` (C1).
+14. **Estado crítico removido do localStorage** — `Stage.tsx` não chama mais `saveCharacterCache`/`loadCharacterCache`; persistência oficial via messageState/chatState do StageBase. Preferências leves usam `setPreference`/`getPreference` com debounce 300ms e tratamento de `QuotaExceededError` (C3/A5).
+15. **Toggles de config conectados** — `ErosTerminal.tsx` propaga mudanças de NTR/auditor/imgAuditor via `onConfigChange`; `App.tsx` mantém estado `config` (A1/A2).
+16. **Débito técnico A4 registrado** — `@chub-ai/stages-ts ^0.3.7` não atualizado nesta iteração; documentado em `docs/architecture/tech-debt.md`.
+17. **Suite de testes Vitest validada** — `npm run test` passa com 17 testes em `parser.test.ts`, `middleware.test.ts` e `audit.test.ts`.
 
 ## Contratos de Execução
 - `T01` — UI/UX e Frontend (`/docs/management/contratos/T01-ui-ux-frontend.json`)
@@ -37,9 +42,9 @@ T04 — DevOps / Deploy / Git concluído. Build validado (`npm install`, `npm ru
 - `T04` — DevOps / Deploy / Git (`/docs/management/contratos/T04-devops-deploy-git.json`)
 
 ## Próximos Passos
-1. `equipe-revisao` auditar obrigatoriamente o entregável integrado (T01 + T02 + T03 + T04).
-2. Tier 3 corrigir eventuais issues apontadas pelos revisores.
-3. @arquiteto-geral validar interface entre T01/T02/T04 e os schemas de T03.
+1. @dev-frontend corrige A3 (CSS inline inválido), A1/A2 complementares de UI, M1 (cores hardcoded), M2 (teste OpenRouter simulado).
+2. Re-executar `npm run typecheck`, `npm run lint`, `npm run build`, `npm run test` após integração das correções de frontend.
+3. @arquiteto-geral coordena reativação da skill `equipe-revisao` para iteração 2.
 4. Com aprovação do usuário, fazer push de `dev` para `origin/dev` e validar deploy de teste no Chub.
 5. Após validação de staging, promover `dev` → `main` mediante solicitação explícita do usuário.
 
@@ -48,6 +53,10 @@ T04 — DevOps / Deploy / Git concluído. Build validado (`npm install`, `npm ru
 - 2026-08-15: T02 reconstituído — parser 100% framework-agnostic, middleware com auditoria/memória/fog-of-war, StageBase tipado e integrado ao `ErosTerminal.tsx`.
 - 2026-08-15: `src/components/terminal/ErosTerminal.tsx` reconstruído para consumir os componentes do T01 em vez de permanecer como stub.
 - 2026-08-15: Auditoria T04 — @devops ainda não executado. Não existem `.github/workflows/`, `docs/deployment/`, branches `old`/`dev` preparadas nem secret `CHUB_AUTH_TOKEN` configurado. Build não validado. Ver relatório em `/docs/audit/2026-08-15_T04_devops/`.
+- 2026-08-15: Auditoria `equipe-revisao` — skill ainda não executada. Nenhum dos 5 revisores (`critico`, `critico-usuario`, `testador`, `auditor-seguranca`, `otimizador`) foi acionado. Contador de iterações: 0. Revisão do entregável integrado (T01 + T02 + T03 + T04) é bloqueante e pendente. Ver relatório em `/docs/audit/2026-08-15_equipe_revisao/`.
+- 2026-08-15: Revisão 1/3 REPROVADA. Findings críticos (C1–C3) e altos (A1–A5) ainda não endereçados. Loop de correção coordenado por `@arquiteto-geral` ainda não iniciado. Contador de iterações permanece 1/3. Ver relatório em `/docs/audit/2026-08-15_correcoes_revisao/`.
+- 2026-08-15: Auditoria das correções Tier 3 (`@dev-backend`, `@dev-frontend`, `@devops`, `@documentacao`) — nenhum agente Tier 3 foi acionado; findings C1–C3 e A1–A5 permanecem intactos; `.github/workflows/` ausente no filesystem apesar de constar como entregue em `tarefas.md`. Ver relatório em `/docs/audit/2026-08-15_correcoes_tier3/`.
+- 2026-08-15: Documentação de débito técnico criada (`docs/architecture/tech-debt.md`) e README/branch-strategy atualizados. A atualização `@chub-ai/stages-ts` de `^0.3.7` para `^0.5.2` é bloqueada pela dependência de React 19; recomenda-se `^0.4.0` como passo intermediário compatível com React 18.
 - Recomendação: executar build e lint para validar integração antes da revisão obrigatória.
 
 ## Riscos e Mitigação
