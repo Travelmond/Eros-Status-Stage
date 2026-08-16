@@ -29,6 +29,12 @@ export interface ConfigType {
    */
   openRouterApiKey?: string;
 
+  /**
+   * Se true, persiste `openRouterApiKey` em localStorage DESTA máquina
+   * (opt-in explícito). AVISO: não é seguro em computadores compartilhados.
+   */
+  rememberApiKey?: boolean;
+
   /** Presets de personagem/cenário disponíveis. */
   presets?: CharacterPreset[];
 

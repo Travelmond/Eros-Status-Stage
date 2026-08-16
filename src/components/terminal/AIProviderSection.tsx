@@ -2,6 +2,7 @@ import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
 import {
   testOpenRouterConnection,
   fetchOpenRouterModels,
@@ -66,6 +67,7 @@ export function AIProviderSection({ config, onConfigChange }: AIProviderSectionP
   const [key, setKey] = useState(config?.openRouterApiKey || '');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'idle' | 'testing' | 'ok' | 'error'>('idle');
+  const [showKey, setShowKey] = useState(false);
 
   // Lista dinamica de modelos (OpenRouter) com fallback offline.
   const [models, setModels] = useState<OpenRouterModelInfo[]>([]);
@@ -73,6 +75,11 @@ export function AIProviderSection({ config, onConfigChange }: AIProviderSectionP
   const [loadError, setLoadError] = useState<string | null>(null);
 
   const selectedModel = config?.openRouterModel || '';
+  const rememberApiKey = config?.rememberApiKey === true;
+
+  // Validacao de formato: nao-bloqueante, apenas aviso visual.
+  const trimmedKey = key.trim();
+  const keyInvalid = trimmedKey !== '' && !trimmedKey.startsWith('sk-or-');
 
   useEffect(() => {
     const nextKey = config?.openRouterApiKey || '';
@@ -123,6 +130,10 @@ export function AIProviderSection({ config, onConfigChange }: AIProviderSectionP
     onConfigChange?.({ openRouterModel: modelId });
   }, [onConfigChange]);
 
+  const handleRememberChange = useCallback((value: boolean) => {
+    onConfigChange?.({ rememberApiKey: value });
+  }, [onConfigChange]);
+
   const handleTest = useCallback(async () => {
     setStatus('testing');
     const model = selectedModel || models[0]?.id || FALLBACK_MODELS[0]?.id || '';
@@ -141,18 +152,50 @@ export function AIProviderSection({ config, onConfigChange }: AIProviderSectionP
       <div className="px-3 py-2 space-y-2">
         <div className="space-y-1">
           <label htmlFor="or-api-key" className="text-[10px] font-mono" style={{ color: 'var(--terminal-text-muted)' }}>OpenRouter API Key</label>
-          <Input
-            id="or-api-key"
-            type="password"
-            value={key}
-            onChange={handleApiKeyInputChange}
-            placeholder="sk-or-v1-..."
-            autoComplete="off"
-            className="h-8 text-xs font-mono bg-[var(--terminal-bg-deep)] border-[color-mix(in_srgb,_var(--neon-green)_30%,_transparent)]"
-          />
+          <div className="relative">
+            <Input
+              id="or-api-key"
+              type={showKey ? 'text' : 'password'}
+              value={key}
+              onChange={handleApiKeyInputChange}
+              placeholder="sk-or-v1-..."
+              autoComplete="off"
+              className="h-8 text-xs font-mono bg-[var(--terminal-bg-deep)] border-[color-mix(in_srgb,_var(--neon-green)_30%,_transparent)] pr-8"
+            />
+            <button
+              type="button"
+              onClick={() => setShowKey((v) => !v)}
+              aria-label={showKey ? 'Ocultar chave' : 'Mostrar chave'}
+              aria-pressed={showKey}
+              className="absolute right-1 top-1/2 -translate-y-1/2 h-6 w-6 inline-flex items-center justify-center rounded transition-colors"
+              style={{ color: 'var(--terminal-text-muted)' }}
+            >
+              {showKey ? '🙈' : '👁️'}
+            </button>
+          </div>
+          {keyInvalid && (
+            <div className="text-[9px] font-mono" style={{ color: 'var(--neon-pink)' }} role="alert">
+              Chave inválida — deve começar com 'sk-or-'
+            </div>
+          )}
           <div className="text-[9px] font-mono" style={{ color: 'var(--terminal-text-faint)' }}>
             Never commit API keys. Prefer Chub secure config for production.
           </div>
+          <div className="flex items-center gap-2 pt-1">
+            <Switch
+              id="or-remember-key"
+              checked={rememberApiKey}
+              onCheckedChange={handleRememberChange}
+            />
+            <label htmlFor="or-remember-key" className="text-[10px] font-mono cursor-pointer" style={{ color: 'var(--terminal-text-secondary)' }}>
+              Lembrar chave nesta máquina
+            </label>
+          </div>
+          {rememberApiKey && (
+            <div className="text-[9px] font-mono" style={{ color: 'var(--neon-pink)' }} role="note">
+              ⚠️ armazena em localStorage deste navegador
+            </div>
+          )}
         </div>
 
         <div className="space-y-1">

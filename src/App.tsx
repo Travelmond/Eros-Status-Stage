@@ -34,6 +34,13 @@ const DEMO_CONFIG: ConfigType = {
 const CONFIG_PREF_KEY = 'ui_config';
 
 /**
+ * Chave dedicada (localStorage) para a API key do OpenRouter quando o usuário
+ * opta explicitamente por "lembrar chave nesta máquina" (rememberApiKey=true).
+ * Nunca é gravada junto às preferências normais — apenas aqui, sob opt-in.
+ */
+const REMEMBERED_KEY_STORAGE = 'eros_remembered_openrouter_key';
+
+/**
  * Remove campos sensíveis antes de persistir a config.
  * `openRouterApiKey` NUNCA é gravada em localStorage — permanece apenas em memória.
  */
@@ -170,16 +177,35 @@ export default function App() {
     visitedRooms: ['Home', 'Bedroom'],
     revealedRooms: ['Home', 'Bedroom', 'Kitchen'],
   });
-  const [config, setConfig] = useState<ConfigType>(() => ({
-    ...DEMO_CONFIG,
-    ...getPreference<Partial<ConfigType>>(CONFIG_PREF_KEY, {}),
-  }));
+  const [config, setConfig] = useState<ConfigType>(() => {
+    const cfg: ConfigType = {
+      ...DEMO_CONFIG,
+      ...getPreference<Partial<ConfigType>>(CONFIG_PREF_KEY, {}),
+    };
+    if (cfg.rememberApiKey) {
+      try {
+        cfg.openRouterApiKey = localStorage.getItem(REMEMBERED_KEY_STORAGE) || '';
+      } catch {
+        /* ignore — localStorage pode falhar em iframe sandbox/private mode */
+      }
+    }
+    return cfg;
+  });
   const [log, setLog] = useState<string[]>([]);
 
   const handleConfigChange = useCallback((patch: Partial<ConfigType>) => {
     setConfig((prev) => {
       const next = { ...prev, ...patch };
       setPreference(CONFIG_PREF_KEY, sanitizeConfigForStorage(next));
+      try {
+        if (next.rememberApiKey && next.openRouterApiKey) {
+          localStorage.setItem(REMEMBERED_KEY_STORAGE, next.openRouterApiKey);
+        } else if (next.rememberApiKey === false) {
+          localStorage.removeItem(REMEMBERED_KEY_STORAGE);
+        }
+      } catch {
+        /* ignore — localStorage pode falhar em iframe sandbox/private mode */
+      }
       return next;
     });
   }, []);

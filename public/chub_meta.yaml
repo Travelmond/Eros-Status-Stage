@@ -29,6 +29,10 @@ config_schema:
       default: ""
       description: "Chave de API do OpenRouter. NUNCA compartilhe ou persista em localStorage."
       secret: true
+    rememberApiKey:
+      type: boolean
+      default: false
+      description: "Se marcado, armazena a chave do OpenRouter em localStorage DESTA máquina. AVISO: não é seguro em computadores compartilhados."
     presets:
       type: array
       default: []
