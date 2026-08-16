@@ -226,8 +226,14 @@
   - `public/chub_meta.yaml`: `rememberApiKey` adicionado ao `config_schema.properties` (boolean, default `false`, com aviso de segurança).
   - `src/App.tsx`: chave dedicada `REMEMBERED_KEY_STORAGE = 'eros_remembered_openrouter_key'`; restauração da chave na inicialização lazy do `config` (apenas se `cfg.rememberApiKey`); `handleConfigChange` grava (`setItem`) quando `rememberApiKey && openRouterApiKey` e remove (`removeItem`) quando `rememberApiKey === false`; tudo em try/catch. `sanitizeConfigForStorage` segue excluindo `openRouterApiKey` das preferências normais (`ui_config`).
   - `src/components/terminal/AIProviderSection.tsx`: Switch "Lembrar chave nesta máquina" (`config.rememberApiKey` ↔ `onConfigChange({ rememberApiKey })`), aviso "⚠️ armazena em localStorage deste navegador", validação visual não-bloqueante de formato (`sk-or-`) em `var(--neon-pink)` e botão 👁️/🙈 para alternar `type` password↔text.
-  - Regra de segurança mantida: a chave só é persistida com opt-in explícito (`rememberApiKey === true`).
-  - Validação: `npm run typecheck` ✅, `npm run lint` ✅, `npm run build` ✅, `npm run test` ✅ (45 testes). **Sem push.**
+   - Regra de segurança mantida: a chave só é persistida com opt-in explícito (`rememberApiKey === true`).
+   - Validação: `npm run typecheck` ✅, `npm run lint` ✅, `npm run build` ✅, `npm run test` ✅ (45 testes). **Sem push.**
+
+## Tarefas Concluídas
+- [x] Validação + commit da opção "lembrar chave" + validação de API key — @devops — 2026-08-15
+   - Validação limpa: `npm run typecheck` ✅, `npm run lint` ✅, `npm run build` ✅, `npm run test` ✅ (45 testes / 5 arquivos).
+   - Commit `b9c61b5` na branch `dev` (11 arquivos, 238+/16−): `feat: opção de lembrar chave OpenRouter (opt-in) + validação sk-or- e mostrar/ocultar`.
+   - **Sem push** — aguardando autorização do usuário.
 
 ## Tarefas Pendentes
 - [ ] Push para `origin/dev` — @devops — aguardando autorização do usuário

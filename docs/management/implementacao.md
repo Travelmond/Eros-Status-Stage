@@ -6,9 +6,9 @@ Materializar o Eros Status Terminal (ESS) v3.0 como um Stage funcional para Chub
 ## Fase Atual
 Validação completa + commit na branch `dev` **sem push** (aguardando autorização do usuário).
 
-- Commit `946881e` (`fix: mescla config no TestRunner (merge) + persiste preferências sem API key`) criado em `refs/heads/dev` — 8 arquivos (211 inserções / 2 remoções), incluindo `src/App.tsx` e relatórios de auditoria `docs/audit/2026-08-15_fix_config_persistencia/`.
+- Commit `b9c61b5` (`feat: opção de lembrar chave OpenRouter (opt-in) + validação sk-or- e mostrar/ocultar`) criado em `refs/heads/dev` — 11 arquivos (238 inserções / 16 remoções), incluindo `src/App.tsx`, `src/components/terminal/AIProviderSection.tsx`, `src/types/config.ts`, `public/chub_meta.yaml` e relatórios de auditoria `docs/audit/2026-08-15_lembrar_chave/`.
 - Validação limpa: `npm run typecheck` ✅, `npm run lint` ✅, `npm run build` ✅, `npm run test` ✅ (45 testes / 5 arquivos).
-- Commit anterior `613df57` (`feat: montagem do Stage via ReactRunner + listagem dinâmica de modelos OpenRouter`) preservado.
+- Commit anterior `946881e` (`fix: mescla config no TestRunner (merge) + persiste preferências sem API key`) preservado.
 - Push para `origin/dev` **NÃO executado** — aguardando aprovação explícita do usuário (`/git push` ou comando equivalente).
 - Histórico anterior de branches remotos (em `https://github.com/Travelmond/Eros-Status-Stage`) permanece inalterado desde o commit `2b114f8`.
 
