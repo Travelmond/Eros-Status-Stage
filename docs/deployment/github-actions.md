@@ -17,7 +17,7 @@ A API do Chub (`api.chub.ai`) retorna **HTTP 403 "This service is not available 
 
 ### `.github/workflows/deploy-dev.yml`
 
-- **Trigger:** push na branch `dev` ou execução manual (`workflow_dispatch`).
+- **Trigger:** execução manual (`workflow_dispatch`) **apenas** — sem trigger automático por push, pois a API do Chub (`api.chub.ai`) está geo-bloqueada em runners do GitHub Actions (403) e o deploy é feito via script local a partir de IP liberado.
 - **Environment:** `development`.
 - **Etapa final:** faz upload do pacote para `https://api.chub.ai/extension/${CHUB_EXTENSION_ID_DEV}/upload` usando os secrets `CHUB_AUTH_TOKEN` e `CHUB_EXTENSION_ID_DEV`, com header `CH-API-KEY`.
 

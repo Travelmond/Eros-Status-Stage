@@ -1,9 +1,6 @@
 name: Deploy to Chub (dev)
 
 on:
-  push:
-    branches:
-      - dev
   workflow_dispatch:
 
 env:
