@@ -207,6 +207,13 @@
   - **Sem push** — aguardando autorização do usuário.
   - Nenhum segredo no diff (apenas placeholder `sk-or-v1-...`).
 
+## Tarefas Concluídas
+- [x] Corrigir bug de merge de config + persistência de preferências no TestRunner — @dev-frontend — 2026-08-15
+  - `src/App.tsx`: `onConfigChange={setConfig}` → `handleConfigChange` (merge `{ ...prev, ...patch }`), corrigindo apagamento mútuo de `openRouterApiKey`/`openRouterModel`.
+  - Persistência leve: `CONFIG_PREF_KEY = 'ui_config'` com `setPreference`/`getPreference`; `sanitizeConfigForStorage` remove `openRouterApiKey` antes de gravar (API key só em memória).
+  - Estado inicializado mesclando `DEMO_CONFIG` + preferências salvas (sem restaurar API key).
+  - Validação: `npm run typecheck` ✅, `npm run lint` ✅, `npm run build` ✅, `npm run test` ✅ (45 testes).
+
 ## Tarefas Pendentes
 - [ ] Push para `origin/dev` — @devops — aguardando autorização do usuário
 - [ ] Rodar o projeto localmente (`npm run dev`) para validação — @devops

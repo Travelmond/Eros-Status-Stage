@@ -4,6 +4,7 @@ import { createInitialState } from '@/core/state';
 import { parseErosStatusFromMessage } from '@/core/parser';
 import { processIncomingState } from '@/core/middleware';
 import { condenseChatMemory } from '@/systems/memory';
+import { setPreference, getPreference } from '@/services/characterState';
 import type { ErosStatusState, ErosChatState } from '@/types/eros-status';
 import type { ConfigType } from '@/types/config';
 import { Button } from '@/components/ui/button';
@@ -25,6 +26,21 @@ const DEMO_CONFIG: ConfigType = {
   barStyle: 'bar',
   density: 'comfortable',
 };
+
+/**
+ * Chave de persistência (localStorage) para as preferências de UI do TestRunner.
+ * A API key é intencionalmente excluída do armazenamento (regra de segurança).
+ */
+const CONFIG_PREF_KEY = 'ui_config';
+
+/**
+ * Remove campos sensíveis antes de persistir a config.
+ * `openRouterApiKey` NUNCA é gravada em localStorage — permanece apenas em memória.
+ */
+function sanitizeConfigForStorage(config: ConfigType): Partial<ConfigType> {
+  const { openRouterApiKey: _omit, ...rest } = config;
+  return rest;
+}
 
 function buildDemoState(variant: 'default' | 'sex' | 'reaction' | 'ntr' = 'default'): ErosStatusState {
   const base = createInitialState({
@@ -154,8 +170,19 @@ export default function App() {
     visitedRooms: ['Home', 'Bedroom'],
     revealedRooms: ['Home', 'Bedroom', 'Kitchen'],
   });
-  const [config, setConfig] = useState<ConfigType>(DEMO_CONFIG);
+  const [config, setConfig] = useState<ConfigType>(() => ({
+    ...DEMO_CONFIG,
+    ...getPreference<Partial<ConfigType>>(CONFIG_PREF_KEY, {}),
+  }));
   const [log, setLog] = useState<string[]>([]);
+
+  const handleConfigChange = useCallback((patch: Partial<ConfigType>) => {
+    setConfig((prev) => {
+      const next = { ...prev, ...patch };
+      setPreference(CONFIG_PREF_KEY, sanitizeConfigForStorage(next));
+      return next;
+    });
+  }, []);
 
   const handleCondenseMemory = useCallback(() => {
     setChatState((prev) => condenseChatMemory(prev));
@@ -269,7 +296,7 @@ export default function App() {
           config={config}
           onParse={handleParse}
           onApplyState={handleApplyState}
-          onConfigChange={setConfig}
+          onConfigChange={handleConfigChange}
           onCorrectAudit={handleCorrectAudit}
           onIgnoreAudit={handleIgnoreAudit}
           onCondenseMemory={handleCondenseMemory}
