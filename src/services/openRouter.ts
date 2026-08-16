@@ -30,6 +30,48 @@ export const AVAILABLE_MODELS: OpenRouterModel[] = [
   { id: 'nousresearch/hermes-3-llama-3.1-70b', label: 'Hermes 3 70B (roleplay)', tier: 'mid' },
 ];
 
+export const OPENROUTER_MODELS_URL = 'https://openrouter.ai/api/v1/models';
+
+export interface OpenRouterModelInfo {
+  id: string;
+  name: string;
+  context_length?: number;
+  pricing?: { prompt?: string | number; completion?: string | number };
+  description?: string;
+}
+
+/**
+ * Cache em memória (module-level) para evitar refetch a cada montagem.
+ * Somente listas de sucesso (não-vazias) são cacheadas; erros retornam []
+ * e permitem uma nova tentativa na próxima chamada.
+ */
+let modelsCache: OpenRouterModelInfo[] | null = null;
+
+/** Limpa o cache de modelos (útil em testes). */
+export function resetOpenRouterModelsCache(): void {
+  modelsCache = null;
+}
+
+/**
+ * Busca a lista completa de modelos disponíveis no OpenRouter.
+ * Endpoint público (não requer API key). Retorna [] em caso de erro.
+ */
+export async function fetchOpenRouterModels(): Promise<OpenRouterModelInfo[]> {
+  if (modelsCache !== null) return modelsCache;
+  try {
+    const response = await fetch(OPENROUTER_MODELS_URL, {
+      headers: { 'Content-Type': 'application/json' },
+    });
+    if (!response.ok) return [];
+    const payload = (await response.json()) as { data?: OpenRouterModelInfo[] };
+    const list = Array.isArray(payload?.data) ? payload.data : [];
+    modelsCache = list;
+    return list;
+  } catch {
+    return [];
+  }
+}
+
 export class OpenRouterError extends Error {
   status: number;
   raw: unknown;

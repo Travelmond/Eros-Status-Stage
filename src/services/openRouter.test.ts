@@ -1,5 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { callOpenRouter, callOpenRouterSimple, testOpenRouterConnection, OpenRouterError, DEFAULT_TIMEOUT_MS } from './openRouter';
+import {
+  callOpenRouter,
+  callOpenRouterSimple,
+  testOpenRouterConnection,
+  fetchOpenRouterModels,
+  resetOpenRouterModelsCache,
+  OpenRouterError,
+  DEFAULT_TIMEOUT_MS,
+} from './openRouter';
 
 describe('callOpenRouter', () => {
   beforeEach(() => {
@@ -110,5 +118,53 @@ describe('callOpenRouter', () => {
     const result = await testOpenRouterConnection('sk-test', 'openai/gpt-4o-mini');
     expect(result.ok).toBe(false);
     expect(result.message).toContain('Network failure');
+  });
+});
+
+describe('fetchOpenRouterModels', () => {
+  beforeEach(() => {
+    resetOpenRouterModelsCache();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('returns model list when the API responds with { data: [...] }', async () => {
+    const models = [
+      { id: 'openai/gpt-4o', name: 'GPT-4o', context_length: 128000 },
+      { id: 'anthropic/claude-3.5-sonnet', name: 'Claude 3.5 Sonnet' },
+    ];
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: true,
+      json: async () => ({ data: models }),
+    });
+
+    const result = await fetchOpenRouterModels();
+    expect(result).toEqual(models);
+    expect(result).toHaveLength(2);
+    expect(result[0].id).toBe('openai/gpt-4o');
+  });
+
+  it('returns [] when fetch rejects', async () => {
+    global.fetch = vi.fn().mockRejectedValue(new Error('Network failure'));
+
+    await expect(fetchOpenRouterModels()).resolves.toEqual([]);
+  });
+
+  it('returns [] when the response is not ok', async () => {
+    global.fetch = vi.fn().mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: async () => ({}),
+    });
+
+    await expect(fetchOpenRouterModels()).resolves.toEqual([]);
+  });
+
+  it('returns [] when the payload has no data array', async () => {
+    global.fetch = vi.fn().mockResolvedValue({ ok: true, json: async () => ({}) });
+
+    await expect(fetchOpenRouterModels()).resolves.toEqual([]);
   });
 });

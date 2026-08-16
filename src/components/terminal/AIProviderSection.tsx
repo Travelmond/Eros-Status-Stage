@@ -1,41 +1,59 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { testOpenRouterConnection } from '@/services/openRouter';
+import {
+  testOpenRouterConnection,
+  fetchOpenRouterModels,
+  AVAILABLE_MODELS,
+} from '@/services/openRouter';
+import type { OpenRouterModelInfo } from '@/services/openRouter';
 import type { ConfigType } from '@/types/config';
 
-interface ModelInfo {
-  id: string;
-  name: string;
-  context_length: number;
-  pricing: { prompt: number; completion: number };
-  description?: string;
+// Fallback offline: converte AVAILABLE_MODELS (id/label/tier) para o shape
+// consumido pela UI (OpenRouterModelInfo). Fallback nao tem context/pricing.
+const FALLBACK_MODELS: OpenRouterModelInfo[] = AVAILABLE_MODELS.map((m) => ({
+  id: m.id,
+  name: m.label,
+}));
+
+/** `128000` -> `128k`; `1000000` -> `1000k`. Retorna null se invalido. */
+function formatContextLength(n?: number): string | null {
+  if (typeof n !== 'number' || !Number.isFinite(n) || n <= 0) return null;
+  return n >= 1000 ? `${Math.round(n / 1000)}k` : `${n}`;
 }
 
-const DEFAULT_MODELS: ModelInfo[] = [
-  {
-    id: 'openai/gpt-4o-mini',
-    name: 'GPT-4o Mini',
-    context_length: 128000,
-    pricing: { prompt: 0.15, completion: 0.6 },
-    description: 'Fast and cheap for structured extraction.',
-  },
-  {
-    id: 'anthropic/claude-3.5-haiku',
-    name: 'Claude 3.5 Haiku',
-    context_length: 200000,
-    pricing: { prompt: 0.8, completion: 4 },
-    description: 'Great instruction following.',
-  },
-  {
-    id: 'google/gemini-flash-1.5',
-    name: 'Gemini Flash 1.5',
-    context_length: 1000000,
-    pricing: { prompt: 0.075, completion: 0.3 },
-    description: 'Huge context window, low price.',
-  },
-];
+/** Converte preco por token em preco por milhao (numerico). */
+function toPerMillion(v?: string | number): number | null {
+  if (v == null) return null;
+  const num = typeof v === 'string' ? Number(v) : v;
+  if (!Number.isFinite(num)) return null;
+  return num * 1_000_000;
+}
+
+/** `0.00000015` -> `$0.15/M`; `0.0000006` -> `$0.60/M`. */
+function formatPrice(v?: string | number): string | null {
+  const perM = toPerMillion(v);
+  if (perM == null) return null;
+  const decimals = perM < 0.01 ? 4 : 2;
+  return `$${perM.toFixed(decimals)}/M`;
+}
+
+/** Linha de metadados: `ctx 128k · $0.15/M in · $0.60/M out`. */
+function ModelMeta({ model }: { model: OpenRouterModelInfo }) {
+  const parts: string[] = [];
+  const ctx = formatContextLength(model.context_length);
+  if (ctx) parts.push(`ctx ${ctx}`);
+  const inPrice = formatPrice(model.pricing?.prompt);
+  const outPrice = formatPrice(model.pricing?.completion);
+  if (inPrice || outPrice) parts.push(`${inPrice ?? '—'} in · ${outPrice ?? '—'} out`);
+  if (parts.length === 0) return null;
+  return (
+    <div className="text-[9px] font-mono mt-0.5" style={{ color: 'var(--terminal-text-faint)' }}>
+      {parts.join(' · ')}
+    </div>
+  );
+}
 
 interface AIProviderSectionProps {
   config?: ConfigType | null;
@@ -43,27 +61,57 @@ interface AIProviderSectionProps {
 }
 
 export function AIProviderSection({ config, onConfigChange }: AIProviderSectionProps) {
-  // Fonte de verdade: `config.openRouterModel` / `config.openRouterApiKey`.
-  // O estado local abaixo é apenas transitório de input, sincronizado com
-  // `config` via useEffect — toda alteração propaga imediatamente para
-  // `onConfigChange`.
+  // Fonte de verdade: `config.openRouterModel` (derivado, sem estado duplicado).
+  // `key` e apenas input transitorio, propagado imediatamente para `onConfigChange`.
   const [key, setKey] = useState(config?.openRouterApiKey || '');
-  const [selectedModel, setSelectedModel] = useState(config?.openRouterModel || '');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'idle' | 'testing' | 'ok' | 'error'>('idle');
 
+  // Lista dinamica de modelos (OpenRouter) com fallback offline.
+  const [models, setModels] = useState<OpenRouterModelInfo[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  const selectedModel = config?.openRouterModel || '';
+
   useEffect(() => {
     const nextKey = config?.openRouterApiKey || '';
-    const nextModel = config?.openRouterModel || '';
     setKey((prev) => (nextKey !== prev ? nextKey : prev));
-    setSelectedModel((prev) => (nextModel !== prev ? nextModel : prev));
-  }, [config?.openRouterApiKey, config?.openRouterModel]);
+  }, [config?.openRouterApiKey]);
 
-  const filtered = DEFAULT_MODELS.filter(
-    (m) =>
-      m.name.toLowerCase().includes(query.toLowerCase()) ||
-      m.id.toLowerCase().includes(query.toLowerCase()),
-  );
+  useEffect(() => {
+    let cancelled = false;
+    async function loadModels() {
+      try {
+        const list = await fetchOpenRouterModels();
+        if (cancelled) return;
+        setModels(list.length > 0 ? list : FALLBACK_MODELS);
+        setLoadError(null);
+      } catch (err) {
+        if (cancelled) return;
+        setLoadError(err instanceof Error ? err.message : 'Failed to load models');
+        setModels(FALLBACK_MODELS);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    loadModels();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const normalizedQuery = query.trim().toLowerCase();
+  const filtered = useMemo(() => {
+    if (!normalizedQuery) return models;
+    return models.filter(
+      (m) =>
+        m.name.toLowerCase().includes(normalizedQuery) ||
+        m.id.toLowerCase().includes(normalizedQuery),
+    );
+  }, [models, normalizedQuery]);
+
+  const showCustomOption = normalizedQuery !== '' && filtered.length === 0;
 
   const handleApiKeyInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
@@ -71,17 +119,16 @@ export function AIProviderSection({ config, onConfigChange }: AIProviderSectionP
     onConfigChange?.({ openRouterApiKey: value });
   }, [onConfigChange]);
 
-  const handleModelSelect = useCallback((model: string) => {
-    setSelectedModel(model);
-    onConfigChange?.({ openRouterModel: model });
+  const handleModelSelect = useCallback((modelId: string) => {
+    onConfigChange?.({ openRouterModel: modelId });
   }, [onConfigChange]);
 
   const handleTest = useCallback(async () => {
     setStatus('testing');
-    const model = selectedModel || DEFAULT_MODELS[0]?.id || '';
+    const model = selectedModel || models[0]?.id || FALLBACK_MODELS[0]?.id || '';
     const result = await testOpenRouterConnection(key, model);
     setStatus(result.ok ? 'ok' : 'error');
-  }, [key, selectedModel]);
+  }, [key, selectedModel, models]);
 
   return (
     <div
@@ -93,12 +140,14 @@ export function AIProviderSection({ config, onConfigChange }: AIProviderSectionP
       </div>
       <div className="px-3 py-2 space-y-2">
         <div className="space-y-1">
-          <label className="text-[10px] font-mono" style={{ color: 'var(--terminal-text-muted)' }}>OpenRouter API Key</label>
+          <label htmlFor="or-api-key" className="text-[10px] font-mono" style={{ color: 'var(--terminal-text-muted)' }}>OpenRouter API Key</label>
           <Input
+            id="or-api-key"
             type="password"
             value={key}
             onChange={handleApiKeyInputChange}
             placeholder="sk-or-v1-..."
+            autoComplete="off"
             className="h-8 text-xs font-mono bg-[var(--terminal-bg-deep)] border-[color-mix(in_srgb,_var(--neon-green)_30%,_transparent)]"
           />
           <div className="text-[9px] font-mono" style={{ color: 'var(--terminal-text-faint)' }}>
@@ -107,34 +156,71 @@ export function AIProviderSection({ config, onConfigChange }: AIProviderSectionP
         </div>
 
         <div className="space-y-1">
-          <label className="text-[10px] font-mono" style={{ color: 'var(--terminal-text-muted)' }}>Model</label>
+          <label htmlFor="or-model-search" className="text-[10px] font-mono" style={{ color: 'var(--terminal-text-muted)' }}>Model</label>
           <Input
+            id="or-model-search"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Filter models..."
+            placeholder="Search models or type a custom model ID..."
+            aria-label="Search OpenRouter models"
             className="h-8 text-xs font-mono bg-[var(--terminal-bg-deep)] border-[color-mix(in_srgb,_var(--neon-green)_30%,_transparent)]"
           />
-          <div className="flex flex-wrap gap-1 mt-1">
-            {filtered.map((m) => (
-              <button
-                key={m.id}
-                onClick={() => handleModelSelect(m.id)}
-                className="text-left rounded p-1.5 flex-1 min-w-[120px] transition-all"
-                style={{
-                  border: `1px solid ${selectedModel === m.id ? 'var(--neon-green)' : 'var(--terminal-text-ghost)'}`,
-                  background: selectedModel === m.id ? 'color-mix(in srgb, var(--neon-green) 10%, transparent)' : 'transparent',
-                }}
-              >
-                <div className="text-[10px] font-mono font-bold" style={{ color: selectedModel === m.id ? 'var(--neon-green)' : 'var(--terminal-text-secondary)' }}>
-                  {m.name}
-                </div>
-                <div className="text-[9px] font-mono" style={{ color: 'var(--terminal-text-muted)' }}>{m.description}</div>
-                <div className="text-[9px] font-mono mt-0.5" style={{ color: 'var(--terminal-text-faint)' }}>
-                  ctx {Math.round(m.context_length / 1000)}k · ${m.pricing.prompt}/${m.pricing.completion}
-                </div>
-              </button>
-            ))}
-          </div>
+
+          {loadError && (
+            <div className="text-[9px] font-mono" style={{ color: 'var(--neon-pink)' }} role="alert">
+              Couldn&apos;t fetch models ({loadError}). Showing offline fallback.
+            </div>
+          )}
+
+          {loading ? (
+            <div className="py-2 text-[10px] font-mono" style={{ color: 'var(--terminal-text-muted)' }} role="status" aria-live="polite">
+              Loading models...
+            </div>
+          ) : (
+            <div className="flex flex-wrap gap-1 mt-1">
+              {filtered.map((m) => (
+                <button
+                  key={m.id}
+                  type="button"
+                  onClick={() => handleModelSelect(m.id)}
+                  aria-pressed={selectedModel === m.id}
+                  className="text-left rounded p-1.5 flex-1 min-w-[120px] transition-all"
+                  style={{
+                    border: `1px solid ${selectedModel === m.id ? 'var(--neon-green)' : 'var(--terminal-text-ghost)'}`,
+                    background: selectedModel === m.id ? 'color-mix(in srgb, var(--neon-green) 10%, transparent)' : 'transparent',
+                  }}
+                >
+                  <div className="text-[10px] font-mono font-bold" style={{ color: selectedModel === m.id ? 'var(--neon-green)' : 'var(--terminal-text-secondary)' }}>
+                    {m.name}
+                  </div>
+                  {m.description && (
+                    <div className="text-[9px] font-mono" style={{ color: 'var(--terminal-text-muted)' }}>{m.description}</div>
+                  )}
+                  <ModelMeta model={m} />
+                </button>
+              ))}
+
+              {showCustomOption && (
+                <button
+                  type="button"
+                  onClick={() => handleModelSelect(query.trim())}
+                  aria-pressed={selectedModel === query.trim()}
+                  className="text-left rounded p-1.5 flex-1 min-w-[120px] transition-all"
+                  style={{
+                    border: `1px solid ${selectedModel === query.trim() ? 'var(--neon-pink)' : 'var(--terminal-text-ghost)'}`,
+                    background: selectedModel === query.trim() ? 'color-mix(in srgb, var(--neon-pink) 10%, transparent)' : 'transparent',
+                  }}
+                >
+                  <div className="text-[10px] font-mono font-bold" style={{ color: 'var(--neon-pink)' }}>
+                    Use custom model: {query.trim()}
+                  </div>
+                  <div className="text-[9px] font-mono" style={{ color: 'var(--terminal-text-muted)' }}>
+                    Set this exact ID as the model (new/alias not listed yet).
+                  </div>
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="flex items-center gap-2" aria-live="polite" aria-atomic="true">

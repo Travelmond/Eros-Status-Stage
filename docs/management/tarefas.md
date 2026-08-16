@@ -184,6 +184,22 @@
   - `npm install`, `npm run typecheck`, `npm run lint`, `npm run build`, `npm run test` (36 testes) passaram.
   - Commit do polimento na branch `dev` (sem push, aguardando autorização do usuário).
 
+## Tarefas Concluídas
+- [x] Montagem correta do Stage + busca dinâmica de modelos OpenRouter + teste de integração — @dev-backend — 2026-08-15
+  - `src/main.tsx` reescrito: seleciona `App` (TestRunner, dev OU `?test`) vs `ReactRunner` (produção); `StrictMode` só no `App`.
+  - `src/services/openRouter.ts`: `OPENROUTER_MODELS_URL`, `OpenRouterModelInfo`, `fetchOpenRouterModels()` (retorna `[]` em erro) + cache em memória (`resetOpenRouterModelsCache`); `AVAILABLE_MODELS` mantido como fallback offline.
+  - `src/services/openRouter.test.ts`: testes de `fetchOpenRouterModels` (lista em `{ data: [...] }`, `[]` em fetch reject / `!ok` / sem `data`).
+  - `src/Stage.test.tsx`: teste de integração do ciclo de vida (load/beforePrompt/afterResponse/setState/render) sem o Chub.
+  - `src/vite-env.d.ts` criado (`vite/client`); `sass-embedded` adicionado como devDependency (build do `ReactRunner` puxa `index.scss` da lib).
+   - Validação: `npm install`, `npm run typecheck`, `npm run lint`, `npm run build`, `npm run test` passaram (45 testes).
+- [x] Painel de IA lista TODOS os modelos OpenRouter dinamicamente — @dev-frontend — 2026-08-15
+   - `AIProviderSection.tsx` consome `fetchOpenRouterModels` + `OpenRouterModelInfo` (monta a lista dinâmica no `mount`, com `loading` "Loading models...", `error` discreto e fallback offline `AVAILABLE_MODELS` convertido para `OpenRouterModelInfo`).
+   - Input de busca filtra por `name`/`id` (case-insensitive); cartões exibem `name`, `description`, `context_length` (`128k`) e preço por milhão (`$0.15/M in · $0.60/M out` — `pricing` por token × 1_000_000).
+   - Seleção propaga `onConfigChange({ openRouterModel: id })`; opção "Use custom model: {texto}" quando o texto não casa com nenhum modelo (aliases/novos modelos).
+   - Fonte de verdade segue `config.openRouterModel` (sem estado duplicado); "Test Connection" usa modelo selecionado + API key.
+   - Acessibilidade: `role="status"`/`aria-live` no loading, `role="alert"` no erro, `aria-pressed`/`htmlFor`/`aria-label` nos cartões/inputs.
+   - Validação: `npm install`, `npm run typecheck`, `npm run lint`, `npm run build`, `npm run test` passaram (45 testes).
+
 ## Tarefas Pendentes
 - [ ] Rodar o projeto localmente (`npm run dev`) para validação — @devops
 - [ ] Deploy de teste no Chub — @devops — após validação (`CHUB_EXTENSION_ID_DEV` + `CHUB_AUTH_TOKEN`)
