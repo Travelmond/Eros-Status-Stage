@@ -4,7 +4,13 @@
 Materializar o Eros Status Terminal (ESS) v3.0 como um Stage funcional para Chub Venus AI, utilizando a estrutura oficial de Stages em TypeScript (`@chub-ai/stages-ts`, `StageBase`) e portando toda a lógica, parser, middleware, componentes e estética cyberpunk documentados em `/docs`.
 
 ## Fase Atual
-Push concluído para `origin/dev`. Branches remotos reorganizados e backup criado.
+Validação completa + commit na branch `dev` **sem push** (aguardando autorização do usuário).
+
+- Commit `613df57` (`feat: montagem do Stage via ReactRunner + listagem dinâmica de modelos OpenRouter`) criado em `refs/heads/dev`.
+- Validação limpa: `npm install` ✅, `npm run typecheck` ✅, `npm run lint` ✅, `npm run build` ✅, `npm run test` ✅ (45 testes).
+- 20 arquivos alterados (1.701 inserções / 80 remoções), incluindo `src/Stage.test.tsx`, `src/vite-env.d.ts` e relatórios de auditoria.
+- Push para `origin/dev` **NÃO executado** — aguardando aprovação explícita do usuário (`/git push` ou comando equivalente).
+- Histórico anterior de branches remotos (em `https://github.com/Travelmond/Eros-Status-Stage`) permanece inalterado desde o commit `2b114f8`.
 
 - Revisão pós-Tribunal **aprovada**; commit `692c571` preservado em `dev-backup`.
 - Push para `origin/dev` **realizado** (2026-08-15): commit `2b114f8` (`chore: sincroniza conteúdo local ESS v3.0 antes do push`).

@@ -200,7 +200,15 @@
    - Acessibilidade: `role="status"`/`aria-live` no loading, `role="alert"` no erro, `aria-pressed`/`htmlFor`/`aria-label` nos cartões/inputs.
    - Validação: `npm install`, `npm run typecheck`, `npm run lint`, `npm run build`, `npm run test` passaram (45 testes).
 
+## Tarefas Concluídas
+- [x] Validação + commit do fix ReactRunner + listagem dinâmica de modelos — @devops — 2026-08-15
+  - `npm install` ✅ (8 vulns reportadas, não bloqueantes), `npm run typecheck` ✅, `npm run lint` ✅, `npm run build` ✅, `npm run test` ✅ (45 testes / 5 arquivos).
+  - Commit `613df57` na branch `dev` (20 arquivos, 1.701+/80−): `feat: montagem do Stage via ReactRunner + listagem dinâmica de modelos OpenRouter`.
+  - **Sem push** — aguardando autorização do usuário.
+  - Nenhum segredo no diff (apenas placeholder `sk-or-v1-...`).
+
 ## Tarefas Pendentes
+- [ ] Push para `origin/dev` — @devops — aguardando autorização do usuário
 - [ ] Rodar o projeto localmente (`npm run dev`) para validação — @devops
 - [ ] Deploy de teste no Chub — @devops — após validação (`CHUB_EXTENSION_ID_DEV` + `CHUB_AUTH_TOKEN`)
 - [ ] Criar nova `main` + promoção `dev` → `main` e deploy estável — @orquestrador — somente mediante solicitação explícita do usuário
