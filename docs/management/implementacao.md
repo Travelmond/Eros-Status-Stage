@@ -4,11 +4,16 @@
 Materializar o Eros Status Terminal (ESS) v3.0 como um Stage funcional para Chub Venus AI, utilizando a estrutura oficial de Stages em TypeScript (`@chub-ai/stages-ts`, `StageBase`) e portando toda a lógica, parser, middleware, componentes e estética cyberpunk documentados em `/docs`.
 
 ## Fase Atual
-Preparando push: configurar credenciais, renomear branches (main→old-v1, master→old-v2), polir F1-F4 e rodar npm run dev.
+Push concluído para `origin/dev`. Branches remotos reorganizados e backup criado.
 
-- Revisão pós-Tribunal **aprovada**; commit local `692c571` criado na branch `dev`.
-- Decisões do usuário (2026-08-15): configurar credenciais GitHub (usuário `Travelmond`); renomear branches no remoto `https://github.com/Travelmond/Eros-Status-Stage`; polir F1–F4; rodar `npm run dev`; só então push para `dev`.
-- Renomeação no remoto: `main` → `old-v1` (preservar conteúdo), `master` → `old-v2` (preservar conteúdo; master 1 commit acima de main). `dev` permanece como branch de trabalho e será definida como default. Nova `main` será criada apenas na promoção, sob solicitação do usuário.
+- Revisão pós-Tribunal **aprovada**; commit `692c571` preservado em `dev-backup`.
+- Push para `origin/dev` **realizado** (2026-08-15): commit `2b114f8` (`chore: sincroniza conteúdo local ESS v3.0 antes do push`).
+- Branches remotos em `https://github.com/Travelmond/Eros-Status-Stage`:
+  - `dev` → `2b114f8` (novo, default).
+  - `dev-backup` → `692c571` (snapshot pré-force-push; imutável, para rollback).
+  - `old-v1` → `038a33b` (antiga `main`; intacta).
+  - `old-v2` → `f87dcb9` (antiga `master`; intacta).
+  - `main` → inexistente (não havia ref remota; será recriada apenas na promoção).
 - Findings F1–F4 (redefinidos pelo usuário):
   - **F1**: cores hex hardcoded em `src/core/parser.ts` (`getSexPhaseColor`, `getMenstrualPhaseInfo`).
   - **F2**: remover `lodash` de `package.json` (não usado).
@@ -81,18 +86,15 @@ Preparando push: configurar credenciais, renomear branches (main→old-v1, maste
 - `T04` — DevOps / Deploy / Git (`/docs/management/contratos/T04-devops-deploy-git.json`)
 
 ## Próximos Passos
-1. **Configurar credenciais Git**: autenticar o remote `https://github.com/Travelmond/Eros-Status-Stage` com o usuário `Travelmond` (HTTPS com token, SSH com chave ou Git Credential Manager).
-2. **Renomear branches no remoto**: `main` → `old-v1` (preservar conteúdo); `master` → `old-v2` (preservar conteúdo; master está 1 commit acima de main). Definir `dev` como branch default no GitHub.
-3. **Polir F1–F4** antes do push:
+1. **Polir F1–F4** (polimento pós-push):
    - F1: cores hex hardcoded em `src/core/parser.ts` (`getSexPhaseColor`, `getMenstrualPhaseInfo`).
    - F2: remover `lodash` de `package.json` (não usado).
    - F3: eliminar estado local duplicado em `AIProviderSection`/`AIConfigPanel`.
    - F4: evitar round-trip JSON→string→parse no `AIConfigPanel`.
-4. **Rodar o projeto localmente**: `npm run dev` para validar visual/funcionamento antes do push.
-5. **Push para `dev`**: após F1–F4 e `npm run dev`, fazer push do commit para `origin/dev` e validar workflows de deploy.
-6. **Deploy de teste no Chub**: usar `CHUB_EXTENSION_ID_DEV` e `CHUB_AUTH_TOKEN`; validar upload e renderização no ambiente de teste.
-7. **Promoção `dev` → `main`**: criar a nova `main` somente mediante solicitação explícita do usuário, após validação no stage de teste.
-8. **Salto de `@chub-ai/stages-ts` para ^0.5.2** permanece como roadmap futuro dependente de migração para React 19.
+2. **Rodar o projeto localmente**: `npm run dev` para validar visual/funcionamento.
+3. **Deploy de teste no Chub**: usar `CHUB_EXTENSION_ID_DEV` e `CHUB_AUTH_TOKEN`; validar upload e renderização no ambiente de teste (o push em `dev` dispara o workflow `deploy-dev.yml`).
+4. **Promoção `dev` → `main`**: criar a nova `main` somente mediante solicitação explícita do usuário, após validação no stage de teste.
+5. **Salto de `@chub-ai/stages-ts` para ^0.5.2** permanece como roadmap futuro dependente de migração para React 19.
 
 ## Observações do Juiz
 - 2026-08-15: T01 entregue com design system, wireframes, componentes shadcn/ui stubs, componentes do terminal e TestRunner standalone.

@@ -156,27 +156,25 @@
   - Ressalvas F1–F4 registradas como polimento/documentação.
   - Relatório: `/docs/testing/revisao-2026-08-15_pos_tribunal.md`
 
-## Tarefas em Andamento
-- [ ] Preparação para push — @devops + @dev-frontend + @documentacao — 2026-08-15
-  - Commit local `692c571` criado em `dev`; push pendente de credenciais Git.
-  - Ordem definida pelo usuário: (1) configurar credenciais GitHub (usuário `Travelmond`); (2) renomear branches no remoto (`main`→`old-v1`, `master`→`old-v2`) e definir `dev` como default; (3) polir F1–F4; (4) rodar `npm run dev`; (5) push para `dev`.
+## Tarefas Concluídas
+- [x] Sincronização de branches no remoto + push para `dev` — @devops — 2026-08-15
+  - Backup criado: `dev-backup` → `692c571` (snapshot pré-force-push, imutável).
+  - Push forçado: `dev` → `2b114f8` (`chore: sincroniza conteúdo local ESS v3.0 antes do push`).
+  - `main` remota não existia (nada a apagar); `old-v1` (`038a33b`) e `old-v2` (`f87dcb9`) intactas.
+  - Docs atualizados: `docs/deployment/branch-strategy.md` (inclui `dev-backup`) e `docs/management/*`.
 
 ## Tarefas Pendentes
-- [ ] Configurar credenciais Git do repositório GitHub (usuário `Travelmond`) — @devops
-- [ ] Renomear branches no remoto: `main` → `old-v1`, `master` → `old-v2` (preservar conteúdo) — @devops
-- [ ] Definir `dev` como branch default no GitHub — @devops
 - [ ] Polir F1 — cores hex hardcoded em `src/core/parser.ts` (`getSexPhaseColor`, `getMenstrualPhaseInfo`) — @dev-frontend
 - [ ] Polir F2 — remover `lodash` de `package.json` (não usado) — @devops
 - [ ] Polir F3 — eliminar estado local duplicado em `AIProviderSection`/`AIConfigPanel` — @dev-frontend
 - [ ] Polir F4 — evitar round-trip JSON→string→parse no `AIConfigPanel` — @dev-frontend
 - [ ] Rodar o projeto localmente (`npm run dev`) para validação — @devops
-- [ ] Push para `dev` — @devops — após polimento F1–F4 e `npm run dev`
+- [ ] Deploy de teste no Chub — @devops — após validação (`CHUB_EXTENSION_ID_DEV` + `CHUB_AUTH_TOKEN`)
 - [ ] Criar nova `main` + promoção `dev` → `main` e deploy estável — @orquestrador — somente mediante solicitação explícita do usuário
 - [ ] Documentação final e DER — @documentacao
 
 > **Nota (2026-08-15):** os findings F1–F4 foram **redefinidos pelo usuário** (antes: M1/M10/M13/README). Novos significados: F1 = cores hex em `parser.ts`; F2 = `lodash` não usado; F3 = estado local duplicado em AIProviderSection/AIConfigPanel; F4 = round-trip JSON→string→parse no AIConfigPanel.
 
 ## Bloqueios
-- ⛔ Push para `origin/dev` pendente de credenciais Git (usuário `Travelmond`). Autenticação via HTTPS com token, SSH com chave ou Git Credential Manager.
-- ⛔ Renomeação de branches e definição de `dev` como default dependem de credenciais configuradas no remote `https://github.com/Travelmond/Eros-Status-Stage`.
 - ⛔ Criação da `main` + promoção/deploy estável só ocorrem mediante solicitação explícita do usuário, após validação no stage de teste.
+- ⛔ Deploy de teste no Chub depende dos secrets `CHUB_AUTH_TOKEN` e `CHUB_EXTENSION_ID_DEV` configurados em Settings → Secrets and variables → Actions.
