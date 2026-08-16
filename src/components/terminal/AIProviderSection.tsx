@@ -38,33 +38,26 @@ const DEFAULT_MODELS: ModelInfo[] = [
 ];
 
 interface AIProviderSectionProps {
-  apiKey?: string;
-  selectedModel?: string;
-  onApiKeyChange?: (key: string) => void;
-  onModelChange?: (model: string) => void;
   config?: ConfigType | null;
   onConfigChange?: (patch: Partial<ConfigType>) => void;
 }
 
-export function AIProviderSection({
-  apiKey: propApiKey = '',
-  selectedModel: propSelectedModel = '',
-  onApiKeyChange,
-  onModelChange,
-  config,
-  onConfigChange,
-}: AIProviderSectionProps) {
-  const [key, setKey] = useState(propApiKey || config?.openRouterApiKey || '');
-  const [selectedModel, setSelectedModel] = useState(propSelectedModel || config?.openRouterModel || '');
+export function AIProviderSection({ config, onConfigChange }: AIProviderSectionProps) {
+  // Fonte de verdade: `config.openRouterModel` / `config.openRouterApiKey`.
+  // O estado local abaixo é apenas transitório de input, sincronizado com
+  // `config` via useEffect — toda alteração propaga imediatamente para
+  // `onConfigChange`.
+  const [key, setKey] = useState(config?.openRouterApiKey || '');
+  const [selectedModel, setSelectedModel] = useState(config?.openRouterModel || '');
   const [query, setQuery] = useState('');
   const [status, setStatus] = useState<'idle' | 'testing' | 'ok' | 'error'>('idle');
 
   useEffect(() => {
-    const nextKey = propApiKey || config?.openRouterApiKey || '';
-    const nextModel = propSelectedModel || config?.openRouterModel || '';
+    const nextKey = config?.openRouterApiKey || '';
+    const nextModel = config?.openRouterModel || '';
     setKey((prev) => (nextKey !== prev ? nextKey : prev));
     setSelectedModel((prev) => (nextModel !== prev ? nextModel : prev));
-  }, [propApiKey, propSelectedModel, config?.openRouterApiKey, config?.openRouterModel]);
+  }, [config?.openRouterApiKey, config?.openRouterModel]);
 
   const filtered = DEFAULT_MODELS.filter(
     (m) =>
@@ -75,15 +68,13 @@ export function AIProviderSection({
   const handleApiKeyInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setKey(value);
-    onApiKeyChange?.(value);
     onConfigChange?.({ openRouterApiKey: value });
-  }, [onApiKeyChange, onConfigChange]);
+  }, [onConfigChange]);
 
   const handleModelSelect = useCallback((model: string) => {
     setSelectedModel(model);
-    onModelChange?.(model);
     onConfigChange?.({ openRouterModel: model });
-  }, [onModelChange, onConfigChange]);
+  }, [onConfigChange]);
 
   const handleTest = useCallback(async () => {
     setStatus('testing');

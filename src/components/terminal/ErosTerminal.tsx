@@ -39,6 +39,7 @@ export interface ErosTerminalProps {
   config?: ConfigType | null;
   barStyle?: BarStyle;
   onParse?: (text: string) => void;
+  onApplyState?: (parsed: Partial<ErosStatusState>) => void;
   onConfigChange?: (patch: Partial<ConfigType>) => void;
   onIgnoreAudit?: (issueId: string) => void;
   onCorrectAudit?: (issueId: string, value: unknown) => void;
@@ -68,6 +69,7 @@ export default function ErosTerminal({
   config,
   barStyle = 'bar',
   onParse,
+  onApplyState,
   onIgnoreAudit,
   onCorrectAudit,
   onConfigChange,
@@ -277,7 +279,10 @@ export default function ErosTerminal({
             {activeTab === 'aiconfig' && (
               <div className="pb-2 animate-fade-in-up">
                 <AIConfigPanel
-                  onParsed={(text) => onParse?.(text)}
+                  onParsed={(result) => {
+                    if (typeof result === 'string') onParse?.(result);
+                    else onApplyState?.(result);
+                  }}
                   config={config}
                   onConfigChange={onConfigChange}
                 />

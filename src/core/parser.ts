@@ -11,6 +11,8 @@
 
 import type {
   ErosStatusState,
+  AuditIssue,
+  AuditState,
   CharacterState,
   SystemState,
   UserCharacterState,
@@ -171,6 +173,21 @@ export function parseErosStatusFromMessage(messageText: string): Partial<ErosSta
   parseMetaInfo(messageText, state);
 
   return foundAnyData ? toErosStatusState(state) : null;
+}
+
+/**
+ * Converte um objeto JSON já extraído (ex.: resposta do OpenRouter) em
+ * estado ESS diretamente — sem re-serializar para string e re-parsear.
+ * Usado pelo painel de extração por IA (AIConfigPanel).
+ */
+export function parseErosStatusFromJson(
+  json: Record<string, unknown> | null | undefined,
+): Partial<ErosStatusState> | null {
+  if (!json || Object.keys(json).length === 0) return null;
+  const state = createParsedState();
+  parseJsonBlock(json, state);
+  syncClothingSlots(state);
+  return toErosStatusState(state);
 }
 
 function toErosStatusState(state: ParsedState): Partial<ErosStatusState> {
@@ -374,6 +391,20 @@ function parseJsonBlock(json: Record<string, unknown>, state: ParsedState): void
     if (img.anchors) Object.assign(state.img_module.anchors ?? {}, img.anchors);
     if (img.scene) Object.assign(state.img_module.scene ?? {}, img.scene);
     if (img.params) Object.assign(state.img_module.params ?? {}, img.params);
+  }
+  if (Array.isArray(json.goals)) {
+    state.goals = json.goals.filter((g): g is string => typeof g === 'string');
+  }
+  if (Array.isArray(json.aiInstructions)) {
+    state.aiInstructions = json.aiInstructions.filter((a): a is string => typeof a === 'string');
+  }
+  if (json.audit && typeof json.audit === 'object') {
+    const audit = json.audit as Partial<AuditState>;
+    if (Array.isArray(audit.issues)) {
+      state.audit.issues = audit.issues.map((i) => ({ ...(i as AuditIssue) }));
+    }
+    if (Array.isArray(audit.ignoredIds)) state.audit.ignoredIds = [...audit.ignoredIds];
+    if (Array.isArray(audit.correctedIds)) state.audit.correctedIds = [...audit.correctedIds];
   }
 }
 
@@ -983,23 +1014,6 @@ export function getClothingEmoji(slot: keyof ClothingSlots, value?: string): str
   }
   if (slot === 'accessories') return '💍';
   return '👔';
-}
-
-export function getSexPhaseColor(phase?: string): string {
-  if (phase === 'sex') return '#FF2D78';
-  if (phase === 'flirting') return '#BF5FFF';
-  if (phase === 'post-sex') return '#FFD700';
-  return '#00FFF5';
-}
-
-export function getMenstrualPhaseInfo(phase?: string): { label: string; color: string; days: string; fertile: boolean } {
-  const phases: Record<string, { label: string; color: string; days: string; fertile: boolean }> = {
-    menstruation: { label: 'Menstruation', color: '#FF2D78', days: '1-5', fertile: false },
-    follicular: { label: 'Follicular', color: '#00FFF5', days: '6-13', fertile: false },
-    ovulation: { label: 'Ovulation', color: '#39FF14', days: '14', fertile: true },
-    luteal: { label: 'Luteal', color: '#FFD700', days: '15-28', fertile: false },
-  };
-  return phases[phase || ''] || { label: phase || 'Unknown', color: '#ffffff30', days: '?', fertile: false };
 }
 
 function normalizeWeather(raw: string): string {

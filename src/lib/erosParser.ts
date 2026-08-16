@@ -7,6 +7,7 @@
 
 export {
   parseErosStatusFromMessage,
+  parseErosStatusFromJson,
   parseCondensedBlock,
   parseTerminalBlock,
   parseNPCData,
@@ -16,8 +17,12 @@ export {
   getExpressionEmoji,
   getWeatherIcon,
   getClothingEmoji,
-  getSexPhaseColor,
-  getMenstrualPhaseInfo,
 } from '@/core/parser';
+
+/**
+ * Helpers visuais de cor foram movidos para `@/theme/colors` (F1).
+ * @deprecated Importe diretamente de `@/theme/colors`.
+ */
+export { getSexPhaseColor, getMenstrualPhaseInfo } from '@/theme/colors';
 
 

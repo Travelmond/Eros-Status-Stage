@@ -1,14 +1,20 @@
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { AIProviderSection } from './AIProviderSection';
 import { callOpenRouter, extractJsonFromResponse } from '@/services/openRouter';
-import { parseErosStatusFromMessage } from '@/core/parser';
+import { parseErosStatusFromJson } from '@/core/parser';
 import { toast } from '@/components/ui/use-toast';
 import type { ConfigType } from '@/types/config';
+import type { ErosStatusState } from '@/types/eros-status';
 
 interface AIConfigPanelProps {
-  onParsed?: (text: string) => void;
+  /**
+   * Resultado do processamento:
+   * - `Partial<ErosStatusState>` quando a extração por IA teve sucesso;
+   * - `string` (texto bruto colado pelo usuário) quando caiu no fallback local.
+   */
+  onParsed?: (result: Partial<ErosStatusState> | string) => void;
   config?: ConfigType | null;
   onConfigChange?: (patch: Partial<ConfigType>) => void;
 }
@@ -20,27 +26,19 @@ Return ONLY valid JSON. Do not wrap in markdown. If a field is unknown, omit it.
 
 export function AIConfigPanel({ onParsed, config, onConfigChange }: AIConfigPanelProps) {
   const [text, setText] = useState('');
-  const [model, setModel] = useState(config?.openRouterModel || 'openai/gpt-4o-mini');
-  const [apiKey, setApiKey] = useState(config?.openRouterApiKey || '');
   const [raw, setRaw] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleModelChange = useCallback((newModel: string) => {
-    setModel(newModel);
-    onConfigChange?.({ openRouterModel: newModel });
-  }, [onConfigChange]);
-
-  const handleApiKeyChange = useCallback((newKey: string) => {
-    setApiKey(newKey);
-    onConfigChange?.({ openRouterApiKey: newKey });
-  }, [onConfigChange]);
+  // Fonte de verdade: `config`. Sem estado local duplicado de model/apiKey.
+  const apiKey = config?.openRouterApiKey?.trim() || '';
+  const model = config?.openRouterModel || 'openai/gpt-4o-mini';
 
   const handleProcess = async () => {
     if (!text.trim()) {
       toast({ variant: 'destructive', title: 'Empty input', description: 'Paste raw AI output before processing.' });
       return;
     }
-    if (!apiKey.trim()) {
+    if (!apiKey) {
       toast({ variant: 'destructive', title: 'API key missing', description: 'Enter your OpenRouter API key in the AI Provider section.' });
       return;
     }
@@ -65,16 +63,16 @@ export function AIConfigPanel({ onParsed, config, onConfigChange }: AIConfigPane
         return;
       }
 
-      const jsonText = JSON.stringify(json);
-      const parsedState = parseErosStatusFromMessage(jsonText);
-      if (!parsedState || Object.keys(parsedState).length === 0) {
-        toast({ variant: 'destructive', title: 'Parse failed', description: 'AI returned JSON, but local parser found no status markers.' });
-        onParsed?.(jsonText);
+      // Parse apenas uma vez, direto do objeto — sem round-trip stringify/parse.
+      const parsedState = parseErosStatusFromJson(json);
+      if (!parsedState) {
+        toast({ variant: 'destructive', title: 'Parse failed', description: 'AI returned JSON, but no status markers were found.' });
+        onParsed?.(text);
         return;
       }
 
       toast({ title: 'Extraction successful', description: `Parsed ${Object.keys(parsedState).length} status blocks.` });
-      onParsed?.(jsonText);
+      onParsed?.(parsedState);
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Unknown error during AI extraction.';
       toast({ variant: 'destructive', title: 'OpenRouter error', description: message });
@@ -86,10 +84,8 @@ export function AIConfigPanel({ onParsed, config, onConfigChange }: AIConfigPane
   return (
     <div className="mx-3 mb-2 space-y-2 pb-2 animate-fade-in-up">
       <AIProviderSection
-        apiKey={apiKey}
-        selectedModel={model}
-        onApiKeyChange={handleApiKeyChange}
-        onModelChange={handleModelChange}
+        config={config}
+        onConfigChange={onConfigChange}
       />
 
       <div

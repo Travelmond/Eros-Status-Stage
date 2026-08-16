@@ -163,11 +163,28 @@
   - `main` remota não existia (nada a apagar); `old-v1` (`038a33b`) e `old-v2` (`f87dcb9`) intactas.
   - Docs atualizados: `docs/deployment/branch-strategy.md` (inclui `dev-backup`) e `docs/management/*`.
 
+## Tarefas Concluídas
+- [x] Polir F1 — cores hex em helpers visuais — @dev-frontend — 2026-08-15
+  - Criado `src/theme/colors.ts` com tokens `NEON.*` (referenciando `var(--neon-*)`) + `NEUTRAL_FALLBACK`.
+  - `getSexPhaseColor`/`getMenstrualPhaseInfo` movidos de `src/core/parser.ts` para `src/theme/colors.ts` (agora derivam dos tokens `--neon-*`).
+  - `parser.ts` não exporta mais funções de cor e ficou sem hex residual; `lib/erosParser.ts` re-exporta do novo módulo com `@deprecated`.
+  - `SexPanel.tsx` e `ASCIIPositionViewer.tsx` importam de `@/theme/colors`.
+- [x] Polir F3 — estado local duplicado em AIProviderSection/AIConfigPanel — @dev-frontend — 2026-08-15
+  - `AIProviderSection.tsx`: fonte de verdade = `config.openRouterModel`/`config.openRouterApiKey`; removidos props `apiKey`/`selectedModel`/`onApiKeyChange`/`onModelChange`; estado transitório de input sincronizado via `useEffect`.
+  - `AIConfigPanel.tsx`: removido estado local `model`/`apiKey`; lê de `config` diretamente.
+- [x] Polir F4 — round-trip JSON no AIConfigPanel — @dev-frontend — 2026-08-15
+  - Novo `parseErosStatusFromJson()` em `src/core/parser.ts` (parse direto do objeto, sem `JSON.stringify` + re-parse).
+  - `parseJsonBlock` passou a cobrir `goals`/`aiInstructions`/`audit`.
+  - `AIConfigPanel` propaga `Partial<ErosStatusState>` via `onParsed` (assinatura ajustada); `ErosTerminal.tsx` ganha `onApplyState`; `App.tsx`/`Stage.tsx` aplicam o estado sem re-parse.
+  - Testes: +2 (`parseErosStatusFromJson`) → 36 testes passando.
+- [x] Polir F2 — remover `lodash` de `package.json` (não usado) — @devops — 2026-08-15
+  - `lodash` e `@types/lodash` removidos de `package.json` + `package-lock.json`.
+  - Zero referências a `lodash` no código (`grep -rn lodash src/` → vazio).
+- [x] Validação final do polimento F1–F4 — @devops — 2026-08-15
+  - `npm install`, `npm run typecheck`, `npm run lint`, `npm run build`, `npm run test` (36 testes) passaram.
+  - Commit do polimento na branch `dev` (sem push, aguardando autorização do usuário).
+
 ## Tarefas Pendentes
-- [ ] Polir F1 — cores hex hardcoded em `src/core/parser.ts` (`getSexPhaseColor`, `getMenstrualPhaseInfo`) — @dev-frontend
-- [ ] Polir F2 — remover `lodash` de `package.json` (não usado) — @devops
-- [ ] Polir F3 — eliminar estado local duplicado em `AIProviderSection`/`AIConfigPanel` — @dev-frontend
-- [ ] Polir F4 — evitar round-trip JSON→string→parse no `AIConfigPanel` — @dev-frontend
 - [ ] Rodar o projeto localmente (`npm run dev`) para validação — @devops
 - [ ] Deploy de teste no Chub — @devops — após validação (`CHUB_EXTENSION_ID_DEV` + `CHUB_AUTH_TOKEN`)
 - [ ] Criar nova `main` + promoção `dev` → `main` e deploy estável — @orquestrador — somente mediante solicitação explícita do usuário

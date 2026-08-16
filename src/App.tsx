@@ -209,11 +209,7 @@ export default function App() {
     setLog((prev) => [...prev, `[AUDIT IGNORE] ${issueId}`]);
   }, []);
 
-  const handleParse = useCallback((text: string) => {
-    setLog((prev) => [...prev, `> ${text.slice(0, 80)}${text.length > 80 ? '…' : ''}`]);
-    const parsed = parseErosStatusFromMessage(text);
-    if (!parsed) return;
-
+  const applyParsedState = useCallback((parsed: Partial<ErosStatusState>) => {
     const result = processIncomingState(state, parsed, {
       ntrEnabled: config.enableNTR ?? false,
       auditorEnabled: config.auditorEnabled ?? true,
@@ -227,6 +223,18 @@ export default function App() {
     setState(result.messageState);
     setChatState(result.chatState);
   }, [state, chatState, config]);
+
+  const handleParse = useCallback((text: string) => {
+    setLog((prev) => [...prev, `> ${text.slice(0, 80)}${text.length > 80 ? '…' : ''}`]);
+    const parsed = parseErosStatusFromMessage(text);
+    if (!parsed) return;
+    applyParsedState(parsed);
+  }, [applyParsedState]);
+
+  const handleApplyState = useCallback((parsed: Partial<ErosStatusState>) => {
+    setLog((prev) => [...prev, `[AI EXTRACT] applied ${Object.keys(parsed).length} blocks`]);
+    applyParsedState(parsed);
+  }, [applyParsedState]);
 
   return (
     <div className="h-screen w-screen bg-[var(--terminal-bg)] flex overflow-hidden text-xs font-mono">
@@ -260,6 +268,7 @@ export default function App() {
           chatState={chatState}
           config={config}
           onParse={handleParse}
+          onApplyState={handleApplyState}
           onConfigChange={setConfig}
           onCorrectAudit={handleCorrectAudit}
           onIgnoreAudit={handleIgnoreAudit}

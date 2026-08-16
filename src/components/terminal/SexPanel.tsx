@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { getSexPhaseColor, getMenstrualPhaseInfo } from '@/lib/erosParser';
+import { getSexPhaseColor, getMenstrualPhaseInfo } from '@/theme/colors';
 import { ASCIIPositionViewer } from './ASCIIPositionViewer';
 import type { SexModule } from '@/types/eros-status';
 

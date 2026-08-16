@@ -1,5 +1,5 @@
 import { findPosition } from '@/lib/sexPositionsLibrary';
-import { getSexPhaseColor } from '@/lib/erosParser';
+import { getSexPhaseColor } from '@/theme/colors';
 
 interface ASCIIPositionViewerProps {
   positionName?: string;

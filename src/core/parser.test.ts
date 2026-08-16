@@ -1,5 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import { parseErosStatusFromMessage } from './parser';
+import { parseErosStatusFromMessage, parseErosStatusFromJson } from './parser';
 
 describe('parseErosStatusFromMessage', () => {
   it('returns null for empty text', () => {
@@ -48,5 +48,28 @@ describe('parseErosStatusFromMessage', () => {
     const result = parseErosStatusFromMessage(text);
     expect(result).not.toBeNull();
     expect(result?.aiInstructions).toEqual(['focus on dialogue', 'keep it flirty']);
+  });
+
+  it('parseErosStatusFromJson parses a JSON object without round-trip', () => {
+    const result = parseErosStatusFromJson({
+      system: { day: 7, time: '09:15' },
+      character: { name: 'Hanako' },
+      progressions: { affection: 88 },
+      goals: ['Cook breakfast', 'Tease the user'],
+      aiInstructions: ['stay flirty'],
+    });
+    expect(result).not.toBeNull();
+    expect(result?.system?.day).toBe(7);
+    expect(result?.system?.time).toBe('09:15');
+    expect(result?.character?.name).toBe('Hanako');
+    expect(result?.progressions?.affection).toBe(88);
+    expect(result?.goals).toEqual(['Cook breakfast', 'Tease the user']);
+    expect(result?.aiInstructions).toEqual(['stay flirty']);
+  });
+
+  it('parseErosStatusFromJson returns null for empty/invalid input', () => {
+    expect(parseErosStatusFromJson(null)).toBeNull();
+    expect(parseErosStatusFromJson(undefined)).toBeNull();
+    expect(parseErosStatusFromJson({})).toBeNull();
   });
 });

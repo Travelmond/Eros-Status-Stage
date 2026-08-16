@@ -17,6 +17,7 @@ import React from 'react';
 import { StageBase } from '@chub-ai/stages-ts';
 import type { InitialData, Message, LoadResponse, StageResponse } from './types/chub';
 import type { InitStateType, ChatStateType, MessageStateType, ConfigType } from './types/chub';
+import type { ErosStatusState } from './types/eros-status';
 import { parseErosStatusFromMessage } from './core/parser';
 import { processIncomingState, enforceSchema } from './core/middleware';
 import { createInitialState, createDefaultInitState, createDefaultChatState, deepClone, STATE_SCHEMA_VERSION } from './core/state';
@@ -158,6 +159,25 @@ export default class Stage extends StageBase<InitStateType, ChatStateType, Messa
     };
   }
 
+  private handleApplyParsed = (parsed: Partial<ErosStatusState>): void => {
+    const turnId = incrementTurnId(this.chatState, this.messageState.meta?.branch_index || 0);
+    const parentTurnId = this.messageState.meta?.turn_id || '';
+    const cfg = this.runtimeConfig ?? this.config;
+    const result = processIncomingState(this.messageState, parsed, {
+      ntrEnabled: cfg?.enableNTR ?? false,
+      auditorEnabled: cfg?.auditorEnabled ?? true,
+      imgAuditorEnabled: cfg?.imgAuditorEnabled ?? true,
+      config: cfg,
+      currentTurnId: turnId,
+      parentTurnId,
+      previousChatState: this.chatState,
+    });
+
+    this.messageState = result.messageState;
+    this.chatState = result.chatState;
+    this.charKey = normalizeCharKey(this.messageState.character?.name || this.charKey);
+  };
+
   private handleCorrectAudit = (issueId: string, _value: unknown): void => {
     const currentAudit = this.messageState.audit ?? { issues: [], correctedIds: [], ignoredIds: [] };
     const correctedIds = currentAudit.correctedIds ?? [];
@@ -215,6 +235,7 @@ export default class Stage extends StageBase<InitStateType, ChatStateType, Messa
         onConfigChange={(patch) => {
           this.runtimeConfig = { ...(this.runtimeConfig ?? this.config ?? {}), ...patch } as ConfigType;
         }}
+        onApplyState={this.handleApplyParsed}
         onCorrectAudit={this.handleCorrectAudit}
         onIgnoreAudit={this.handleIgnoreAudit}
         onCondenseMemory={this.handleCondenseMemory}
