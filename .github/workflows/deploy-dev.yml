@@ -63,7 +63,7 @@ jobs:
           echo "Uploading Eros Status Terminal (dev) to Chub..."
           HTTP_STATUS=$(curl -s -o response.json -w "%{http_code}" \
             -X POST "https://api.chub.ai/extension/${{ env.CHUB_EXTENSION_ID }}/upload" \
-            -H "Authorization: Bearer ${CHUB_AUTH_TOKEN}" \
+            -H "CH-API-KEY: ${CHUB_AUTH_TOKEN}" \
             -H "Accept: application/json" \
             -F "file=@eros-status-stage-dev.zip")
 

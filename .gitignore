@@ -13,6 +13,14 @@ dist-ssr
 .env
 .env.*
 !.env.example
+.env.chub
+
+# Deploy script versionado (sem secrets). Artefatos locais de deploy ignorados.
+scripts/*
+!scripts/deploy-chub.sh
+chub-upload/
+response.json
+eros-status-stage-dev.zip
 
 # IDE
 .vscode/*

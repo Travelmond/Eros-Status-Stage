@@ -233,12 +233,36 @@
 - [x] Validação + commit da opção "lembrar chave" + validação de API key — @devops — 2026-08-15
    - Validação limpa: `npm run typecheck` ✅, `npm run lint` ✅, `npm run build` ✅, `npm run test` ✅ (45 testes / 5 arquivos).
    - Commit `b9c61b5` na branch `dev` (11 arquivos, 238+/16−): `feat: opção de lembrar chave OpenRouter (opt-in) + validação sk-or- e mostrar/ocultar`.
-   - **Sem push** — aguardando autorização do usuário.
+- [x] Push para `origin/dev` + deploy de teste disparado — @devops — 2026-08-15
+   - Commit `feaeb1f` criado: `docs(management): sincroniza contexto após deploy do Stage para teste no Chub` (2 arquivos, 10+/4−).
+   - Push aceito: `cc3ff9a..feaeb1f dev -> dev` (fast-forward, 5 commits — sem força, `main`/`old-v1`/`old-v2`/`dev-backup` intactas).
+   - `origin/dev` → `feaeb1f` (confirmado via `git fetch` + `git rev-parse origin/dev`).
+   - Workflow `.github/workflows/deploy-dev.yml` disparado automaticamente (push em `dev`): lint → typecheck → build → empacota zip → upload na Chub API.
+   - Acompanhamento: `https://github.com/Travelmond/Eros-Status-Stage/actions` | `https://github.com/Travelmond/Eros-Status-Stage/tree/dev`.
+   - ⚠️ Deploy só conclui se os secrets `CHUB_AUTH_TOKEN` e `CHUB_EXTENSION_ID_DEV` estiverem configurados no GitHub.
+   - ⚠️ **Juiz (2026-08-15):** PAT `ghp_…Rr90` ainda exposto em texto plano em `.git/config` (não rotacionado) e tracking de `old` aponta para `refs/heads/main`. Ver `/docs/audit/2026-08-15_deploy_dev/`.
+
+## Tarefas Concluídas
+- [x] Criar script de deploy local `scripts/deploy-chub.sh` — @devops — 2026-08-15
+   - Motivação: workflow `deploy-dev.yml` falhou com HTTP 403 "This service is not available in your country." (API do Chub bloqueia IPs de data centers dos runners do GitHub).
+   - Script executável: lê credenciais (env > `.env.chub` > prompt interativo), roda `npm run build`, empacota `dist/` + `chub_meta.yaml` em `eros-status-stage-dev.zip`, faz upload via `api.chub.ai/extension/{id}/upload`, valida status 200/201 e limpa temporários.
+   - `.gitignore` atualizado: `scripts/` e `.env.chub` adicionados.
+   - `README.md` atualizado com seção "Deploy local (recomendado para dev)".
+   - Sintaxe validada com `bash -n`. **Upload NÃO executado** — aguardando usuário fornecer `CHUB_EXTENSION_ID_DEV`.
+- [x] Corrigir deploy Chub: header `CH-API-KEY` + criação automática de extension — @devops — 2026-08-15
+   - `scripts/deploy-chub.sh` reescrito: autenticação via `-H "CH-API-KEY: $CHUB_AUTH_TOKEN"` (a API do Chub não aceita `Authorization: Bearer`).
+   - Resolução do STAGE_ID em 3 níveis: `CHUB_EXTENSION_ID_DEV` (env/`.env.chub`) → `extension_id:` de `public/chub_meta.yaml` → criação automática via `POST https://api.chub.ai/extensions` (parseia `.id_v2` com `jq`/`python3` e grava no `chub_meta.yaml`).
+   - Flag `--create` força nova extension; prompt do token mascarado (`read -rsp`); validação `CHK-`; `trap cleanup` completo; guarda do `cat response.json`; mensagens de erro com detecção de geo-block.
+   - Workflows corrigidos: `.github/workflows/deploy-dev.yml` e `.github/workflows/deploy.yml` (`Authorization: Bearer` → `CH-API-KEY`).
+   - Executado localmente (comando do usuário): build OK (12.2s), empacotamento OK, **upload → HTTP 403 (geo-block)**. Com `--create`: **criação → HTTP 403 (geo-block)**. `chub_meta.yaml` intacto.
+   - Docs atualizados: `docs/deployment/github-actions.md` + `README.md` (nota geo BR + fluxo local).
 
 ## Tarefas Pendentes
-- [ ] Push para `origin/dev` — @devops — aguardando autorização do usuário
 - [ ] Rodar o projeto localmente (`npm run dev`) para validação — @devops
-- [ ] Deploy de teste no Chub — @devops — após validação (`CHUB_EXTENSION_ID_DEV` + `CHUB_AUTH_TOKEN`)
+- [ ] Executar `./scripts/deploy-chub.sh` a partir de **VPN/VPS/proxy em país liberado** (não BR, não datacenter) para criar a extension dev e fazer o upload — @devops — **BLOQUEADO por geo: IP residencial BR também retorna 403 na API do Chub** (2026-08-15)
+- [ ] Configurar secret `CHUB_EXTENSION_ID_DEV` no GitHub (ID de dev separado do ID de produção) — @devops — necessário para o CI quando o runner for liberado
+- [ ] Rotacionar PAT exposto em `.git/config` e remover token da URL do remote — @devops
+- [ ] Corrigir tracking de `old` (`.git/config` aponta para `refs/heads/main`) — @devops
 - [ ] Criar nova `main` + promoção `dev` → `main` e deploy estável — @orquestrador — somente mediante solicitação explícita do usuário
 - [ ] Documentação final e DER — @documentacao
 
@@ -247,3 +271,5 @@
 ## Bloqueios
 - ⛔ Criação da `main` + promoção/deploy estável só ocorrem mediante solicitação explícita do usuário, após validação no stage de teste.
 - ⛔ Deploy de teste no Chub depende dos secrets `CHUB_AUTH_TOKEN` e `CHUB_EXTENSION_ID_DEV` configurados em Settings → Secrets and variables → Actions.
+- ⛔ **Geo-block da API do Chub (2026-08-15)**: `api.chub.ai` retorna 403 "This service is not available in your country." para IP residencial BR (`177.194.239.236`, Claro/MS; `x-src-country: BR`) em TODOS os endpoints — inclusive `POST /extensions` e `POST /extension/{id}/upload`. Nem a criação nem o upload são possíveis da máquina local sem **VPN/VPS/proxy em país liberado** ou runner self-hosted.
+- ⛔ `public/chub_meta.yaml` contém o `extension_id` de **produção** (`eros-status-stage-b47cccbfa255`); sem `CHUB_EXTENSION_ID_DEV`, o script local usa esse ID — para dev separado, definir a env ou usar `--create`.

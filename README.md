@@ -111,3 +111,40 @@ O deploy e feito automaticamente via GitHub Actions para `api.chub.ai/extension/
 
 - `CHUB_AUTH_TOKEN` — token de autenticacao da API do Chub.
 - `CHUB_EXTENSION_ID_DEV` — ID do Stage de desenvolvimento/testes (diferente do ID de producao).
+
+### Deploy local (fallback quando o CI está geo-bloqueado)
+
+A API do Chub (`api.chub.ai`) retorna **HTTP 403 "This service is not available in your country."** para IPs de data centers (runners do GitHub Actions) **e também para países inteiros** — inclusive o Brasil (BR), confirmado em 2026-08-15. Se a sua conexão local também for bloqueada, o script falhará com 403 em todas as chamadas; nesse caso, rode a partir de uma **VPN/VPS/proxy em país liberado** ou com **runner self-hosted**.
+
+**1. Tornar executável (primeira vez):**
+
+```bash
+chmod +x scripts/deploy-chub.sh
+```
+
+**2. Usando variáveis de ambiente (inline) — ou `.env.chub` na raiz:**
+
+```bash
+# Recomendado: .env.chub (NUNCA commite este arquivo — já está no .gitignore)
+# CHUB_AUTH_TOKEN=CHK-...
+# CHUB_EXTENSION_ID_DEV=id...
+# chmod 600 .env.chub
+
+CHUB_AUTH_TOKEN=CHK-... ./scripts/deploy-chub.sh
+```
+
+**Resolução do STAGE_ID (nesta ordem):**
+
+1. `CHUB_EXTENSION_ID_DEV` (env/`.env.chub`) → usa.
+2. Senão, lê `extension_id:` de `public/chub_meta.yaml` → usa.
+3. Senão (ou se vazio/nulo) → **cria automaticamente** via `POST https://api.chub.ai/extensions` (nome "Eros Status Terminal"), parseia `.id_v2` e grava no `chub_meta.yaml`.
+
+**Forçar criação de uma nova extension (dev):**
+
+```bash
+CHUB_AUTH_TOKEN=CHK-... ./scripts/deploy-chub.sh --create
+```
+
+**Autenticação:** o script usa o header `CH-API-KEY: $CHUB_AUTH_TOKEN` (não `Authorization: Bearer`).
+
+O script faz: resolve STAGE_ID → build → empacota `dist/` + `chub_meta.yaml` em `eros-status-stage-dev.zip` → upload para `api.chub.ai/extension/{id}/upload` → valida o status HTTP (200/201) → limpa arquivos temporários.
