@@ -157,16 +157,26 @@
   - Relatório: `/docs/testing/revisao-2026-08-15_pos_tribunal.md`
 
 ## Tarefas em Andamento
-- [ ] Push para `origin/dev` e deploy de teste — @devops (Contrato T04) — 2026-08-15
-  - Próximo passo: garantir commits na branch `dev`, validar workflows e realizar deploy no Chub usando `CHUB_EXTENSION_ID_DEV` e `CHUB_AUTH_TOKEN`.
+- [ ] Preparação para push — @devops + @dev-frontend + @documentacao — 2026-08-15
+  - Commit local `692c571` criado em `dev`; push pendente de credenciais Git.
+  - Ordem definida pelo usuário: (1) configurar credenciais GitHub (usuário `Travelmond`); (2) renomear branches no remoto (`main`→`old-v1`, `master`→`old-v2`) e definir `dev` como default; (3) polir F1–F4; (4) rodar `npm run dev`; (5) push para `dev`.
 
 ## Tarefas Pendentes
-- [ ] Promoção `dev` → `main` e deploy estável — @orquestrador — aguardando solicitação explícita do usuário
-- [ ] Polimento F1 — cores hardcoded residuais — @dev-frontend
-- [ ] Polimento F2 — sincronização OpenRouter em subpainéis — @dev-frontend
-- [ ] Polimento F3 — resíduos de dependências removidas — @devops
-- [ ] Polimento F4 — README e documentação de testes — @documentacao
+- [ ] Configurar credenciais Git do repositório GitHub (usuário `Travelmond`) — @devops
+- [ ] Renomear branches no remoto: `main` → `old-v1`, `master` → `old-v2` (preservar conteúdo) — @devops
+- [ ] Definir `dev` como branch default no GitHub — @devops
+- [ ] Polir F1 — cores hex hardcoded em `src/core/parser.ts` (`getSexPhaseColor`, `getMenstrualPhaseInfo`) — @dev-frontend
+- [ ] Polir F2 — remover `lodash` de `package.json` (não usado) — @devops
+- [ ] Polir F3 — eliminar estado local duplicado em `AIProviderSection`/`AIConfigPanel` — @dev-frontend
+- [ ] Polir F4 — evitar round-trip JSON→string→parse no `AIConfigPanel` — @dev-frontend
+- [ ] Rodar o projeto localmente (`npm run dev`) para validação — @devops
+- [ ] Push para `dev` — @devops — após polimento F1–F4 e `npm run dev`
+- [ ] Criar nova `main` + promoção `dev` → `main` e deploy estável — @orquestrador — somente mediante solicitação explícita do usuário
 - [ ] Documentação final e DER — @documentacao
 
+> **Nota (2026-08-15):** os findings F1–F4 foram **redefinidos pelo usuário** (antes: M1/M10/M13/README). Novos significados: F1 = cores hex em `parser.ts`; F2 = `lodash` não usado; F3 = estado local duplicado em AIProviderSection/AIConfigPanel; F4 = round-trip JSON→string→parse no AIConfigPanel.
+
 ## Bloqueios
-- ⛔ Promoção `dev` → `main` e deploy estável só devem ocorrer mediante solicitação explícita do usuário, após validação no stage de teste.
+- ⛔ Push para `origin/dev` pendente de credenciais Git (usuário `Travelmond`). Autenticação via HTTPS com token, SSH com chave ou Git Credential Manager.
+- ⛔ Renomeação de branches e definição de `dev` como default dependem de credenciais configuradas no remote `https://github.com/Travelmond/Eros-Status-Stage`.
+- ⛔ Criação da `main` + promoção/deploy estável só ocorrem mediante solicitação explícita do usuário, após validação no stage de teste.

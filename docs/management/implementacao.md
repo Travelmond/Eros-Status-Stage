@@ -4,7 +4,16 @@
 Materializar o Eros Status Terminal (ESS) v3.0 como um Stage funcional para Chub Venus AI, utilizando a estrutura oficial de Stages em TypeScript (`@chub-ai/stages-ts`, `StageBase`) e portando toda a lógica, parser, middleware, componentes e estética cyberpunk documentados em `/docs`.
 
 ## Fase Atual
-Revisão pós-Tribunal **aprovada**. Próximo passo: **push para `origin/dev` e deploy de teste no Chub**.
+Preparando push: configurar credenciais, renomear branches (main→old-v1, master→old-v2), polir F1-F4 e rodar npm run dev.
+
+- Revisão pós-Tribunal **aprovada**; commit local `692c571` criado na branch `dev`.
+- Decisões do usuário (2026-08-15): configurar credenciais GitHub (usuário `Travelmond`); renomear branches no remoto `https://github.com/Travelmond/Eros-Status-Stage`; polir F1–F4; rodar `npm run dev`; só então push para `dev`.
+- Renomeação no remoto: `main` → `old-v1` (preservar conteúdo), `master` → `old-v2` (preservar conteúdo; master 1 commit acima de main). `dev` permanece como branch de trabalho e será definida como default. Nova `main` será criada apenas na promoção, sob solicitação do usuário.
+- Findings F1–F4 (redefinidos pelo usuário):
+  - **F1**: cores hex hardcoded em `src/core/parser.ts` (`getSexPhaseColor`, `getMenstrualPhaseInfo`).
+  - **F2**: remover `lodash` de `package.json` (não usado).
+  - **F3**: eliminar estado local duplicado em `AIProviderSection`/`AIConfigPanel`.
+  - **F4**: evitar round-trip JSON→string→parse no `AIConfigPanel`.
 
 - Veredito anterior: **NECESSITA APELAÇÃO / CORREÇÕES OBRIGATÓRIAS**.
 - Veredito pós-Tribunal: **✅ APROVAÇÃO FINAL**.
@@ -32,7 +41,7 @@ Revisão pós-Tribunal **aprovada**. Próximo passo: **push para `origin/dev` e 
 4. **Chat State para fog-of-war/mapa** — Salas visitadas, mapa revelado e metadados globais persistem no `chatState`.
 5. **localStorage apenas para preferências** — Configurações de UI, tema, presets de personagem e cache local. **API keys não devem ser persistidas em localStorage por segurança**; o usuário as insere por sessão ou via configuração segura do Chub.
 6. **Configurações avançadas** — `config_schema` em `chub_meta.yaml` expõe: modelo OpenRouter, API key (campo sensível marcado), presets de personagem, filtros de módulos (NTR, sexo, reação).
-7. **Deploy Git** — Branch `old` preserva código antigo; `dev` dispara deploy para stage de teste; `main` publica estável (somente após validação explícita do usuário).
+7. **Deploy Git** — Branches `old-v1` (antiga `main`) e `old-v2` (antiga `master`) preservam código antigo; `dev` é a branch de trabalho/default e dispara deploy para stage de teste; `main` é recriada apenas na promoção e publica estável (somente após validação explícita do usuário).
 8. **Build standalone** — O núcleo `ErosTerminal` continua renderizável fora do Chub para testes locais via `App.tsx` (modo dev).
 9. **Schemas versionados** — `state_schema.version`, `meta.schema_version`, `init.schema_version` e `chat.schema_version` fixados em `3.0.0` para permitir migrações futuras.
 10. **Mapeamento de estado documentado** — `docs/architecture/state-mapping.md` define claramente o que vai para `messageState`, `chatState`, `initState` e `localStorage`.
@@ -72,11 +81,18 @@ Revisão pós-Tribunal **aprovada**. Próximo passo: **push para `origin/dev` e 
 - `T04` — DevOps / Deploy / Git (`/docs/management/contratos/T04-devops-deploy-git.json`)
 
 ## Próximos Passos
-1. **Push para `origin/dev`**: garantir que a branch `dev` contenha todos os commits de correção; validar workflows de deploy.
-2. **Deploy de teste no Chub**: usar `CHUB_EXTENSION_ID_DEV` e `CHUB_AUTH_TOKEN`; validar upload e renderização do Stage no ambiente de teste.
-3. **Promoção `dev` → `main`**: somente mediante solicitação explícita do usuário, após validação no stage de teste.
-4. **Polimento F1–F4**: tratar cores hardcoded residuais (F1), sincronização OpenRouter (F2), resíduos de dependências (F3) e README/testes (F4) como débito técnico leve ou incluir em sprint de polimento pós-deploy.
-5. **Salto de `@chub-ai/stages-ts` para ^0.5.2** permanece como roadmap futuro dependente de migração para React 19.
+1. **Configurar credenciais Git**: autenticar o remote `https://github.com/Travelmond/Eros-Status-Stage` com o usuário `Travelmond` (HTTPS com token, SSH com chave ou Git Credential Manager).
+2. **Renomear branches no remoto**: `main` → `old-v1` (preservar conteúdo); `master` → `old-v2` (preservar conteúdo; master está 1 commit acima de main). Definir `dev` como branch default no GitHub.
+3. **Polir F1–F4** antes do push:
+   - F1: cores hex hardcoded em `src/core/parser.ts` (`getSexPhaseColor`, `getMenstrualPhaseInfo`).
+   - F2: remover `lodash` de `package.json` (não usado).
+   - F3: eliminar estado local duplicado em `AIProviderSection`/`AIConfigPanel`.
+   - F4: evitar round-trip JSON→string→parse no `AIConfigPanel`.
+4. **Rodar o projeto localmente**: `npm run dev` para validar visual/funcionamento antes do push.
+5. **Push para `dev`**: após F1–F4 e `npm run dev`, fazer push do commit para `origin/dev` e validar workflows de deploy.
+6. **Deploy de teste no Chub**: usar `CHUB_EXTENSION_ID_DEV` e `CHUB_AUTH_TOKEN`; validar upload e renderização no ambiente de teste.
+7. **Promoção `dev` → `main`**: criar a nova `main` somente mediante solicitação explícita do usuário, após validação no stage de teste.
+8. **Salto de `@chub-ai/stages-ts` para ^0.5.2** permanece como roadmap futuro dependente de migração para React 19.
 
 ## Observações do Juiz
 - 2026-08-15: T01 entregue com design system, wireframes, componentes shadcn/ui stubs, componentes do terminal e TestRunner standalone.
@@ -92,6 +108,7 @@ Revisão pós-Tribunal **aprovada**. Próximo passo: **push para `origin/dev` e 
 - 2026-08-15: **Juiz — Auditoria da 3ª iteração `equipe-revisao`**: a iter3 ainda não foi executada. `@coordenador-revisao` não foi reativado; nenhum dos 5 revisores foi acionado. Contador real: 2/3. Se a iter3 reprovar com findings Alto/Crítico, o Tribunal deve ser acionado conforme protocolo. Ver relatório em `/docs/audit/2026-08-15_equipe_revisao_iter3/`.
 - 2026-08-15: **Juiz — Observação do Tribunal após 3ª iteração**: Tribunal convocado e executado corretamente. Veredito: **NECESSITA APELAÇÃO / CORREÇÕES OBRIGATÓRIAS**. Alucinações dos revisores (C2, A3, M15) corretamente descartadas. Dívidas técnicas reais (M9, M12, M14) devem ser corrigidas antes do merge. Ressalvas (M1, M10, M13) podem ser polidas ou registradas como débito técnico. Documentos do Tribunal contêm distorções menores (C2 descrito como "workflows ausentes"; M10 descrito como problema de AuditPanel). Ver relatório em `/docs/audit/2026-08-15_tribunal_iter3/`.
 - 2026-08-15: **Juiz — Avaliação das correções pós-Tribunal**: estado documentado em `implementacao.md` e `tarefas.md` diverge do filesystem. M9 parcial (1/5 arquivos com `@deprecated`), M12 pendente (sem validação nem documento dedicado de risco aceito), M14 pendente (`docs/testing/plano-de-testes.md` inexistente). Revisão pós-Tribunal NÃO deve ser acionada. Ver relatório em `/docs/audit/2026-08-15_correcoes_pos_tribunal/`.
+- 2026-08-15: **Juiz — Auditoria do commit/push para `dev`**: novo commit local `692c5711...` realizado em `refs/heads/dev`, mas push para `origin/dev` **não ocorreu** (`refs/remotes/origin/dev` inexistente). Branch `old` preservada, mas tracking em `.git/config` aponta para `refs/heads/main` (risco de push acidental). `.gitignore` respeitado; workflows corretos. Ver relatório em `/docs/audit/2026-08-15_commit_push_dev/`.
 - Recomendação: executar build e lint para validar integração antes da revisão obrigatória.
 
 ## Riscos e Mitigação
@@ -103,4 +120,4 @@ Revisão pós-Tribunal **aprovada**. Próximo passo: **push para `origin/dev` e 
 | Porte de 1.368 linhas de JS puro para TS dentro de StageBase | Médio | Fazer em etapas: parser → middleware → UI; manter testes regressivos |
 | Preservação da estética cyberpunk com shadcn/ui | Médio | Sobrescrever CSS variables e tokens; componentes customizados para painéis |
 | Build do Vite 6 com template Chub (originalmente Vite 5) | Médio | Testar build local e na action; ajustar `vite.config.ts` se necessário |
-| Branch `old` do repositório antigo | Baixo | Criar `old` a partir da `main` atual antes de qualquer push para `dev` |
+| Branches legadas `old-v1`/`old-v2` do repositório antigo | Baixo | Renomear `main` → `old-v1` e `master` → `old-v2` no remoto antes de qualquer push para `dev` |
